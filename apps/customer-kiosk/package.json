@@ -1,0 +1,26 @@
+{
+  "name": "@saas/customer-kiosk",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "build": "esbuild src/index.ts --bundle --platform=node --outfile=dist/index.js",
+    "lint": "echo 'lint customer-kiosk'",
+    "start": "node dist/index.js",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@saas/core": "workspace:*",
+    "@saas/types": "workspace:*",
+    "@saas/logger": "workspace:*",
+    "@saas/ui": "workspace:*",
+    "@saas/theme": "workspace:*",
+    "@saas/api-client": "workspace:*",
+    "@saas/hooks": "workspace:*",
+    "@saas/utils": "workspace:*"
+  },
+  "devDependencies": {
+    "@saas/config": "workspace:*",
+    "typescript": "^5.0.0"
+  }
+}

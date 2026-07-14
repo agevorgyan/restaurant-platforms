@@ -1,0 +1,159 @@
+version: '3.8'
+
+x-app-base: &app-base
+  build:
+    context: .
+    dockerfile: Dockerfile
+  restart: unless-stopped
+  networks:
+    - saas-network
+  depends_on:
+    postgres:
+      condition: service_healthy
+    redis:
+      condition: service_healthy
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: saas_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - saas-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+    networks:
+      - saas-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    <<: *app-base
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        APP_NAME: api
+    ports:
+      - "3001:3000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://postgres:password@postgres:5432/saas_db
+      - REDIS_URL=redis://redis:6379
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  admin:
+    <<: *app-base
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        APP_NAME: admin
+    ports:
+      - "3002:3000"
+    environment:
+      - NODE_ENV=production
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  dashboard:
+    <<: *app-base
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        APP_NAME: dashboard
+    ports:
+      - "3003:3000"
+    environment:
+      - NODE_ENV=production
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  customer-menu:
+    <<: *app-base
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        APP_NAME: customer-menu
+    ports:
+      - "3004:3000"
+    environment:
+      - NODE_ENV=production
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  customer-order:
+    <<: *app-base
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        APP_NAME: customer-order
+    ports:
+      - "3005:3000"
+    environment:
+      - NODE_ENV=production
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  customer-kiosk:
+    <<: *app-base
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        APP_NAME: customer-kiosk
+    ports:
+      - "3006:3000"
+    environment:
+      - NODE_ENV=production
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+networks:
+  saas-network:
+    driver: bridge
+
+volumes:
+  pgdata:
+  redisdata:

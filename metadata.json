@@ -1,0 +1,6 @@
+{
+  "name": "Enterprise Restaurant Platform",
+  "description": "Multi-tenant SaaS restaurant platform architecture and PRD.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
