@@ -11,8 +11,8 @@ async function startServer() {
 
   // API Routes
   const healthController = new HealthController();
-  app.use('/api', healthController.router);
-  app.use('/', healthController.router); // for root health check too
+  app.use('/api', healthController.router as any);
+  app.use('/', healthController.router as any); // for root health check too
 
   // Vite middleware for development
   if (process.env.NODE_ENV !== "production") {

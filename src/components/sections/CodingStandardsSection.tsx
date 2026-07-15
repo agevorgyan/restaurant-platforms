@@ -52,7 +52,7 @@ export function CodingStandardsSection() {
             <div className="p-4 rounded-lg border bg-card">
               <h3 className="font-semibold text-sm">Enums</h3>
               <p className="text-xs text-muted-foreground mt-1 font-mono">PascalCase (Keys: UPPER_SNAKE_CASE)</p>
-              <p className="text-xs text-muted-foreground mt-2">e.g., `enum OrderStatus { PENDING, PAID }`</p>
+              <p className="text-xs text-muted-foreground mt-2">{"e.g., `enum OrderStatus { PENDING, PAID }`"}</p>
             </div>
             <div className="p-4 rounded-lg border bg-card">
               <h3 className="font-semibold text-sm">React Hooks</h3>

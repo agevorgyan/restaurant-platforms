@@ -92,7 +92,7 @@ import { TransactionStrategySection } from "@/components/sections/TransactionStr
 import { CqrsEvaluationSection } from "@/components/sections/CqrsEvaluationSection";
 import { DatabaseStrategySection } from "@/components/sections/DatabaseStrategySection";
 import { DomainArchReviewSection } from "@/components/sections/DomainArchReviewSection";
-import { ListChecks, FolderTree, Container, GitBranch, Settings, Code2, BookOpen as BookOpenIcon, Book, ShieldCheck, AlignLeft, Brush, Type, PaintBucket, LayoutTemplate, Navigation, Smartphone, ShoppingCart, Activity, ShieldAlert, Package, Layers, MousePointerClick, LayoutList, ShoppingBag, PanelBottomClose, Search, Anchor, Palette, Box, Workflow, ScrollText, AlertOctagon, Network, Library, Zap, ToggleLeft, Map, Key, Languages, History, ClipboardCheck, LayoutDashboard, Database, Cuboid, Diamond, DatabaseBackup, ActivitySquare, RefreshCw, SplitSquareHorizontal, HardDrive, Shield } from "lucide-react";
+import { ListChecks, FolderTree, Container, GitBranch, Settings, Code2, BookOpen as BookOpenIcon, Book, ShieldCheck, AlignLeft, Brush, Type, PaintBucket, LayoutTemplate, Navigation, Smartphone, Activity, ShieldAlert, Package, MousePointerClick, LayoutList, ShoppingBag, PanelBottomClose, Search, Anchor, Box, Workflow, ScrollText, AlertOctagon, Network, Library, Zap, ToggleLeft, Map, Key, Languages, History, ClipboardCheck, LayoutDashboard, Cuboid, Diamond, DatabaseBackup, ActivitySquare, RefreshCw, SplitSquareHorizontal, HardDrive } from "lucide-react";
 
 const navigation = [
   { id: "vision", name: "Vision & Architecture", icon: Building2, component: <VisionSection /> },
