@@ -3,10 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build": "turbo run build",
-    "dev": "turbo run dev",
-    "lint": "turbo run lint",
-    "typecheck": "turbo run typecheck"
+    "build": "npx --yes turbo run build",
+    "dev": "npx --yes turbo run dev",
+    "lint": "npx --yes turbo run lint",
+    "typecheck": "npx --yes turbo run typecheck"
   },
   "devDependencies": {
     "turbo": "latest",
@@ -16,5 +16,8 @@
   "workspaces": [
     "apps/*",
     "packages/*"
-  ]
+  ],
+  "dependencies": {
+    "@fastify/static": "^7.0.4"
+  }
 }
