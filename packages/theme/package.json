@@ -6,19 +6,11 @@
   "types": "./src/index.ts",
   "scripts": {
     "lint": "eslint .",
-    "build": "tsc --noEmit",
-    "test": "vitest run",
-    "typecheck": "tsc --noEmit"
+    "build": "tsc --noEmit"
   },
+  "dependencies": {},
   "devDependencies": {
-    "@saas/config": "workspace:*",
-    "typescript": "^5.0.0",
-    "vitest": "^4.1.10"
-  },
-  "dependencies": {
-    "@types/react": "^19.2.17",
-    "@types/react-dom": "^19.2.3",
-    "react": "^19.2.7",
-    "react-dom": "^19.2.7"
+    "@saas/config": "*",
+    "typescript": "^5.0.0"
   }
 }

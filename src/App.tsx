@@ -1,5 +1,24 @@
 import { useState } from "react";
-
+import { 
+  Building2, 
+  FileText, 
+  PenTool, 
+  Component,
+  Database,
+  Server,
+  Shield,
+  Globe,
+  QrCode,
+  ShoppingCart,
+  Sparkles,
+  ServerCog,
+  Menu,
+  Layers,
+  BookOpen,
+  Folder,
+  CheckSquare,
+  Palette
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -73,7 +92,7 @@ import { TransactionStrategySection } from "@/components/sections/TransactionStr
 import { CqrsEvaluationSection } from "@/components/sections/CqrsEvaluationSection";
 import { DatabaseStrategySection } from "@/components/sections/DatabaseStrategySection";
 import { DomainArchReviewSection } from "@/components/sections/DomainArchReviewSection";
-import { Building2, FileText, PenTool, Component, Server, QrCode, Sparkles, ServerCog, Folder, CheckSquare, BookOpen, Shield, Users, CreditCard, Box, Settings, Bell, LayoutDashboard, Store, Paintbrush, Receipt, BarChart3, ChevronRight, Menu, X, ArrowRight, Zap, Globe, Lock, Code2, Database, ShoppingCart, Layers, Palette, ListChecks, FolderTree, Container, GitBranch, BookOpen as BookOpenIcon, Book, ShieldCheck, AlignLeft, Brush, Type, PaintBucket, LayoutTemplate, Navigation, Smartphone, Activity, ShieldAlert, Package, MousePointerClick, LayoutList, ShoppingBag, PanelBottomClose, Search, Anchor, Workflow, ScrollText, AlertOctagon, Network, Library, ToggleLeft, Map, Key, Languages, History, ClipboardCheck, Cuboid, Diamond, DatabaseBackup, ActivitySquare, RefreshCw, SplitSquareHorizontal, HardDrive } from "lucide-react";
+import { ListChecks, FolderTree, Container, GitBranch, Settings, Code2, BookOpen as BookOpenIcon, Book, ShieldCheck, AlignLeft, Brush, Type, PaintBucket, LayoutTemplate, Navigation, Smartphone, ShoppingCart, Activity, ShieldAlert, Package, Layers, MousePointerClick, LayoutList, ShoppingBag, PanelBottomClose, Search, Anchor, Palette, Box, Workflow, ScrollText, AlertOctagon, Network, Library, Zap, ToggleLeft, Map, Key, Languages, History, ClipboardCheck, LayoutDashboard, Database, Cuboid, Diamond, DatabaseBackup, ActivitySquare, RefreshCw, SplitSquareHorizontal, HardDrive, Shield } from "lucide-react";
 
 const navigation = [
   { id: "vision", name: "Vision & Architecture", icon: Building2, component: <VisionSection /> },

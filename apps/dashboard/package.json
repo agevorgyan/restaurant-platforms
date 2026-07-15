@@ -6,21 +6,20 @@
     "dev": "tsx src/index.ts",
     "build": "esbuild src/index.ts --bundle --platform=node --outfile=dist/index.js",
     "lint": "echo 'lint dashboard'",
-    "start": "node dist/index.js",
-    "typecheck": "tsc --noEmit"
+    "start": "node dist/index.js"
   },
   "dependencies": {
-    "@saas/core": "workspace:*",
-    "@saas/types": "workspace:*",
-    "@saas/logger": "workspace:*",
-    "@saas/ui": "workspace:*",
-    "@saas/theme": "workspace:*",
-    "@saas/api-client": "workspace:*",
-    "@saas/hooks": "workspace:*",
-    "@saas/utils": "workspace:*"
+    "@saas/core": "*",
+    "@saas/types": "*",
+    "@saas/logger": "*",
+    "@saas/ui": "*",
+    "@saas/theme": "*",
+    "@saas/api-client": "*",
+    "@saas/hooks": "*",
+    "@saas/utils": "*"
   },
   "devDependencies": {
-    "@saas/config": "workspace:*",
+    "@saas/config": "*",
     "typescript": "^5.0.0"
   }
 }

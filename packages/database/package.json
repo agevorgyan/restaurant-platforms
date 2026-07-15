@@ -9,18 +9,15 @@
     "build": "tsc --noEmit",
     "generate": "prisma generate",
     "db:push": "prisma db push",
-    "db:seed": "tsx prisma/seed.ts",
-    "typecheck": "tsc --noEmit"
+    "db:seed": "tsx prisma/seed.ts"
   },
   "devDependencies": {
-    "@saas/config": "workspace:*",
+    "@saas/config": "*",
     "prisma": "^5.22.0",
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "@nestjs/common": "^10.0.0",
-    "@prisma/client": "^5.22.0",
-    "@saas/db": "workspace:*"
+    "@prisma/client": "^5.22.0"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

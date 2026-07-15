@@ -1,1 +1,1 @@
-export const log = (msg: string) => console.log(msg);
+export const name = '@saas/logger';

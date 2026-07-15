@@ -100,7 +100,7 @@ export function FeatureFlagArchitectureSection() {
             <div className="flex flex-col gap-2 p-4 rounded-lg border bg-muted/50">
               <ArrowRight className="h-5 w-5 text-emerald-500" />
               <h3 className="font-bold text-sm">Evaluation Context</h3>
-              <p className="text-xs text-muted-foreground">Clients provide `{ ['restaurantId', 'planId'] }` to compute state.</p>
+              <p className="text-xs text-muted-foreground">Clients provide `{ restaurantId, planId }` to compute state.</p>
             </div>
 
             <div className="flex flex-col gap-2 p-4 rounded-lg border bg-muted/50">

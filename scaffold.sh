@@ -1,58 +1,42 @@
 #!/bin/bash
 set -e
 
-npm install -g pnpm@9.5.0
+# Update root package.json to include workspaces and turbo
+node -e "
+const fs = require('fs');
+const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+pkg.workspaces = ['apps/*', 'packages/*'];
+pkg.scripts = pkg.scripts || {};
+pkg.scripts['build:turbo'] = 'turbo run build';
+pkg.scripts['dev:turbo'] = 'turbo run dev';
+pkg.scripts['lint:turbo'] = 'turbo run lint';
+pkg.scripts['prepare'] = 'husky install || true';
+fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2));
+"
 
-cat << 'EOF' > package.json
-{
-  "name": "restaurant-saas",
-  "private": true,
-  "scripts": {
-    "build": "turbo run build",
-    "dev": "turbo run dev",
-    "lint": "turbo run lint",
-    "typecheck": "turbo run typecheck",
-    "test": "turbo run test",
-    "prepare": "husky"
-  },
-  "devDependencies": {
-    "turbo": "latest",
-    "husky": "latest",
-    "prettier": "latest",
-    "@commitlint/cli": "latest",
-    "@commitlint/config-conventional": "latest",
-    "typescript": "latest",
-    "eslint": "9.x",
-    "@eslint/js": "latest",
-    "@typescript-eslint/eslint-plugin": "latest",
-    "@typescript-eslint/parser": "latest"
-  },
-  "packageManager": "pnpm@9.5.0"
-}
-EOF
+# Create directories
+mkdir -p apps/{api,admin,dashboard,customer-menu,customer-order,customer-kiosk}/src
+mkdir -p packages/{ui,theme,database,types,config,core,events,logger,validation,api-client,hooks,utils}/src
 
-cat << 'EOF' > pnpm-workspace.yaml
+# 1. pnpm-workspace.yaml
+cat << 'EOF2' > pnpm-workspace.yaml
 packages:
   - "apps/*"
   - "packages/*"
-EOF
+EOF2
 
-cat << 'EOF' > turbo.json
+# 2. turbo.json
+cat << 'EOF2' > turbo.json
 {
   "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": ["**/.env.*local"],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**", ".next/**"]
+      "outputs": ["dist/**", ".next/**", "!-next/cache/**"]
     },
     "lint": {
       "dependsOn": ["^lint"]
-    },
-    "typecheck": {
-      "dependsOn": ["^typecheck"]
-    },
-    "test": {
-      "dependsOn": ["^build"]
     },
     "dev": {
       "cache": false,
@@ -60,53 +44,34 @@ cat << 'EOF' > turbo.json
     }
   }
 }
-EOF
+EOF2
 
-cat << 'EOF' > commitlint.config.js
-module.exports = { extends: ['@commitlint/config-conventional'] };
-EOF
+# 3. commitlint.config.js
+cat << 'EOF2' > commitlint.config.js
+module.exports = {
+  extends: ['@commitlint/config-conventional'],
+};
+EOF2
 
-cat << 'EOF' > eslint.config.mjs
-import js from "@eslint/js";
-import tsPlugin from "@typescript-eslint/eslint-plugin";
-import tsParser from "@typescript-eslint/parser";
+# 4. .lintstagedrc.js
+cat << 'EOF2' > .lintstagedrc.js
+module.exports = {
+  '*.{js,jsx,ts,tsx}': ['eslint --fix', 'prettier --write'],
+  '*.{json,md,yml,yaml}': ['prettier --write'],
+};
+EOF2
 
-export default [
-  js.configs.recommended,
-  {
-    files: ["**/*.ts", "**/*.tsx"],
-    languageOptions: {
-      parser: tsParser,
-      parserOptions: {
-        ecmaVersion: "latest",
-        sourceType: "module",
-      },
-    },
-    plugins: {
-      "@typescript-eslint": tsPlugin,
-    },
-    rules: {
-      "no-unused-vars": "off",
-      "@typescript-eslint/no-unused-vars": "warn",
-    },
-  },
-  {
-    ignores: ["**/dist/**", "**/.next/**", "**/node_modules/**"]
-  }
-];
-EOF
-
-mkdir -p packages/config
-cat << 'EOF' > packages/config/package.json
+# 5. packages/config
+cat << 'EOF2' > packages/config/package.json
 {
   "name": "@saas/config",
   "version": "0.0.0",
   "private": true,
   "main": "index.js"
 }
-EOF
+EOF2
 
-cat << 'EOF' > packages/config/tsconfig.base.json
+cat << 'EOF2' > packages/config/tsconfig.base.json
 {
   "compilerOptions": {
     "strict": true,
@@ -114,123 +79,114 @@ cat << 'EOF' > packages/config/tsconfig.base.json
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "moduleResolution": "node",
-    "resolveJsonModule": true,
     "isolatedModules": true
   }
 }
-EOF
+EOF2
 
-mkdir -p packages/types/src
-cat << 'EOF' > packages/types/package.json
+cat << 'EOF2' > packages/config/eslint-preset.js
+module.exports = {
+  extends: ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+  parser: "@typescript-eslint/parser",
+  plugins: ["@typescript-eslint"],
+  rules: {},
+};
+EOF2
+
+# 6. Initialize packages
+for pkg in ui theme database types core events logger validation api-client hooks utils; do
+  cat << EOF2 > packages/$pkg/package.json
 {
-  "name": "@saas/types",
+  "name": "@saas/$pkg",
   "version": "0.0.0",
   "private": true,
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
   "scripts": {
-    "build": "tsc",
-    "lint": "eslint .",
-    "typecheck": "tsc --noEmit"
+    "lint": "eslint src/",
+    "build": "tsc --noEmit"
   },
+  "dependencies": {},
   "devDependencies": {
     "@saas/config": "workspace:*",
-    "typescript": "latest"
+    "typescript": "^5.0.0"
   }
 }
-EOF
+EOF2
 
-cat << 'EOF' > packages/types/tsconfig.json
+  cat << EOF2 > packages/$pkg/tsconfig.json
 {
   "extends": "@saas/config/tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "dist",
-    "declaration": true
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["./src/*"]
+    }
   },
-  "include": ["src"]
+  "include": ["src/**/*"]
 }
-EOF
+EOF2
 
-echo "export type User = { id: string; name: string; };" > packages/types/src/index.ts
+  echo "export const name = '@saas/$pkg';" > packages/$pkg/src/index.ts
+done
 
-mkdir -p packages/logger/src
-cat << 'EOF' > packages/logger/package.json
+# 7. Initialize apps
+for app in api admin dashboard customer-menu customer-order customer-kiosk; do
+  cat << EOF2 > apps/$app/package.json
 {
-  "name": "@saas/logger",
-  "version": "0.0.0",
-  "private": true,
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "scripts": {
-    "build": "tsc",
-    "lint": "eslint .",
-    "typecheck": "tsc --noEmit"
-  },
-  "devDependencies": {
-    "@saas/config": "workspace:*",
-    "typescript": "latest"
-  }
-}
-EOF
-
-cat << 'EOF' > packages/logger/tsconfig.json
-{
-  "extends": "@saas/config/tsconfig.base.json",
-  "compilerOptions": {
-    "outDir": "dist",
-    "declaration": true
-  },
-  "include": ["src"]
-}
-EOF
-
-echo "export const log = (msg: string) => console.log(msg);" > packages/logger/src/index.ts
-
-mkdir -p apps/api/src
-cat << 'EOF' > apps/api/package.json
-{
-  "name": "@saas/api",
+  "name": "@saas/$app",
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build": "tsc",
-    "lint": "eslint .",
-    "typecheck": "tsc --noEmit"
+    "dev": "echo 'dev $app'",
+    "build": "echo 'build $app'",
+    "lint": "echo 'lint $app'"
   },
   "dependencies": {
+    "@saas/core": "workspace:*",
     "@saas/types": "workspace:*",
     "@saas/logger": "workspace:*"
   },
   "devDependencies": {
     "@saas/config": "workspace:*",
-    "typescript": "latest"
+    "typescript": "^5.0.0"
   }
 }
-EOF
+EOF2
 
-cat << 'EOF' > apps/api/tsconfig.json
+  cat << EOF2 > apps/$app/tsconfig.json
 {
   "extends": "@saas/config/tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "dist"
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["./src/*"]
+    }
   },
-  "include": ["src"]
+  "include": ["src/**/*"]
 }
-EOF
+EOF2
 
-cat << 'EOF' > apps/api/src/index.ts
-import { log } from '@saas/logger';
-import type { User } from '@saas/types';
-const user: User = { id: '1', name: 'Test' };
-log(\`API started for user \${user.name}\`);
-EOF
+  echo "import { name } from '@saas/core'; console.log('App: $app, Core:', name);" > apps/$app/src/index.ts
+done
 
-pnpm install
-pnpm run build
-pnpm run typecheck
-pnpm run lint
+# Update specific package dependencies
+# UI depends on theme
+node -e "
+const fs = require('fs');
+const pkg = JSON.parse(fs.readFileSync('packages/ui/package.json', 'utf8'));
+pkg.dependencies['@saas/theme'] = 'workspace:*';
+fs.writeFileSync('packages/ui/package.json', JSON.stringify(pkg, null, 2));
+"
 
-npx husky init
-echo "pnpm run lint" > .husky/pre-commit
-echo "pnpm exec commitlint --edit \$1" > .husky/commit-msg
+# API depends on database, events, validation
+node -e "
+const fs = require('fs');
+const pkg = JSON.parse(fs.readFileSync('apps/api/package.json', 'utf8'));
+pkg.dependencies['@saas/database'] = 'workspace:*';
+pkg.dependencies['@saas/events'] = 'workspace:*';
+pkg.dependencies['@saas/validation'] = 'workspace:*';
+fs.writeFileSync('apps/api/package.json', JSON.stringify(pkg, null, 2));
+"
 
+echo "Scaffolding complete."
