@@ -10,10 +10,11 @@
     "typecheck": "npx --yes turbo run typecheck"
   },
   "devDependencies": {
+    "eslint": "^8",
     "turbo": "latest",
     "typescript": "^5.5.4"
   },
-  "packageManager": "npm@10.9.8",
+  "packageManager": "pnpm@11.1.2",
   "workspaces": [
     "apps/*",
     "packages/*"
