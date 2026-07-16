@@ -14,3 +14,5 @@ export * from './reservation-settings.value-object';
 export * from './contact-information.value-object';
 export * from './social-links.value-object';
 export * from './restaurant-settings.value-object';
+export * from './membership-role.value-object';
+export * from './membership-status.value-object';
