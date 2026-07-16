@@ -1,16 +1,13 @@
-import { Address, WorkingHours } from '../value-objects';
-
 export interface IBranch {
   id: string;
   restaurantId: string;
   name: string;
-  address: Address;
-  workingHours: WorkingHours[];
-  phoneNumber?: string;
+  code: string;
+  status: 'active' | 'inactive' | 'temporarily_closed';
+  phone?: string;
   email?: string;
   timezone: string;
-  isMainBranch: boolean;
-  status: 'active' | 'inactive' | 'temporarily_closed';
+  currency: string;
   createdAt: Date;
   updatedAt: Date;
 }

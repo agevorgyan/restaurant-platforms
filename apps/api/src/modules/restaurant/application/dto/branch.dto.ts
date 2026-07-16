@@ -1,5 +1,4 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Address } from '../../domain';
 
 export class CreateBranchDto {
   @ApiProperty({ description: 'The parent restaurant ID' })
@@ -8,11 +7,11 @@ export class CreateBranchDto {
   @ApiProperty({ description: 'The name of the branch' })
   name!: string;
 
-  @ApiProperty({ description: 'The physical address' })
-  address!: Address;
+  @ApiProperty({ description: 'The branch code identifier' })
+  code!: string;
 
   @ApiPropertyOptional({ description: 'Phone number' })
-  phoneNumber?: string;
+  phone?: string;
 
   @ApiPropertyOptional({ description: 'Contact email' })
   email?: string;
@@ -20,8 +19,8 @@ export class CreateBranchDto {
   @ApiProperty({ description: 'Timezone string' })
   timezone!: string;
 
-  @ApiProperty({ description: 'Is this the main branch?' })
-  isMainBranch!: boolean;
+  @ApiProperty({ description: 'Operating Currency' })
+  currency!: string;
 }
 
 export class BranchResponseDto {
@@ -35,10 +34,13 @@ export class BranchResponseDto {
   name!: string;
 
   @ApiProperty()
-  address!: Address;
+  code!: string;
+
+  @ApiProperty()
+  status!: 'active' | 'inactive' | 'temporarily_closed';
 
   @ApiPropertyOptional()
-  phoneNumber?: string;
+  phone?: string;
 
   @ApiPropertyOptional()
   email?: string;
@@ -47,10 +49,7 @@ export class BranchResponseDto {
   timezone!: string;
 
   @ApiProperty()
-  isMainBranch!: boolean;
-
-  @ApiProperty()
-  status!: 'active' | 'inactive' | 'temporarily_closed';
+  currency!: string;
 
   @ApiProperty()
   createdAt!: Date;
