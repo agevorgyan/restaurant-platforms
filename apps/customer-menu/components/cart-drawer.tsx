@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { CartItem, RestaurantConfig } from "../types/menu";
+import { useState } from 'react';
+import { CartItem, RestaurantConfig } from '../types/menu';
 
 interface CartDrawerProps {
   isOpen: boolean;
@@ -76,8 +76,18 @@ export function CartDrawer({
         {orderSuccess ? (
           <div className="absolute inset-0 bg-neutral-950/95 flex flex-col items-center justify-center p-6 text-center z-30 animate-fade-in">
             <div className="w-20 h-20 rounded-full bg-amber-500/10 border border-amber-500/25 flex items-center justify-center shadow-lg shadow-amber-500/5 mb-6 animate-bounce">
-              <svg className="w-10 h-10 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              <svg
+                className="w-10 h-10 text-amber-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M5 13l4 4L19 7"
+                />
               </svg>
             </div>
             <h3 className="text-2xl font-serif text-white tracking-wide">Order Transmitted</h3>
@@ -85,7 +95,8 @@ export function CartDrawer({
               Your order has been sent to the kitchen. Chef is preparing your delicacies.
             </p>
             <div className="mt-6 px-4 py-2 bg-neutral-900 border border-neutral-800 rounded-full text-xs text-neutral-400">
-              Table <span className="font-semibold text-white">{tableNumber}</span> &bull; {config.name}
+              Table <span className="font-semibold text-white">{tableNumber}</span> &bull;{' '}
+              {config.name}
             </div>
             <button
               onClick={handleCloseSuccess}
@@ -101,7 +112,7 @@ export function CartDrawer({
           <div>
             <h2 className="text-lg font-semibold text-white tracking-wide">Your Order</h2>
             <p className="text-xs text-neutral-500 mt-0.5">
-              Table {tableNumber} &bull; {cart.length} item{cart.length !== 1 ? "s" : ""}
+              Table {tableNumber} &bull; {cart.length} item{cart.length !== 1 ? 's' : ''}
             </p>
           </div>
           <button
@@ -147,12 +158,19 @@ export function CartDrawer({
               const itemTotal = unitPrice * item.quantity;
 
               return (
-                <div key={item.id} className="p-4 bg-neutral-950 border border-neutral-850 rounded-2xl space-y-3">
+                <div
+                  key={item.id}
+                  className="p-4 bg-neutral-950 border border-neutral-850 rounded-2xl space-y-3"
+                >
                   <div className="flex justify-between items-start gap-4">
                     <div className="space-y-0.5">
-                      <h4 className="text-sm font-semibold text-white tracking-wide">{item.menuItem.name}</h4>
+                      <h4 className="text-sm font-semibold text-white tracking-wide">
+                        {item.menuItem.name}
+                      </h4>
                       {chosenCustoms.length > 0 && (
-                        <p className="text-xs text-neutral-500 font-medium">{chosenCustoms.join(", ")}</p>
+                        <p className="text-xs text-neutral-500 font-medium">
+                          {chosenCustoms.join(', ')}
+                        </p>
                       )}
                       {item.notes && (
                         <p className="text-xs text-amber-500/80 italic mt-1 bg-neutral-900 border border-neutral-850 rounded-lg px-2.5 py-1">
@@ -171,7 +189,12 @@ export function CartDrawer({
                       onClick={() => onRemoveItem(item.id)}
                       className="text-xs font-medium text-neutral-500 hover:text-red-400 transition-colors flex items-center gap-1"
                     >
-                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg
+                        className="w-3.5 h-3.5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
                         <path
                           strokeLinecap="round"
                           strokeLinejoin="round"
@@ -190,7 +213,9 @@ export function CartDrawer({
                       >
                         —
                       </button>
-                      <span className="w-8 text-center text-xs font-semibold text-white">{item.quantity}</span>
+                      <span className="w-8 text-center text-xs font-semibold text-white">
+                        {item.quantity}
+                      </span>
                       <button
                         onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
                         className="w-7 h-7 flex items-center justify-center text-neutral-400 hover:text-white rounded-full hover:bg-neutral-800 transition-all duration-200"
@@ -246,8 +271,19 @@ export function CartDrawer({
             >
               {isSubmitting ? (
                 <>
-                  <svg className="animate-spin h-5 w-5 text-neutral-950" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <svg
+                    className="animate-spin h-5 w-5 text-neutral-950"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    />
                     <path
                       className="opacity-75"
                       fill="currentColor"

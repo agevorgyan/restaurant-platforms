@@ -1,8 +1,8 @@
-import type { Metadata } from "next";
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "Platform",
-  description: "Restaurant Platform",
+  title: 'Platform',
+  description: 'Restaurant Platform',
 };
 
 export default function RootLayout({

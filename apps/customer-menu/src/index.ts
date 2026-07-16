@@ -1,1 +1,1 @@
-export const name = "customer-menu";
+export const name = 'customer-menu';

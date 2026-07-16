@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from 'next/link';
 
 export default function NotFound() {
   return (
@@ -8,7 +8,8 @@ export default function NotFound() {
       </div>
       <h2 className="text-2xl font-serif tracking-wide text-white font-medium">Page Not Found</h2>
       <p className="mt-2 text-sm text-neutral-400 max-w-sm leading-relaxed">
-        The table or menu selection you are looking for has been moved or does not exist in our salon.
+        The table or menu selection you are looking for has been moved or does not exist in our
+        salon.
       </p>
       <div className="mt-8">
         <Link

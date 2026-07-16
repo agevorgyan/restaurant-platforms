@@ -8,13 +8,13 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: saas_db
     ports:
-      - "5432:5432"
+      - '5432:5432'
     volumes:
       - pgdata:/var/lib/postgresql/data
     networks:
       - saas-network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
       interval: 5s
       timeout: 5s
       retries: 5
@@ -22,13 +22,13 @@ services:
   redis:
     image: redis:7-alpine
     ports:
-      - "6379:6379"
+      - '6379:6379'
     volumes:
       - redisdata:/data
     networks:
       - saas-network
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test: ['CMD', 'redis-cli', 'ping']
       interval: 5s
       timeout: 5s
       retries: 5
@@ -39,7 +39,7 @@ services:
     volumes:
       - .:/app
     ports:
-      - "3000-3010:3000-3010"
+      - '3000-3010:3000-3010'
     environment:
       - NODE_ENV=development
       - DATABASE_URL=postgresql://postgres:password@postgres:5432/saas_db

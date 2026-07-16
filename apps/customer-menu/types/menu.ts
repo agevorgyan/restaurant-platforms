@@ -13,12 +13,7 @@ export interface CustomizationOption {
 }
 
 export type DietaryTag =
-  | "vegan"
-  | "vegetarian"
-  | "gluten-free"
-  | "dairy-free"
-  | "nut-free"
-  | "chef-special";
+  'vegan' | 'vegetarian' | 'gluten-free' | 'dairy-free' | 'nut-free' | 'chef-special';
 
 export interface MenuItem {
   id: string;

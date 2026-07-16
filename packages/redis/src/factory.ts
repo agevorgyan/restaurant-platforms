@@ -5,7 +5,7 @@ let clientInstance: Redis | null = null;
 
 export function createRedisClient(options?: Partial<RedisOptions>): Redis {
   const config = getRedisConfig();
-  
+
   return new Redis({
     host: config.host,
     port: config.port,

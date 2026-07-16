@@ -1,26 +1,31 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { MenuItem, CustomizationChoice, CustomizationOption } from "../types/menu";
+import { useEffect, useState } from 'react';
+import { MenuItem, CustomizationChoice, CustomizationOption } from '../types/menu';
 
 interface DishModalProps {
   item: MenuItem | null;
   onClose: () => void;
-  onAddToCart: (item: MenuItem, quantity: number, customizations: Record<string, CustomizationChoice[]>, notes: string) => void;
+  onAddToCart: (
+    item: MenuItem,
+    quantity: number,
+    customizations: Record<string, CustomizationChoice[]>,
+    notes: string,
+  ) => void;
   currencySymbol: string;
 }
 
 export function DishModal({ item, onClose, onAddToCart, currencySymbol }: DishModalProps) {
   const [quantity, setQuantity] = useState(1);
   const [selectedChoices, setSelectedChoices] = useState<Record<string, CustomizationChoice[]>>({});
-  const [notes, setNotes] = useState("");
+  const [notes, setNotes] = useState('');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // Reset state when item changes
   useEffect(() => {
     if (item) {
       setQuantity(1);
-      setNotes("");
+      setNotes('');
       setErrorMessage(null);
 
       // Initialize default/required selections
@@ -93,7 +98,9 @@ export function DishModal({ item, onClose, onAddToCart, currencySymbol }: DishMo
     });
 
     if (missingRequired && missingRequired.length > 0) {
-      setErrorMessage(`Please make a selection for: ${missingRequired.map((o) => o.name).join(", ")}`);
+      setErrorMessage(
+        `Please make a selection for: ${missingRequired.map((o) => o.name).join(', ')}`,
+      );
       return;
     }
 
@@ -117,7 +124,12 @@ export function DishModal({ item, onClose, onAddToCart, currencySymbol }: DishMo
           aria-label="Close"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M6 18L18 6M6 6l12 12"
+            />
           </svg>
         </button>
 
@@ -137,7 +149,9 @@ export function DishModal({ item, onClose, onAddToCart, currencySymbol }: DishMo
         <div className="flex-1 overflow-y-auto px-6 pb-6 pt-4 space-y-6">
           <div>
             <div className="flex justify-between items-start">
-              <h2 className="text-2xl font-serif font-semibold text-white tracking-wide">{item.name}</h2>
+              <h2 className="text-2xl font-serif font-semibold text-white tracking-wide">
+                {item.name}
+              </h2>
               <span className="text-xl font-medium text-amber-400">
                 {currencySymbol}
                 {item.price.toFixed(2)}
@@ -152,7 +166,7 @@ export function DishModal({ item, onClose, onAddToCart, currencySymbol }: DishMo
                     key={tag}
                     className="px-2.5 py-0.5 text-xs rounded-full font-medium tracking-wide uppercase bg-neutral-800 text-neutral-300 border border-neutral-700"
                   >
-                    {tag.replace("-", " ")}
+                    {tag.replace('-', ' ')}
                   </span>
                 ))}
               </div>
@@ -163,14 +177,17 @@ export function DishModal({ item, onClose, onAddToCart, currencySymbol }: DishMo
           {item.customizations?.map((option) => {
             const selections = selectedChoices[option.id] || [];
             return (
-              <div key={option.id} className="p-5 bg-neutral-950 border border-neutral-850 rounded-2xl space-y-4">
+              <div
+                key={option.id}
+                className="p-5 bg-neutral-950 border border-neutral-850 rounded-2xl space-y-4"
+              >
                 <div className="flex justify-between items-center">
                   <h3 className="text-sm font-semibold text-neutral-200 tracking-wide">
                     {option.name}
                     {option.required && <span className="text-amber-500 ml-1.5">*</span>}
                   </h3>
                   <span className="text-xs text-neutral-500 font-medium">
-                    {option.required ? "Required" : `Choose up to ${option.maxChoices}`}
+                    {option.required ? 'Required' : `Choose up to ${option.maxChoices}`}
                   </span>
                 </div>
 
@@ -183,8 +200,8 @@ export function DishModal({ item, onClose, onAddToCart, currencySymbol }: DishMo
                         onClick={() => handleChoiceSelect(option, choice)}
                         className={`flex justify-between items-center px-4 py-3 border rounded-xl text-left transition-all duration-200 group ${
                           isSelected
-                            ? "bg-amber-500/5 border-amber-500/40 text-white shadow-sm shadow-amber-500/5"
-                            : "bg-neutral-900 border-neutral-800 text-neutral-400 hover:border-neutral-700 hover:text-neutral-300"
+                            ? 'bg-amber-500/5 border-amber-500/40 text-white shadow-sm shadow-amber-500/5'
+                            : 'bg-neutral-900 border-neutral-800 text-neutral-400 hover:border-neutral-700 hover:text-neutral-300'
                         }`}
                       >
                         <div className="flex items-center gap-3">
@@ -192,12 +209,16 @@ export function DishModal({ item, onClose, onAddToCart, currencySymbol }: DishMo
                           <div
                             className={`w-4 h-4 rounded-full flex items-center justify-center border transition-all duration-200 ${
                               isSelected
-                                ? "border-amber-500 bg-amber-500"
-                                : "border-neutral-600 bg-neutral-950"
+                                ? 'border-amber-500 bg-amber-500'
+                                : 'border-neutral-600 bg-neutral-950'
                             }`}
                           >
                             {isSelected && (
-                              <svg className="w-2.5 h-2.5 text-black" viewBox="0 0 8 8" fill="currentColor">
+                              <svg
+                                className="w-2.5 h-2.5 text-black"
+                                viewBox="0 0 8 8"
+                                fill="currentColor"
+                              >
                                 <circle cx="4" cy="4" r="2.5" />
                               </svg>
                             )}
@@ -205,7 +226,9 @@ export function DishModal({ item, onClose, onAddToCart, currencySymbol }: DishMo
                           <span className="text-sm font-medium">{choice.name}</span>
                         </div>
                         {choice.priceAdjustment && (
-                          <span className={`text-xs font-semibold ${isSelected ? "text-amber-400" : "text-neutral-500"}`}>
+                          <span
+                            className={`text-xs font-semibold ${isSelected ? 'text-amber-400' : 'text-neutral-500'}`}
+                          >
                             +{currencySymbol}
                             {choice.priceAdjustment.toFixed(2)}
                           </span>
@@ -241,13 +264,18 @@ export function DishModal({ item, onClose, onAddToCart, currencySymbol }: DishMo
               <div>
                 <p className="text-xs font-semibold text-amber-500">Allergen Notice</p>
                 <p className="text-xs text-neutral-400 mt-0.5">
-                  Contains: {item.allergens.join(", ")}. Please inform your server if you have any severe allergies.
+                  Contains: {item.allergens.join(', ')}. Please inform your server if you have any
+                  severe allergies.
                 </p>
               </div>
             </div>
           )}
 
-          {errorMessage && <p className="text-sm font-medium text-red-400 text-center animate-shake">{errorMessage}</p>}
+          {errorMessage && (
+            <p className="text-sm font-medium text-red-400 text-center animate-shake">
+              {errorMessage}
+            </p>
+          )}
         </div>
 
         {/* Footer Actions */}

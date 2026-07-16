@@ -8,7 +8,7 @@ export async function checkRedisHealth(): Promise<{ status: string; message?: st
       return { status: 'ok' };
     }
     return { status: 'error', message: `Unexpected response: ${result}` };
-  } catch (error: any) {
-    return { status: 'error', message: error.message || 'Unknown error connecting to Redis' };
+  } catch (error) {
+    return { status: 'error', message: (error as Error).message || 'Unknown error connecting to Redis' };
   }
 }

@@ -39,21 +39,28 @@ apps/customer-menu/
 ## Running the Application
 
 ### 1. Installation
+
 Run the workspace pnpm installer from the root repository directory:
+
 ```bash
 pnpm install
 ```
 
 ### 2. Run Development Servers
+
 Start the dev servers for all apps in the monorepo:
+
 ```bash
 pnpm dev
 ```
+
 The **Customer Menu** app will start at [http://localhost:3001](http://localhost:3001).
 Pass a query parameter to test table assignments, e.g. [http://localhost:3001?table=104](http://localhost:3001?table=104).
 
 ### 3. Build for Production
+
 To bundle and optimize the application for production:
+
 ```bash
 pnpm build
 ```
