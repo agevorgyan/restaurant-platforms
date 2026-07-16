@@ -1,17 +1,22 @@
 import { Module } from '@nestjs/common';
-import { RestaurantController } from './infrastructure/controllers';
-import { RestaurantService } from './application/services';
-import { InMemoryRestaurantRepository } from './infrastructure/repositories';
+import { RestaurantController, BranchController } from './infrastructure/controllers';
+import { RestaurantService, BranchService } from './application/services';
+import { InMemoryRestaurantRepository, InMemoryBranchRepository } from './infrastructure/repositories';
 
 @Module({
-  controllers: [RestaurantController],
+  controllers: [RestaurantController, BranchController],
   providers: [
     RestaurantService,
+    BranchService,
     {
       provide: 'IRestaurantRepository',
       useClass: InMemoryRestaurantRepository,
     },
+    {
+      provide: 'IBranchRepository',
+      useClass: InMemoryBranchRepository,
+    },
   ],
-  exports: [RestaurantService],
+  exports: [RestaurantService, BranchService],
 })
 export class RestaurantModule {}

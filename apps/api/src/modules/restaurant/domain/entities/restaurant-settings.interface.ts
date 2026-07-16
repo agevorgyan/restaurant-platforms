@@ -1,3 +1,5 @@
+import { ThemeSettings } from '../value-objects';
+
 export interface IRestaurantSettings {
   id: string;
   restaurantId: string;
@@ -7,5 +9,6 @@ export interface IRestaurantSettings {
   acceptsReservations: boolean;
   acceptsDelivery: boolean;
   acceptsPickup: boolean;
+  theme: ThemeSettings;
   updatedAt: Date;
 }
