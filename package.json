@@ -26,5 +26,10 @@
   ],
   "dependencies": {
     "@fastify/static": "^7.0.4"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "sharp"
+    ]
   }
 }
