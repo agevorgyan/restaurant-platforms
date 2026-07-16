@@ -1,74 +1,36 @@
-# Customer Menu Application
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-A premium, interactive digital restaurant menu client application designed for tableside browsing and ordering in upscale dining establishments.
+## Getting Started
 
-## Tech Stack & Standards
-
-- **Core**: Next.js 14.2.5 (App Router), React 18.3
-- **Styling**: Tailwind CSS, PostCSS (Autoprefixer)
-- **Language**: TypeScript (strict mode checks)
-- **Quality**: ESLint (custom Next rules)
-- **Architecture**: Domain-Driven Design, Feature-Modular configuration
-- **Aesthetics**: Sleek dark mode first, custom glassmorphism, responsive category scrollbar, CSS-based micro-animations.
-
-## Folder Structure
-
-```
-apps/customer-menu/
-├── app/                  # Next.js App Router root layout, pages, errors, and static assets
-│   ├── error.tsx         # Premium error boundary catcher
-│   ├── globals.css       # Global styles and custom keyframes / transitions
-│   ├── layout.tsx        # Base document layout
-│   ├── not-found.tsx     # Custom 404 handler page
-│   └── page.tsx          # Main interactive homepage view (filtered categories, search, modal and drawer containers)
-├── components/           # Modularized UI component layer
-│   ├── cart-drawer.tsx   # Checkout summary calculations, quantity updating, and order submission
-│   └── dish-modal.tsx    # Ingredient details, customizable add-ons, and allergen warnings
-├── config/               # Decoupled mock database configurations
-│   └── menu.ts           # Gastronomy dishes data array and restaurant metadata configuration
-├── hooks/                # Custom React hook utilities
-│   └── use-analytics.ts  # Standard custom telemetry event logger (no-console logging rule compliance)
-├── types/                # Strict TypeScript declaration types
-│   └── menu.ts           # Models for MenuItems, Categories, CartItems, and configs
-├── README.md             # This document
-├── package.json          # Node scripts and dependencies
-├── tsconfig.json         # TypeScript rules
-└── next.config.mjs       # Next.js settings
-```
-
-## Running the Application
-
-### 1. Installation
-
-Run the workspace pnpm installer from the root repository directory:
+First, run the development server:
 
 ```bash
-pnpm install
-```
-
-### 2. Run Development Servers
-
-Start the dev servers for all apps in the monorepo:
-
-```bash
+npm run dev
+# or
+yarn dev
+# or
 pnpm dev
+# or
+bun dev
 ```
 
-The **Customer Menu** app will start at [http://localhost:3001](http://localhost:3001).
-Pass a query parameter to test table assignments, e.g. [http://localhost:3001?table=104](http://localhost:3001?table=104).
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-### 3. Build for Production
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-To bundle and optimize the application for production:
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-```bash
-pnpm build
-```
+## Learn More
 
-## Features
+To learn more about Next.js, take a look at the following resources:
 
-- **Decoupled Data Configs**: All products and details are sourced from config files, allowing immediate API binding later.
-- **Search & Filters**: Instantly filters menu items by title, description, or allergens, with dietary selection badges.
-- **Interactive Modals**: Customizable choices (size, doneness, add-ons) with automatic total price adjustments.
-- **Mock Cart Checkout**: Dynamic service charge and state sales tax calculations. Places order at table with animations.
-- **Custom Telemetry**: All core actions (views, carts, orders) generate `CustomEvent` entries tracked in `sessionStorage` for inspection.
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
