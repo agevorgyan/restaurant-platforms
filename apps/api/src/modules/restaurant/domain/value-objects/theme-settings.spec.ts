@@ -1,4 +1,4 @@
-import { test, describe, it } from 'node:test';
+import { describe, it } from 'node:test';
 import * as assert from 'node:assert';
 import { ColorPalette } from './color-palette.value-object';
 import { Typography } from './typography.value-object';

@@ -1,4 +1,4 @@
-import { test, describe, it } from 'node:test';
+import { describe, it } from 'node:test';
 import * as assert from 'node:assert';
 import { OpeningPeriod } from './opening-period.value-object';
 import { BusinessDay } from './business-day.value-object';
