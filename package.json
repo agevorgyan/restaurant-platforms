@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "build": "npx --yes turbo run build",
+    "start": "npx --yes turbo run start",
     "dev": "npx --yes turbo run dev",
     "lint": "npx --yes turbo run lint",
     "typecheck": "npx --yes turbo run typecheck"
