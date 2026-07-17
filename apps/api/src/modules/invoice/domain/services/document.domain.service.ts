@@ -59,7 +59,7 @@ export class DocumentDomainService {
     };
 
     await this.invoiceRepository.save(invoice);
-    new InvoiceIssuedEvent(invoice);
+    new InvoiceIssuedEvent(invoice.id, invoice.orderId);
     return invoice;
   }
 
@@ -76,7 +76,7 @@ export class DocumentDomainService {
     invoice.updatedAt = new Date();
 
     await this.invoiceRepository.save(invoice);
-    new InvoiceCancelledEvent(invoice);
+    new InvoiceCancelledEvent(invoice.id, invoice.orderId);
 
     return invoice;
   }
@@ -106,7 +106,7 @@ export class DocumentDomainService {
     };
 
     await this.receiptRepository.save(receipt);
-    new ReceiptIssuedEvent(receipt);
+    new ReceiptIssuedEvent(receipt.id, receipt.paymentId);
     return receipt;
   }
 
@@ -123,7 +123,7 @@ export class DocumentDomainService {
     receipt.updatedAt = new Date();
 
     await this.receiptRepository.save(receipt);
-    new ReceiptVoidedEvent(receipt);
+    new ReceiptVoidedEvent(receipt.id, receipt.paymentId);
 
     return receipt;
   }

@@ -8,7 +8,7 @@ import { PaymentMethodAvailability } from '../../domain/value-objects/payment-me
 import { IPaymentMethod } from '../../domain/entities/payment-method.interface';
 import {
   PaymentMethodCreatedEvent,
-  PaymentMethodUpdatedEvent,
+  PaymentMethodChangedEvent,
   PaymentMethodActivatedEvent,
   PaymentMethodDeactivatedEvent
 } from '../../domain/events/payment-method.events';
@@ -64,7 +64,7 @@ export class PaymentMethodDomainService implements IPaymentMethodPolicy {
     };
 
     await this.repository.save(paymentMethod);
-    new PaymentMethodCreatedEvent(paymentMethod);
+    new PaymentMethodCreatedEvent(paymentMethod.id, paymentMethod.restaurantId);
     return paymentMethod;
   }
 
@@ -87,11 +87,11 @@ export class PaymentMethodDomainService implements IPaymentMethodPolicy {
     await this.repository.save(paymentMethod);
 
     if (dto.status === 'Active') {
-      new PaymentMethodActivatedEvent(paymentMethod);
+      new PaymentMethodActivatedEvent(paymentMethod.id, paymentMethod.restaurantId);
     } else if (dto.status === 'Inactive' || dto.status === 'Disabled') {
-      new PaymentMethodDeactivatedEvent(paymentMethod);
+      new PaymentMethodDeactivatedEvent(paymentMethod.id, paymentMethod.restaurantId);
     } else {
-      new PaymentMethodUpdatedEvent(paymentMethod);
+      new PaymentMethodChangedEvent(paymentMethod.id, paymentMethod.restaurantId);
     }
 
     return paymentMethod;

@@ -69,7 +69,7 @@ export class RefundDomainService {
     };
 
     await this.repository.save(refund);
-    new RefundRequestedEvent(refund);
+    new RefundRequestedEvent(refund.id, refund.paymentId);
     return refund;
   }
 
@@ -90,7 +90,7 @@ export class RefundDomainService {
     refund.updatedAt = new Date();
 
     await this.repository.save(refund);
-    new RefundApprovedEvent(refund);
+    new RefundApprovedEvent(refund.id, refund.paymentId);
 
     return refund;
   }
@@ -107,7 +107,7 @@ export class RefundDomainService {
     refund.updatedAt = new Date();
 
     await this.repository.save(refund);
-    new RefundRejectedEvent(refund);
+    new RefundRejectedEvent(refund.id, refund.paymentId);
 
     return refund;
   }
@@ -144,7 +144,7 @@ export class RefundDomainService {
     refund.updatedAt = new Date();
 
     await this.repository.save(refund);
-    new RefundCompletedEvent(refund);
+    new RefundCompletedEvent(refund.id, refund.paymentId);
 
     return refund;
   }

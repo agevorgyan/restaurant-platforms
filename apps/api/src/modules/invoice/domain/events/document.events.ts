@@ -1,18 +1,15 @@
-import { IInvoice } from '../entities/invoice.interface';
-import { IReceipt } from '../entities/receipt.interface';
-
 export class InvoiceIssuedEvent {
-  constructor(public readonly invoice: IInvoice) {}
+  constructor(public readonly invoiceId: string, public readonly orderId: string) {}
 }
 
 export class InvoiceCancelledEvent {
-  constructor(public readonly invoice: IInvoice) {}
+  constructor(public readonly invoiceId: string, public readonly orderId: string) {}
 }
 
 export class ReceiptIssuedEvent {
-  constructor(public readonly receipt: IReceipt) {}
+  constructor(public readonly receiptId: string, public readonly paymentId: string) {}
 }
 
 export class ReceiptVoidedEvent {
-  constructor(public readonly receipt: IReceipt) {}
+  constructor(public readonly receiptId: string, public readonly paymentId: string) {}
 }

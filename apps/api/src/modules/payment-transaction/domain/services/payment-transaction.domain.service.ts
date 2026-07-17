@@ -107,7 +107,7 @@ export class PaymentTransactionDomainService {
     };
 
     await this.repository.save(transaction);
-    new PaymentTransactionCreatedEvent(transaction);
+    new PaymentTransactionCreatedEvent(transaction.id, transaction.paymentId);
     return transaction;
   }
 
@@ -127,11 +127,11 @@ export class PaymentTransactionDomainService {
 
     // Emit specific events based on type
     if (transaction.transactionType.value === 'Authorization') {
-      new PaymentTransactionAuthorizedEvent(transaction);
+      new PaymentTransactionAuthorizedEvent(transaction.id, transaction.paymentId);
     } else if (transaction.transactionType.value === 'Capture' || transaction.transactionType.value === 'PartialCapture') {
-      new PaymentTransactionCapturedEvent(transaction);
+      new PaymentTransactionCapturedEvent(transaction.id, transaction.paymentId);
     } else if (transaction.transactionType.value === 'Void') {
-      new PaymentTransactionVoidedEvent(transaction);
+      new PaymentTransactionVoidedEvent(transaction.id, transaction.paymentId);
     }
 
     return transaction;
@@ -154,7 +154,7 @@ export class PaymentTransactionDomainService {
     transaction.updatedAt = new Date();
 
     await this.repository.save(transaction);
-    new PaymentTransactionFailedEvent(transaction);
+    new PaymentTransactionFailedEvent(transaction.id, transaction.paymentId);
 
     return transaction;
   }

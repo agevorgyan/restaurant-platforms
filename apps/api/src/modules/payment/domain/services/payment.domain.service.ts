@@ -10,6 +10,9 @@ import { IPayment } from '../../domain/entities/payment.interface';
 import {
   PaymentCreatedEvent,
   PaymentAuthorizedEvent,
+  PaymentCapturedEvent,
+  PaymentFailedEvent,
+  PaymentRefundedEvent,
   PaymentCancelledEvent
 } from '../../domain/events/payment.events';
 
@@ -44,7 +47,7 @@ export class PaymentDomainService {
     };
 
     await this.repository.save(payment);
-    new PaymentCreatedEvent(payment);
+    new PaymentCreatedEvent(payment.id, payment.orderId);
     return payment;
   }
 
@@ -72,9 +75,15 @@ export class PaymentDomainService {
     await this.repository.save(payment);
 
     if (dto.status === 'Authorized') {
-      new PaymentAuthorizedEvent(payment);
+      new PaymentAuthorizedEvent(payment.id, payment.orderId);
+    } else if (dto.status === 'Captured') {
+      new PaymentCapturedEvent(payment.id, payment.orderId);
+    } else if (dto.status === 'Failed') {
+      new PaymentFailedEvent(payment.id, payment.orderId);
+    } else if (dto.status === 'Refunded') {
+      new PaymentRefundedEvent(payment.id, payment.orderId);
     } else if (dto.status === 'Cancelled') {
-      new PaymentCancelledEvent(payment);
+      new PaymentCancelledEvent(payment.id, payment.orderId);
     }
 
     return payment;

@@ -37,7 +37,7 @@ export class PaymentPolicyDomainService {
     };
 
     await this.repository.save(policy);
-    new PaymentPolicyCreatedEvent(policy);
+    new PaymentPolicyCreatedEvent(policy.id, policy.restaurantId);
     return policy;
   }
 
@@ -62,11 +62,11 @@ export class PaymentPolicyDomainService {
     await this.repository.save(policy);
 
     if (dto.status === 'Active') {
-      new PaymentPolicyActivatedEvent(policy);
+      new PaymentPolicyActivatedEvent(policy.id, policy.restaurantId);
     } else if (dto.status === 'Inactive') {
-      new PaymentPolicyDeactivatedEvent(policy);
+      new PaymentPolicyDeactivatedEvent(policy.id, policy.restaurantId);
     } else {
-      new PaymentPolicyUpdatedEvent(policy);
+      new PaymentPolicyUpdatedEvent(policy.id, policy.restaurantId);
     }
 
     return policy;

@@ -1,17 +1,15 @@
-import { IPaymentPolicy } from '../entities/payment-policy.interface';
-
 export class PaymentPolicyCreatedEvent {
-  constructor(public readonly policy: IPaymentPolicy) {}
+  constructor(public readonly policyId: string, public readonly restaurantId: string) {}
 }
 
 export class PaymentPolicyUpdatedEvent {
-  constructor(public readonly policy: IPaymentPolicy) {}
+  constructor(public readonly policyId: string, public readonly restaurantId: string) {}
 }
 
 export class PaymentPolicyActivatedEvent {
-  constructor(public readonly policy: IPaymentPolicy) {}
+  constructor(public readonly policyId: string, public readonly restaurantId: string) {}
 }
 
 export class PaymentPolicyDeactivatedEvent {
-  constructor(public readonly policy: IPaymentPolicy) {}
+  constructor(public readonly policyId: string, public readonly restaurantId: string) {}
 }

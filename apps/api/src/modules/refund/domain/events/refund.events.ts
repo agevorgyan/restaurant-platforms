@@ -1,17 +1,15 @@
-import { IRefund } from '../entities/refund.interface';
-
 export class RefundRequestedEvent {
-  constructor(public readonly refund: IRefund) {}
+  constructor(public readonly refundId: string, public readonly paymentId: string) {}
 }
 
 export class RefundApprovedEvent {
-  constructor(public readonly refund: IRefund) {}
+  constructor(public readonly refundId: string, public readonly paymentId: string) {}
 }
 
 export class RefundRejectedEvent {
-  constructor(public readonly refund: IRefund) {}
+  constructor(public readonly refundId: string, public readonly paymentId: string) {}
 }
 
 export class RefundCompletedEvent {
-  constructor(public readonly refund: IRefund) {}
+  constructor(public readonly refundId: string, public readonly paymentId: string) {}
 }

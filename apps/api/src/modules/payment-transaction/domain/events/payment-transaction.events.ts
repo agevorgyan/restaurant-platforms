@@ -1,21 +1,19 @@
-import { IPaymentTransaction } from '../entities/payment-transaction.interface';
-
 export class PaymentTransactionCreatedEvent {
-  constructor(public readonly transaction: IPaymentTransaction) {}
+  constructor(public readonly transactionId: string, public readonly paymentId: string) {}
 }
 
 export class PaymentTransactionAuthorizedEvent {
-  constructor(public readonly transaction: IPaymentTransaction) {}
+  constructor(public readonly transactionId: string, public readonly paymentId: string) {}
 }
 
 export class PaymentTransactionCapturedEvent {
-  constructor(public readonly transaction: IPaymentTransaction) {}
+  constructor(public readonly transactionId: string, public readonly paymentId: string) {}
 }
 
 export class PaymentTransactionVoidedEvent {
-  constructor(public readonly transaction: IPaymentTransaction) {}
+  constructor(public readonly transactionId: string, public readonly paymentId: string) {}
 }
 
 export class PaymentTransactionFailedEvent {
-  constructor(public readonly transaction: IPaymentTransaction) {}
+  constructor(public readonly transactionId: string, public readonly paymentId: string) {}
 }
