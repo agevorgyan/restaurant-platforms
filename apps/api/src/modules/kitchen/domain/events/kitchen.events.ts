@@ -15,6 +15,4 @@ export class KitchenStatusChangedEvent {
   ) {}
 }
 
-export class KitchenCreatedEvent {
-  constructor(public readonly kitchenId: string, public readonly branchId: string) {}
-}
+

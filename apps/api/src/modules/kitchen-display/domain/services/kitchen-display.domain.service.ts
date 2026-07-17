@@ -9,8 +9,6 @@ import { DisplayRefreshPolicy } from '../value-objects/display-refresh-policy.va
 import { DisplayFilter } from '../value-objects/display-filter.value-object';
 import { DisplayStatus } from '../value-objects/display-status.value-object';
 import {
-  KitchenDisplayCreatedEvent,
-  KitchenDisplayUpdatedEvent,
   KitchenDisplayActivatedEvent,
   KitchenDisplayDeactivatedEvent
 } from '../events/kitchen-display.events';
@@ -49,7 +47,6 @@ export class KitchenDisplayDomainService {
     };
 
     await this.repository.save(display);
-    new KitchenDisplayCreatedEvent(display.id, display.stationId);
     return display;
   }
 
@@ -89,7 +86,6 @@ export class KitchenDisplayDomainService {
 
     display.updatedAt = new Date();
     await this.repository.save(display);
-    new KitchenDisplayUpdatedEvent(display.id);
 
     return display;
   }

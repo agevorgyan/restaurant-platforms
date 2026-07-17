@@ -9,7 +9,7 @@ import { PreparationTime } from '../value-objects/preparation-time.value-object'
 import { IKitchenTicketItem } from '../entities/kitchen-ticket-item.interface';
 import {
   KitchenTicketCreatedEvent,
-  KitchenTicketStartedEvent,
+  KitchenTicketQueuedEvent,
   KitchenTicketReadyEvent,
   KitchenTicketCompletedEvent,
   KitchenTicketCancelledEvent
@@ -76,7 +76,7 @@ export class KitchenTicketDomainService {
     ticket.updatedAt = new Date();
 
     await this.repository.save(ticket);
-    new KitchenTicketStartedEvent(ticket.id, ticket.kitchenId);
+    new KitchenTicketQueuedEvent(ticket.id, ticket.kitchenId);
     return ticket;
   }
 

@@ -8,7 +8,6 @@ import { KitchenStationCapacity } from '../../domain/value-objects/kitchen-stati
 import { IKitchenStation } from '../../domain/entities/kitchen-station.interface';
 import {
   KitchenStationCreatedEvent,
-  KitchenStationUpdatedEvent,
   KitchenStationActivatedEvent,
   KitchenStationDeactivatedEvent
 } from '../../domain/events/kitchen-station.events';
@@ -70,8 +69,6 @@ export class KitchenStationDomainService {
       new KitchenStationActivatedEvent(station.id, station.kitchenId);
     } else if (newStatusStr === 'Inactive' || newStatusStr === 'Maintenance') {
       new KitchenStationDeactivatedEvent(station.id, station.kitchenId);
-    } else {
-      new KitchenStationUpdatedEvent(station.id, station.kitchenId);
     }
 
     return station;

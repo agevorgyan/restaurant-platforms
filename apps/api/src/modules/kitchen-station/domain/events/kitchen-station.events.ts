@@ -2,9 +2,7 @@ export class KitchenStationCreatedEvent {
   constructor(public readonly stationId: string, public readonly kitchenId: string) {}
 }
 
-export class KitchenStationUpdatedEvent {
-  constructor(public readonly stationId: string, public readonly kitchenId: string) {}
-}
+
 
 export class KitchenStationActivatedEvent {
   constructor(public readonly stationId: string, public readonly kitchenId: string) {}

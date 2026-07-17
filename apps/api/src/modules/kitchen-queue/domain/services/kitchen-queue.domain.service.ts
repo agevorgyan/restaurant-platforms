@@ -7,12 +7,7 @@ import { QueueCapacity } from '../value-objects/queue-capacity.value-object';
 import { QueuePriority } from '../value-objects/queue-priority.value-object';
 import { QueuePosition } from '../value-objects/queue-position.value-object';
 import { QueueStrategyType } from '../strategies/queue-strategy.interface';
-import {
-  TicketQueuedEvent,
-  TicketDequeuedEvent,
-  TicketReorderedEvent,
-  QueueCapacityReachedEvent
-} from '../events/kitchen-queue.events';
+import { KitchenQueueReorderedEvent } from '../events/kitchen-queue.events';
 
 @Injectable()
 export class KitchenQueueDomainService {
@@ -87,13 +82,12 @@ export class KitchenQueueDomainService {
     this.recalculatePositions(queue);
 
     if (queue.capacity.isExceeded(queue.tickets.length)) {
-      new QueueCapacityReachedEvent(queue.id, queue.stationId);
+      // Capacity reached
     }
 
     queue.updatedAt = new Date();
     await this.repository.save(queue);
     
-    new TicketQueuedEvent(queue.id, ticket.ticketId);
     return queue;
   }
 
@@ -110,7 +104,6 @@ export class KitchenQueueDomainService {
     queue.updatedAt = new Date();
 
     await this.repository.save(queue);
-    new TicketDequeuedEvent(queue.id, ticketId);
     
     return queue;
   }
@@ -145,7 +138,7 @@ export class KitchenQueueDomainService {
     queue.updatedAt = new Date();
 
     await this.repository.save(queue);
-    new TicketReorderedEvent(queue.id, ticket.ticketId);
+    new KitchenQueueReorderedEvent(queue.id, ticket.ticketId);
     
     return queue;
   }

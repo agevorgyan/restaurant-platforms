@@ -6,7 +6,6 @@ import { KitchenStatus } from '../../domain/value-objects/kitchen-status.value-o
 import { KitchenPriorityMode } from '../../domain/value-objects/kitchen-priority.value-object';
 import { IKitchen } from '../../domain/entities/kitchen.interface';
 import {
-  KitchenCreatedEvent,
   KitchenOpenedEvent,
   KitchenClosedEvent,
   KitchenStatusChangedEvent
@@ -50,7 +49,6 @@ export class KitchenDomainService {
     };
 
     await this.repository.save(kitchen);
-    new KitchenCreatedEvent(kitchen.id, kitchen.branchId);
     return kitchen;
   }
 

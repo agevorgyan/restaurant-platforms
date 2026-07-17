@@ -2,7 +2,7 @@ export class KitchenTicketCreatedEvent {
   constructor(public readonly ticketId: string, public readonly kitchenId: string) {}
 }
 
-export class KitchenTicketStartedEvent {
+export class KitchenTicketQueuedEvent {
   constructor(public readonly ticketId: string, public readonly kitchenId: string) {}
 }
 

@@ -10,8 +10,7 @@ import {
   KitchenPreparationStartedEvent,
   KitchenPreparationPausedEvent,
   KitchenPreparationResumedEvent,
-  KitchenPreparationCompletedEvent,
-  KitchenWorkflowDelayedEvent
+  KitchenPreparationCompletedEvent
 } from '../events/kitchen-workflow.events';
 
 @Injectable()
@@ -100,7 +99,7 @@ export class KitchenWorkflowDomainService {
 
     const elapsedMinutes = (new Date().getTime() - workflow.startedAt.getTime()) / 60000;
     if (workflow.timePolicy.isExceeded(elapsedMinutes)) {
-      new KitchenWorkflowDelayedEvent(workflow.id, workflow.kitchenId, elapsedMinutes);
+      // Delay exceeded
     }
   }
 
