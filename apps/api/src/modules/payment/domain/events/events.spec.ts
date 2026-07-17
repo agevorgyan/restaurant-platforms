@@ -1,10 +1,10 @@
 import { describe, it } from 'node:test';
 import * as assert from 'node:assert';
 import { PaymentCapturedEvent, PaymentFailedEvent, PaymentRefundedEvent } from './payment.events';
-import { PaymentMethodChangedEvent } from '../../../../payment-method/domain/events/payment-method.events';
-import { PaymentPolicyActivatedEvent } from '../../../../payment-policy/domain/events/payment-policy.events';
-import { InvoiceIssuedEvent, ReceiptIssuedEvent } from '../../../../invoice/domain/events/document.events';
-import { RefundCompletedEvent } from '../../../../refund/domain/events/refund.events';
+import { PaymentMethodChangedEvent } from '../../../payment-method/domain/events/payment-method.events';
+import { PaymentPolicyActivatedEvent } from '../../../payment-policy/domain/events/payment-policy.events';
+import { InvoiceIssuedEvent, ReceiptIssuedEvent } from '../../../invoice/domain/events/document.events';
+import { RefundCompletedEvent } from '../../../refund/domain/events/refund.events';
 
 describe('Payment Domain Events', () => {
   it('PaymentCapturedEvent should only hold aggregate identifiers', () => {
@@ -59,8 +59,11 @@ describe('Payment Domain Events', () => {
   it('All events should be immutable (runtime behavior check - freeze should work)', () => {
     const event = new PaymentCapturedEvent('pay_1', 'order_1');
     Object.freeze(event);
-    assert.throws(() => {
+    try {
       (event as any).paymentId = 'mutated';
-    });
+    } catch {
+      // strict mode throws, non-strict fails silently. Both are fine as long as value is unchanged.
+    }
+    assert.strictEqual(event.paymentId, 'pay_1');
   });
 });
