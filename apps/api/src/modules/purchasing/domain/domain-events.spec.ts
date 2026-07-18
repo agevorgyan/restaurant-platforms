@@ -1,24 +1,19 @@
 import { describe, it } from 'node:test';
 import * as assert from 'node:assert';
-import { SupplierCreatedEvent, SupplierUpdatedEvent } from './events/supplier.events';
-import { PurchaseOrderCreatedEvent, PurchaseOrderCompletedEvent } from './events/purchase-order.events';
-import { GoodsReceiptCreatedEvent, GoodsReceiptPostedEvent } from './events/goods-receipt.events';
-import { PurchaseInvoiceCreatedEvent, PurchaseInvoiceMatchedEvent } from './events/purchase-invoice.events';
-import { PurchaseReturnCreatedEvent, PurchaseReturnPostedEvent } from './events/purchase-return.events';
-import { SupplierContractCreatedEvent, SupplierContractActivatedEvent } from './events/supplier-contract.events';
-import { SupplierPriceListCreatedEvent, SupplierPriceUpdatedEvent } from './events/supplier-price-list.events';
+import { SupplierCreatedEvent } from './events/supplier.events';
+import { PurchaseOrderCreatedEvent } from './events/purchase-order.events';
+import { GoodsReceiptPostedEvent } from './events/goods-receipt.events';
+import { PurchaseInvoiceMatchedEvent } from './events/purchase-invoice.events';
+import { PurchaseReturnPostedEvent } from './events/purchase-return.events';
+import { SupplierContractActivatedEvent } from './events/supplier-contract.events';
+import { SupplierPriceUpdatedEvent } from './events/supplier-price-list.events';
 import { IDomainEvent } from './events/domain-event.interface';
 import { SupplierDomainService } from './services/supplier.domain.service';
 import { PurchaseOrderDomainService } from './services/purchase-order.domain.service';
-import { GoodsReceiptDomainService } from './services/goods-receipt.domain.service';
 import { ISupplierRepository } from './repositories/supplier.repository.interface';
 import { IPurchaseOrderRepository } from './repositories/purchase-order.repository.interface';
-import { IGoodsReceiptRepository } from './repositories/goods-receipt.repository.interface';
-import { SupplierStatus } from './value-objects/supplier-status.value-object';
 import { PurchaseOrderStatus } from './value-objects/purchase-order-status.value-object';
 import { ApprovalStatus } from './value-objects/approval-status.value-object';
-import { ISupplier } from './entities/supplier.interface';
-import { IPurchaseOrder } from './entities/purchase-order.interface';
 
 describe('Domain Events Standardization', () => {
   it('should ensure events implement IDomainEvent correctly and are immutable', () => {
