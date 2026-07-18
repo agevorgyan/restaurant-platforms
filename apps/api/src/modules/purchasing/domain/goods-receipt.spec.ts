@@ -33,6 +33,7 @@ describe('Goods Receipt Domain', () => {
         receiptNumber: '',
         receivedBy: '',
         receiptDate: new Date('invalid'),
+        source: '',
         lines: []
       });
       assert.strictEqual(errors.includes('restaurantId is required'), true);
@@ -49,7 +50,7 @@ describe('Goods Receipt Domain', () => {
         purchaseOrderId: 'po1',
         receiptNumber: 'GR-01',
         receivedBy: 'John',
-        receiptDate: new Date(),
+        receiptDate: new Date(), source: 'Supplier',
         lines: [
           { purchaseOrderLineId: 'pol1', ingredientId: 'ing1', orderedQuantity: 10, receivedQuantity: 10, acceptedQuantity: 11, rejectedQuantity: -1, unitOfMeasure: 'kg' },
           { purchaseOrderLineId: 'pol2', ingredientId: 'ing2', orderedQuantity: 10, receivedQuantity: 10, acceptedQuantity: 5, rejectedQuantity: 4, unitOfMeasure: 'kg' }
@@ -88,7 +89,7 @@ describe('Goods Receipt Domain', () => {
           purchaseOrderId: 'po1',
           receiptNumber: 'GR-01',
           receivedBy: 'John',
-          receiptDate: new Date(),
+          receiptDate: new Date(), source: 'Supplier',
           lines: [{ purchaseOrderLineId: 'pol1', ingredientId: 'ing1', orderedQuantity: 10, receivedQuantity: 10, acceptedQuantity: 10, rejectedQuantity: 0, unitOfMeasure: 'kg' }]
         });
         assert.fail('Should throw');
@@ -108,7 +109,7 @@ describe('Goods Receipt Domain', () => {
         purchaseOrderId: 'po1',
         receiptNumber: 'GR-01',
         receivedBy: 'John',
-        receiptDate: new Date(),
+        receiptDate: new Date(), source: 'Supplier',
         lines: [{ purchaseOrderLineId: 'pol1', ingredientId: 'ing1', orderedQuantity: 10, receivedQuantity: 10, acceptedQuantity: 10, rejectedQuantity: 0, unitOfMeasure: 'kg' }]
       });
 

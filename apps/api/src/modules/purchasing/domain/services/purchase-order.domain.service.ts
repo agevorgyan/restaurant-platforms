@@ -9,6 +9,15 @@ import { ExpectedDeliveryDate } from '../value-objects/expected-delivery-date.va
 import { DeliveryTerms } from '../value-objects/delivery-terms.value-object';
 import { PurchaseOrderTotals } from '../value-objects/purchase-order-totals.value-object';
 import { CreatePurchaseOrderDto, ReceivePurchaseOrderLineDto } from '../../application/dto/purchase-order.dto';
+import {
+  PurchaseOrderCreatedEvent,
+  PurchaseOrderSubmittedEvent,
+  PurchaseOrderApprovedEvent,
+  PurchaseOrderRejectedEvent,
+  PurchaseOrderCancelledEvent,
+  PurchaseOrderPartiallyReceivedEvent,
+  PurchaseOrderCompletedEvent
+} from '../events/purchase-order.events';
 
 export class PurchaseOrderDomainService {
   constructor(
@@ -74,6 +83,7 @@ export class PurchaseOrderDomainService {
       lines,
       totals,
       notes: dto.notes,
+      domainEvents: [new PurchaseOrderCreatedEvent(id, dto.restaurantId)],
       createdAt: new Date(),
       updatedAt: new Date()
     };
@@ -88,6 +98,8 @@ export class PurchaseOrderDomainService {
     if (!po.status.isDraft()) throw new Error('Only Draft orders can be submitted');
 
     po.status = new PurchaseOrderStatus('Submitted');
+    po.domainEvents = po.domainEvents || [];
+    po.domainEvents.push(new PurchaseOrderSubmittedEvent(po.id, po.restaurantId));
     po.updatedAt = new Date();
     await this.purchaseOrderRepository.save(po);
     return po;
@@ -100,6 +112,8 @@ export class PurchaseOrderDomainService {
 
     po.approvalStatus = new ApprovalStatus('Approved');
     po.status = new PurchaseOrderStatus('Approved');
+    po.domainEvents = po.domainEvents || [];
+    po.domainEvents.push(new PurchaseOrderApprovedEvent(po.id, po.restaurantId));
     po.updatedAt = new Date();
     await this.purchaseOrderRepository.save(po);
     return po;
@@ -112,6 +126,8 @@ export class PurchaseOrderDomainService {
 
     po.approvalStatus = new ApprovalStatus('Rejected');
     po.status = new PurchaseOrderStatus('Draft'); 
+    po.domainEvents = po.domainEvents || [];
+    po.domainEvents.push(new PurchaseOrderRejectedEvent(po.id, po.restaurantId));
     po.updatedAt = new Date();
     await this.purchaseOrderRepository.save(po);
     return po;
@@ -124,6 +140,8 @@ export class PurchaseOrderDomainService {
     if (po.status.isCancelled()) throw new Error('Purchase order is already cancelled');
 
     po.status = new PurchaseOrderStatus('Cancelled');
+    po.domainEvents = po.domainEvents || [];
+    po.domainEvents.push(new PurchaseOrderCancelledEvent(po.id, po.restaurantId));
     po.updatedAt = new Date();
     await this.purchaseOrderRepository.save(po);
     return po;
@@ -156,10 +174,13 @@ export class PurchaseOrderDomainService {
     const allFullyReceived = po.lines.every(l => l.receivedQuantity === l.orderedQuantity);
     const someReceived = po.lines.some(l => l.receivedQuantity > 0);
 
+    po.domainEvents = po.domainEvents || [];
     if (allFullyReceived) {
       po.status = new PurchaseOrderStatus('Completed');
+      po.domainEvents.push(new PurchaseOrderCompletedEvent(po.id, po.restaurantId));
     } else if (someReceived) {
       po.status = new PurchaseOrderStatus('PartiallyReceived');
+      po.domainEvents.push(new PurchaseOrderPartiallyReceivedEvent(po.id, po.restaurantId));
     }
 
     po.updatedAt = new Date();

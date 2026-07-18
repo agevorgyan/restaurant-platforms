@@ -5,6 +5,7 @@ import { ExpectedDeliveryDate } from '../value-objects/expected-delivery-date.va
 import { DeliveryTerms } from '../value-objects/delivery-terms.value-object';
 import { PurchaseOrderTotals } from '../value-objects/purchase-order-totals.value-object';
 import { IPurchaseOrderLine } from './purchase-order-line.interface';
+import { IDomainEvent } from '../events/domain-event.interface';
 
 export interface IPurchaseOrder {
   id: string;
@@ -19,6 +20,7 @@ export interface IPurchaseOrder {
   lines: IPurchaseOrderLine[];
   totals: PurchaseOrderTotals;
   notes?: string;
+  domainEvents?: IDomainEvent[];
   createdAt: Date;
   updatedAt: Date;
 }

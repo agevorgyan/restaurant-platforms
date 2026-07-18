@@ -8,6 +8,12 @@ import { ReturnReason, ReturnReasonValue } from '../value-objects/return-reason.
 import { ReturnAuthorization } from '../value-objects/return-authorization.value-object';
 import { SupplierCreditReference } from '../value-objects/supplier-credit-reference.value-object';
 import { CreatePurchaseReturnDto } from '../../application/dto/purchase-return.dto';
+import {
+  PurchaseReturnCreatedEvent,
+  PurchaseReturnAuthorizedEvent,
+  PurchaseReturnPostedEvent,
+  PurchaseReturnCancelledEvent
+} from '../events/purchase-return.events';
 
 export class PurchaseReturnDomainService {
   constructor(
@@ -64,6 +70,7 @@ export class PurchaseReturnDomainService {
       returnDate: dto.returnDate,
       notes: dto.notes,
       lines,
+      domainEvents: [new PurchaseReturnCreatedEvent(id, dto.restaurantId)],
       createdAt: new Date(),
       updatedAt: new Date()
     };
@@ -82,6 +89,8 @@ export class PurchaseReturnDomainService {
 
     purchaseReturn.authorization = new ReturnAuthorization(authorizationCode, authorizedBy, authorizedAt);
     purchaseReturn.status = new ReturnStatus('Authorized');
+    purchaseReturn.domainEvents = purchaseReturn.domainEvents || [];
+    purchaseReturn.domainEvents.push(new PurchaseReturnAuthorizedEvent(purchaseReturn.id, purchaseReturn.restaurantId));
     purchaseReturn.updatedAt = new Date();
     await this.purchaseReturnRepository.save(purchaseReturn);
     return purchaseReturn;
@@ -98,6 +107,8 @@ export class PurchaseReturnDomainService {
     }
 
     purchaseReturn.status = new ReturnStatus('Posted');
+    purchaseReturn.domainEvents = purchaseReturn.domainEvents || [];
+    purchaseReturn.domainEvents.push(new PurchaseReturnPostedEvent(purchaseReturn.id, purchaseReturn.restaurantId));
     purchaseReturn.updatedAt = new Date();
     await this.purchaseReturnRepository.save(purchaseReturn);
     return purchaseReturn;
@@ -111,6 +122,8 @@ export class PurchaseReturnDomainService {
     if (purchaseReturn.status.isCancelled()) throw new Error('Return is already cancelled');
 
     purchaseReturn.status = new ReturnStatus('Cancelled');
+    purchaseReturn.domainEvents = purchaseReturn.domainEvents || [];
+    purchaseReturn.domainEvents.push(new PurchaseReturnCancelledEvent(purchaseReturn.id, purchaseReturn.restaurantId));
     purchaseReturn.updatedAt = new Date();
     await this.purchaseReturnRepository.save(purchaseReturn);
     return purchaseReturn;

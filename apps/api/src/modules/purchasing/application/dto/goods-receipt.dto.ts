@@ -19,5 +19,6 @@ export interface CreateGoodsReceiptDto {
   supplierDeliveryNote?: string;
   receivedBy: string;
   notes?: string;
+  source: string;
   lines: GoodsReceiptLineDto[];
 }

@@ -7,6 +7,13 @@ import { SupplierCode } from '../value-objects/supplier-code.value-object';
 import { SupplierAddress } from '../value-objects/supplier-address.value-object';
 import { SupplierPaymentTerms } from '../value-objects/supplier-payment-terms.value-object';
 import { CreateSupplierDto, UpdateSupplierDto, SupplierContactDto } from '../../application/dto/supplier.dto';
+import {
+  SupplierCreatedEvent,
+  SupplierUpdatedEvent,
+  SupplierActivatedEvent,
+  SupplierDeactivatedEvent,
+  SupplierArchivedEvent
+} from '../events/supplier.events';
 
 export class SupplierDomainService {
   constructor(private readonly repository: ISupplierRepository) {}
@@ -59,6 +66,7 @@ export class SupplierDomainService {
       ) : undefined,
       contacts,
       notes: dto.notes,
+      domainEvents: [new SupplierCreatedEvent(id, dto.restaurantId)],
       createdAt: new Date(),
       updatedAt: new Date()
     };
@@ -115,6 +123,8 @@ export class SupplierDomainService {
     if (supplier.status.isArchived()) throw new Error('Archived suppliers are read-only');
 
     supplier.status = new SupplierStatus('Active');
+    supplier.domainEvents = supplier.domainEvents || [];
+    supplier.domainEvents.push(new SupplierActivatedEvent(supplier.id, supplier.restaurantId));
     supplier.updatedAt = new Date();
     await this.repository.save(supplier);
     return supplier;
@@ -126,6 +136,8 @@ export class SupplierDomainService {
     if (supplier.status.isArchived()) throw new Error('Archived suppliers are read-only');
 
     supplier.status = new SupplierStatus('Inactive');
+    supplier.domainEvents = supplier.domainEvents || [];
+    supplier.domainEvents.push(new SupplierDeactivatedEvent(supplier.id, supplier.restaurantId));
     supplier.updatedAt = new Date();
     await this.repository.save(supplier);
     return supplier;
@@ -136,6 +148,8 @@ export class SupplierDomainService {
     if (!supplier) throw new Error('Supplier not found');
 
     supplier.status = new SupplierStatus('Archived');
+    supplier.domainEvents = supplier.domainEvents || [];
+    supplier.domainEvents.push(new SupplierArchivedEvent(supplier.id, supplier.restaurantId));
     supplier.updatedAt = new Date();
     await this.repository.save(supplier);
     return supplier;
@@ -163,6 +177,8 @@ export class SupplierDomainService {
       isPrimary: contactDto.isPrimary
     });
 
+    supplier.domainEvents = supplier.domainEvents || [];
+    supplier.domainEvents.push(new SupplierUpdatedEvent(supplier.id, supplier.restaurantId));
     supplier.updatedAt = new Date();
     await this.repository.save(supplier);
     return supplier;
@@ -193,6 +209,8 @@ export class SupplierDomainService {
     if (contactDto.email !== undefined) contact.email = contactDto.email;
     if (contactDto.phone !== undefined) contact.phone = contactDto.phone;
 
+    supplier.domainEvents = supplier.domainEvents || [];
+    supplier.domainEvents.push(new SupplierUpdatedEvent(supplier.id, supplier.restaurantId));
     supplier.updatedAt = new Date();
     await this.repository.save(supplier);
     return supplier;
@@ -217,6 +235,8 @@ export class SupplierDomainService {
       supplier.contacts[0].isPrimary = true;
     }
 
+    supplier.domainEvents = supplier.domainEvents || [];
+    supplier.domainEvents.push(new SupplierUpdatedEvent(supplier.id, supplier.restaurantId));
     supplier.updatedAt = new Date();
     await this.repository.save(supplier);
     return supplier;

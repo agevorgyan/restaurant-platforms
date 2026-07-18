@@ -7,6 +7,12 @@ import { InvoiceNumber } from '../value-objects/invoice-number.value-object';
 import { DueDate } from '../value-objects/due-date.value-object';
 import { InvoiceTotals } from '../value-objects/invoice-totals.value-object';
 import { CreatePurchaseInvoiceDto } from '../../application/dto/purchase-invoice.dto';
+import {
+  PurchaseInvoiceCreatedEvent,
+  PurchaseInvoicePostedEvent,
+  PurchaseInvoiceCancelledEvent,
+  PurchaseInvoiceMatchedEvent
+} from '../events/purchase-invoice.events';
 
 export class PurchaseInvoiceDomainService {
   constructor(
@@ -81,6 +87,7 @@ export class PurchaseInvoiceDomainService {
       discount: totals.discount,
       total: totals.total,
       notes: dto.notes,
+      domainEvents: [new PurchaseInvoiceCreatedEvent(id, dto.restaurantId)],
       createdAt: new Date(),
       updatedAt: new Date()
     };
@@ -98,6 +105,8 @@ export class PurchaseInvoiceDomainService {
     if (invoice.status.isCancelled()) throw new Error('Cancelled invoices are terminal');
 
     invoice.status = new InvoiceStatus('Posted');
+    invoice.domainEvents = invoice.domainEvents || [];
+    invoice.domainEvents.push(new PurchaseInvoicePostedEvent(invoice.id, invoice.restaurantId));
     invoice.updatedAt = new Date();
     await this.purchaseInvoiceRepository.save(invoice);
     return invoice;
@@ -112,6 +121,8 @@ export class PurchaseInvoiceDomainService {
     if (!invoice.status.isPosted()) throw new Error('Only posted invoices can be matched');
 
     invoice.status = new InvoiceStatus('Matched');
+    invoice.domainEvents = invoice.domainEvents || [];
+    invoice.domainEvents.push(new PurchaseInvoiceMatchedEvent(invoice.id, invoice.restaurantId));
     invoice.updatedAt = new Date();
     await this.purchaseInvoiceRepository.save(invoice);
     return invoice;
@@ -126,6 +137,8 @@ export class PurchaseInvoiceDomainService {
     if (invoice.status.isMatched()) throw new Error('Matched invoices cannot be modified');
 
     invoice.status = new InvoiceStatus('Cancelled');
+    invoice.domainEvents = invoice.domainEvents || [];
+    invoice.domainEvents.push(new PurchaseInvoiceCancelledEvent(invoice.id, invoice.restaurantId));
     invoice.updatedAt = new Date();
     await this.purchaseInvoiceRepository.save(invoice);
     return invoice;

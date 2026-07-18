@@ -5,6 +5,11 @@ import { ContractPeriod } from '../value-objects/contract-period.value-object';
 import { LeadTime } from '../value-objects/lead-time.value-object';
 import { MinimumOrderQuantity } from '../value-objects/minimum-order-quantity.value-object';
 import { CreateSupplierContractDto } from '../../application/dto/supplier-contract.dto';
+import {
+  SupplierContractCreatedEvent,
+  SupplierContractActivatedEvent,
+  SupplierContractExpiredEvent
+} from '../events/supplier-contract.events';
 
 export class SupplierContractDomainService {
   constructor(private readonly supplierContractRepository: ISupplierContractRepository) {}
@@ -31,6 +36,7 @@ export class SupplierContractDomainService {
         defaultPriceListId: l.defaultPriceListId,
         notes: l.notes
       })),
+      domainEvents: [new SupplierContractCreatedEvent(id, dto.restaurantId)],
       createdAt: new Date(),
       updatedAt: new Date()
     };
@@ -53,6 +59,8 @@ export class SupplierContractDomainService {
     }
 
     contract.status = new ContractStatus('Active');
+    contract.domainEvents = contract.domainEvents || [];
+    contract.domainEvents.push(new SupplierContractActivatedEvent(contract.id, contract.restaurantId));
     contract.updatedAt = new Date();
     await this.supplierContractRepository.save(contract);
     return contract;
@@ -67,6 +75,8 @@ export class SupplierContractDomainService {
     }
 
     contract.status = new ContractStatus('Expired');
+    contract.domainEvents = contract.domainEvents || [];
+    contract.domainEvents.push(new SupplierContractExpiredEvent(contract.id, contract.restaurantId));
     contract.updatedAt = new Date();
     await this.supplierContractRepository.save(contract);
     return contract;

@@ -4,6 +4,7 @@ import { SupplierCode } from '../value-objects/supplier-code.value-object';
 import { SupplierAddress } from '../value-objects/supplier-address.value-object';
 import { SupplierPaymentTerms } from '../value-objects/supplier-payment-terms.value-object';
 import { ISupplierContact } from './supplier-contact.interface';
+import { IDomainEvent } from '../events/domain-event.interface';
 
 export interface ISupplier {
   id: string;
@@ -21,6 +22,7 @@ export interface ISupplier {
   address?: SupplierAddress;
   contacts: ISupplierContact[];
   notes?: string;
+  domainEvents?: IDomainEvent[];
   createdAt: Date;
   updatedAt: Date;
 }

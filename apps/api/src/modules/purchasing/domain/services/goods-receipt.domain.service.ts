@@ -4,9 +4,16 @@ import { IGoodsReceipt } from '../entities/goods-receipt.interface';
 import { IGoodsReceiptLine } from '../entities/goods-receipt-line.interface';
 import { GoodsReceiptStatus } from '../value-objects/goods-receipt-status.value-object';
 import { ReceiptNumber } from '../value-objects/receipt-number.value-object';
+import { ReceiptSource } from '../value-objects/receipt-source.value-object';
 import { LotInformation } from '../value-objects/lot-information.value-object';
 import { ExpirationInformation } from '../value-objects/expiration-information.value-object';
 import { CreateGoodsReceiptDto } from '../../application/dto/goods-receipt.dto';
+import {
+  GoodsReceiptCreatedEvent,
+  GoodsReceiptPostedEvent,
+  GoodsReceiptCancelledEvent,
+  GoodsReceiptLineRejectedEvent
+} from '../events/goods-receipt.events';
 
 export class GoodsReceiptDomainService {
   constructor(
@@ -56,7 +63,9 @@ export class GoodsReceiptDomainService {
       supplierDeliveryNote: dto.supplierDeliveryNote,
       receivedBy: dto.receivedBy,
       notes: dto.notes,
+      source: new ReceiptSource(dto.source),
       lines,
+      domainEvents: [new GoodsReceiptCreatedEvent(id, dto.restaurantId)],
       createdAt: new Date(),
       updatedAt: new Date()
     };
@@ -73,6 +82,24 @@ export class GoodsReceiptDomainService {
     if (receipt.status.isCancelled()) throw new Error('Cancelled receipts are terminal');
 
     receipt.status = new GoodsReceiptStatus('Posted');
+    receipt.domainEvents = receipt.domainEvents || [];
+    receipt.domainEvents.push(new GoodsReceiptPostedEvent(receipt.id, receipt.restaurantId));
+    
+    // Check for rejected lines
+    for (const line of receipt.lines) {
+      if (line.rejectedQuantity > 0) {
+        receipt.domainEvents.push(
+          new GoodsReceiptLineRejectedEvent(
+            receipt.id,
+            receipt.restaurantId,
+            line.purchaseOrderLineId,
+            line.ingredientId,
+            line.rejectedQuantity
+          )
+        );
+      }
+    }
+
     receipt.updatedAt = new Date();
     await this.goodsReceiptRepository.save(receipt);
     return receipt;
@@ -86,6 +113,8 @@ export class GoodsReceiptDomainService {
     if (receipt.status.isCancelled()) throw new Error('Receipt is already cancelled');
 
     receipt.status = new GoodsReceiptStatus('Cancelled');
+    receipt.domainEvents = receipt.domainEvents || [];
+    receipt.domainEvents.push(new GoodsReceiptCancelledEvent(receipt.id, receipt.restaurantId));
     receipt.updatedAt = new Date();
     await this.goodsReceiptRepository.save(receipt);
     return receipt;

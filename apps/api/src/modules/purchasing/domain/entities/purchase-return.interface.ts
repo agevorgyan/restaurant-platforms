@@ -4,6 +4,7 @@ import { ReturnStatus } from '../value-objects/return-status.value-object';
 import { ReturnAuthorization } from '../value-objects/return-authorization.value-object';
 import { SupplierCreditReference } from '../value-objects/supplier-credit-reference.value-object';
 import { IPurchaseReturnLine } from './purchase-return-line.interface';
+import { IDomainEvent } from '../events/domain-event.interface';
 
 export interface IPurchaseReturn {
   id: string;
@@ -19,6 +20,7 @@ export interface IPurchaseReturn {
   returnDate: Date;
   notes?: string;
   lines: IPurchaseReturnLine[];
+  domainEvents?: IDomainEvent[];
   createdAt: Date;
   updatedAt: Date;
 }

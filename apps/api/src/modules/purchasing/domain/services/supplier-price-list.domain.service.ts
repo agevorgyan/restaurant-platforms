@@ -3,6 +3,11 @@ import { ISupplierPriceList } from '../entities/supplier-price-list.interface';
 import { PriceListStatus } from '../value-objects/price-list-status.value-object';
 import { PriceValidityPeriod } from '../value-objects/price-validity-period.value-object';
 import { CreateSupplierPriceListDto } from '../../application/dto/supplier-price-list.dto';
+import {
+  SupplierPriceListCreatedEvent,
+  SupplierPriceListPublishedEvent,
+  SupplierPriceUpdatedEvent
+} from '../events/supplier-price-list.events';
 
 export class SupplierPriceListDomainService {
   constructor(private readonly priceListRepository: ISupplierPriceListRepository) {}
@@ -26,6 +31,7 @@ export class SupplierPriceListDomainService {
           discountPercent: item.discountPercent
         };
       }),
+      domainEvents: [new SupplierPriceListCreatedEvent(id, dto.restaurantId)],
       createdAt: new Date(),
       updatedAt: new Date()
     };
@@ -56,6 +62,8 @@ export class SupplierPriceListDomainService {
     }
 
     priceList.status = new PriceListStatus('Published');
+    priceList.domainEvents = priceList.domainEvents || [];
+    priceList.domainEvents.push(new SupplierPriceListPublishedEvent(priceList.id, priceList.restaurantId));
     priceList.updatedAt = new Date();
     await this.priceListRepository.save(priceList);
     return priceList;
@@ -86,6 +94,8 @@ export class SupplierPriceListDomainService {
     item.minimumQuantity = minimumQuantity;
     item.discountPercent = discountPercent;
 
+    priceList.domainEvents = priceList.domainEvents || [];
+    priceList.domainEvents.push(new SupplierPriceUpdatedEvent(priceList.id, ingredientId, priceList.restaurantId));
     priceList.updatedAt = new Date();
     await this.priceListRepository.save(priceList);
     return priceList;
