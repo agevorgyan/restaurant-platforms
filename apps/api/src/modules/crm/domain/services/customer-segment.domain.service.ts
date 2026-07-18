@@ -54,6 +54,8 @@ export class CustomerSegmentDomainService {
       order: r.order
     }));
 
+    this.validateRuleUniqueness(rules);
+
     const segment: ICustomerSegment = {
       id,
       restaurantId: dto.restaurantId,

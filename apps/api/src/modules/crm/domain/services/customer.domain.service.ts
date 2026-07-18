@@ -53,6 +53,10 @@ export class CustomerDomainService {
       updatedAt: new Date()
     };
 
+    this.validateContacts(customer);
+    this.validateAddresses(customer);
+    this.validateTags(customer);
+
     await this.customerRepository.save(customer);
     return customer;
   }
