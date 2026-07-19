@@ -1,4 +1,4 @@
-import { DomainEvent } from '../base/domain-event';
+import { DomainEvent } from '@saas/core';
 
 export class CampaignCreated implements DomainEvent {
   public dateTimeOccurred: Date;

@@ -1,4 +1,4 @@
-import { ValueObject } from '../base/value-object';
+import { ValueObject } from '@saas/core';
 
 export enum CampaignStatusEnum {
   DRAFT = 'DRAFT',

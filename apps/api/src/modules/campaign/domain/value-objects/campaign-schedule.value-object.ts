@@ -1,4 +1,4 @@
-import { ValueObject } from '../base/value-object';
+import { ValueObject } from '@saas/core';
 
 export interface CampaignScheduleProps {
   startDate: Date;

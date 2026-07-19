@@ -1,15 +1,26 @@
-export type PromotionStatusEnum = 'Draft' | 'Active' | 'Expired' | 'Disabled';
+import { ValueObject } from '@saas/core';
 
-export class PromotionStatus {
-  constructor(public readonly value: PromotionStatusEnum) {
-    this.validate(value);
+export type PromotionStatusEnum = 'Draft' | 'Active' | 'Expired' | 'Disabled' | 'Paused';
+
+interface PromotionStatusProps {
+  value: PromotionStatusEnum;
+}
+
+export class PromotionStatus extends ValueObject<PromotionStatusProps> {
+  private constructor(props: PromotionStatusProps) {
+    super(props);
   }
 
-  private validate(status: string): void {
-    const valid = ['Draft', 'Active', 'Expired', 'Disabled'];
-    if (!valid.includes(status)) {
+  public get value(): PromotionStatusEnum {
+    return this.props.value;
+  }
+
+  public static create(status: string): PromotionStatus {
+    const valid: PromotionStatusEnum[] = ['Draft', 'Active', 'Expired', 'Disabled', 'Paused'];
+    if (!valid.includes(status as PromotionStatusEnum)) {
       throw new Error(`Invalid Promotion Status: ${status}`);
     }
+    return new PromotionStatus({ value: status as PromotionStatusEnum });
   }
 
   public canBeApplied(): boolean {

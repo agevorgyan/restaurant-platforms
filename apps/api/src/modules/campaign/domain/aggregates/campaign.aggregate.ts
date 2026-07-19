@@ -1,4 +1,4 @@
-import { AggregateRoot } from '../base/aggregate-root';
+import { AggregateRoot } from '@saas/core';
 import { CampaignId } from '../value-objects/campaign-id.value-object';
 import { CampaignName } from '../value-objects/campaign-name.value-object';
 import { CampaignType } from '../value-objects/campaign-type.value-object';

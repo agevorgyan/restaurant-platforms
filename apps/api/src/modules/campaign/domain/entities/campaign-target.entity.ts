@@ -1,4 +1,4 @@
-import { Entity } from '../base/entity';
+import { Entity } from '@saas/core';
 
 export interface CampaignTargetProps {
   audienceSegmentIds: string[];
