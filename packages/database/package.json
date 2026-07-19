@@ -5,8 +5,8 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "prisma generate || true && tsc",
-    "dev": "prisma generate || true && tsc --watch",
+    "build": "tsc",
+    "dev": "tsc --watch",
     "lint": "eslint . --ext .ts",
     "typecheck": "tsc --noEmit",
     "db:push": "prisma db push",
