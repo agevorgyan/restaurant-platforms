@@ -1,12 +1,14 @@
 import { 
   PaymentCreatedEvent, 
-  AuthorizationCreatedEvent, 
-  CaptureCreatedEvent, 
-  RefundCreatedEvent,
-  ChargebackCreatedEvent,
+  AuthorizationCompletedEvent, 
+  CaptureCompletedEvent, 
+  RefundCompletedEvent,
+  ChargebackRegisteredEvent,
   PaymentCompletedEvent,
   PaymentFailedEvent,
-  PaymentCancelledEvent
+  PaymentCancelledEvent,
+  PaymentStatusChangedEvent,
+  PaymentVoidedEvent
 } from './payment.events';
 import { PaymentAmount } from '../value-objects/payment-amount.value-object';
 import { PaymentFailureReason, PaymentFailureReasonEnum } from '../value-objects/payment-failure-reason.value-object';
@@ -22,28 +24,28 @@ describe('Payment Domain Events', () => {
     expect(event.amount).toBe(amount);
   });
 
-  it('AuthorizationCreatedEvent should hold identifiers and amount', () => {
-    const event = new AuthorizationCreatedEvent('pay_1', 'auth_1', 'ref_1', amount);
+  it('AuthorizationCompletedEvent should hold identifiers and amount', () => {
+    const event = new AuthorizationCompletedEvent('pay_1', 'auth_1', 'ref_1', amount);
     expect(event.paymentId).toBe('pay_1');
     expect(event.authorizationId).toBe('auth_1');
     expect(event.reference).toBe('ref_1');
   });
 
-  it('CaptureCreatedEvent should hold identifiers and amount', () => {
-    const event = new CaptureCreatedEvent('pay_1', 'cap_1', 'ref_1', amount);
+  it('CaptureCompletedEvent should hold identifiers and amount', () => {
+    const event = new CaptureCompletedEvent('pay_1', 'cap_1', 'ref_1', amount);
     expect(event.paymentId).toBe('pay_1');
     expect(event.captureId).toBe('cap_1');
   });
 
-  it('RefundCreatedEvent should hold identifiers, amount, and reason', () => {
-    const event = new RefundCreatedEvent('pay_1', 'ref_1', 'ref_ext_1', amount, 'Customer request');
+  it('RefundCompletedEvent should hold identifiers, amount, and reason', () => {
+    const event = new RefundCompletedEvent('pay_1', 'ref_1', 'ref_ext_1', amount, 'Customer request');
     expect(event.paymentId).toBe('pay_1');
     expect(event.refundId).toBe('ref_1');
     expect(event.reason).toBe('Customer request');
   });
 
-  it('ChargebackCreatedEvent should hold identifiers, amount, and reason', () => {
-    const event = new ChargebackCreatedEvent('pay_1', 'cb_1', 'cap_ref_1', amount, 'Fraud');
+  it('ChargebackRegisteredEvent should hold identifiers, amount, and reason', () => {
+    const event = new ChargebackRegisteredEvent('pay_1', 'cb_1', 'cap_ref_1', amount, 'Fraud');
     expect(event.paymentId).toBe('pay_1');
     expect(event.chargebackId).toBe('cb_1');
     expect(event.reason).toBe('Fraud');
@@ -61,7 +63,18 @@ describe('Payment Domain Events', () => {
     expect(event.paymentId).toBe('pay_1');
     expect(event.reason).toBe('Timeout');
   });
+  it('PaymentStatusChangedEvent should hold old and new status', () => {
+    const event = new PaymentStatusChangedEvent('pay_1', 'Created', 'Authorized');
+    expect(event.paymentId).toBe('pay_1');
+    expect(event.oldStatus).toBe('Created');
+    expect(event.newStatus).toBe('Authorized');
+  });
 
+  it('PaymentVoidedEvent should hold reason', () => {
+    const event = new PaymentVoidedEvent('pay_1', 'Fraud');
+    expect(event.paymentId).toBe('pay_1');
+    expect(event.reason).toBe('Fraud');
+  });
   it('PaymentCompletedEvent should hold identifiers', () => {
     const event = new PaymentCompletedEvent('pay_1');
     expect(event.paymentId).toBe('pay_1');

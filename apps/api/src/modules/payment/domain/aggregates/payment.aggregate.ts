@@ -15,13 +15,15 @@ import { SettlementReference } from '../entities/settlement-reference.entity';
 
 import {
   PaymentCreatedEvent,
-  AuthorizationCreatedEvent,
-  CaptureCreatedEvent,
-  RefundCreatedEvent,
-  ChargebackCreatedEvent,
+  AuthorizationCompletedEvent,
+  CaptureCompletedEvent,
+  RefundCompletedEvent,
+  ChargebackRegisteredEvent,
   PaymentCompletedEvent,
   PaymentFailedEvent,
-  PaymentCancelledEvent
+  PaymentCancelledEvent,
+  PaymentStatusChangedEvent,
+  PaymentVoidedEvent
 } from '../events/payment.events';
 
 export interface PaymentProps {
@@ -78,6 +80,17 @@ export class Payment extends AggregateRoot<PaymentProps> {
     return payment;
   }
 
+  public markPendingAuthorization(): void {
+    const oldStatus = this.props.status.value;
+    this.props.status = PaymentStatus.create(PaymentStatusEnum.PENDING_AUTHORIZATION);
+    
+    if (oldStatus !== this.props.status.value) {
+      this.addDomainEvent(new PaymentStatusChangedEvent(this.id, oldStatus, this.props.status.value));
+    }
+
+    this.incrementVersion();
+  }
+
   public authorize(authorization: Authorization): void {
     if (this.props.authorization && !this.props.authorization.isExpired() && !this.props.authorization.isVoided) {
       throw new Error('Payment already has an active authorization');
@@ -87,12 +100,17 @@ export class Payment extends AggregateRoot<PaymentProps> {
       throw new Error('Cannot authorize a cancelled or failed payment');
     }
 
+    const oldStatus = this.props.status.value;
     this.props.authorization = authorization;
     this.props.status = PaymentStatus.create(PaymentStatusEnum.AUTHORIZED);
     this.incrementVersion();
 
     this.addDomainEvent(
-      new AuthorizationCreatedEvent(
+      new PaymentStatusChangedEvent(this.id, oldStatus, PaymentStatusEnum.AUTHORIZED)
+    );
+
+    this.addDomainEvent(
+      new AuthorizationCompletedEvent(
         this.id,
         authorization.id,
         authorization.reference.value,
@@ -118,6 +136,7 @@ export class Payment extends AggregateRoot<PaymentProps> {
     }
 
     this.props.captures.push(capture);
+    const oldStatus = this.props.status.value;
     
     if (newTotalCaptured === this.props.authorization.amount.value) {
       this.props.status = PaymentStatus.create(PaymentStatusEnum.CAPTURED);
@@ -126,10 +145,14 @@ export class Payment extends AggregateRoot<PaymentProps> {
       this.props.status = PaymentStatus.create(PaymentStatusEnum.PARTIALLY_CAPTURED);
     }
     
+    if (oldStatus !== this.props.status.value) {
+      this.addDomainEvent(new PaymentStatusChangedEvent(this.id, oldStatus, this.props.status.value));
+    }
+
     this.incrementVersion();
 
     this.addDomainEvent(
-      new CaptureCreatedEvent(
+      new CaptureCompletedEvent(
         this.id,
         capture.id,
         capture.reference.value,
@@ -148,6 +171,7 @@ export class Payment extends AggregateRoot<PaymentProps> {
     }
 
     this.props.refunds.push(refund);
+    const oldStatus = this.props.status.value;
 
     if (newTotalRefunded === totalCaptured) {
       this.props.status = PaymentStatus.create(PaymentStatusEnum.REFUNDED);
@@ -155,10 +179,14 @@ export class Payment extends AggregateRoot<PaymentProps> {
       this.props.status = PaymentStatus.create(PaymentStatusEnum.PARTIALLY_REFUNDED);
     }
 
+    if (oldStatus !== this.props.status.value) {
+      this.addDomainEvent(new PaymentStatusChangedEvent(this.id, oldStatus, this.props.status.value));
+    }
+
     this.incrementVersion();
 
     this.addDomainEvent(
-      new RefundCreatedEvent(
+      new RefundCompletedEvent(
         this.id,
         refund.id,
         refund.reference.value,
@@ -178,11 +206,17 @@ export class Payment extends AggregateRoot<PaymentProps> {
     }
 
     this.props.chargebacks.push(chargeback);
+    const oldStatus = this.props.status.value;
     this.props.status = PaymentStatus.create(PaymentStatusEnum.CHARGEBACK);
+    
+    if (oldStatus !== this.props.status.value) {
+      this.addDomainEvent(new PaymentStatusChangedEvent(this.id, oldStatus, this.props.status.value));
+    }
+
     this.incrementVersion();
 
     this.addDomainEvent(
-      new ChargebackCreatedEvent(
+      new ChargebackRegisteredEvent(
         this.id,
         chargeback.id,
         chargeback.captureReference.value,
@@ -193,7 +227,13 @@ export class Payment extends AggregateRoot<PaymentProps> {
   }
 
   public fail(reason: PaymentFailureReason): void {
+    const oldStatus = this.props.status.value;
     this.props.status = PaymentStatus.create(PaymentStatusEnum.FAILED);
+    
+    if (oldStatus !== this.props.status.value) {
+      this.addDomainEvent(new PaymentStatusChangedEvent(this.id, oldStatus, this.props.status.value));
+    }
+
     this.incrementVersion();
 
     this.addDomainEvent(new PaymentFailedEvent(this.id, reason));
@@ -204,10 +244,39 @@ export class Payment extends AggregateRoot<PaymentProps> {
       throw new Error('Cannot cancel a payment that has captures. Issue a refund instead.');
     }
 
+    const oldStatus = this.props.status.value;
     this.props.status = PaymentStatus.create(PaymentStatusEnum.CANCELLED);
+    
+    if (oldStatus !== this.props.status.value) {
+      this.addDomainEvent(new PaymentStatusChangedEvent(this.id, oldStatus, this.props.status.value));
+    }
+
     this.incrementVersion();
 
     this.addDomainEvent(new PaymentCancelledEvent(this.id, reason));
+  }
+
+  public void(reason: string): void {
+    if (!this.props.authorization) {
+      throw new Error('Cannot void a payment without an authorization');
+    }
+
+    if (this.props.captures.length > 0) {
+      throw new Error('Cannot void a payment that has captures');
+    }
+
+    this.props.authorization.void();
+
+    const oldStatus = this.props.status.value;
+    this.props.status = PaymentStatus.create(PaymentStatusEnum.VOIDED);
+    
+    if (oldStatus !== this.props.status.value) {
+      this.addDomainEvent(new PaymentStatusChangedEvent(this.id, oldStatus, this.props.status.value));
+    }
+
+    this.incrementVersion();
+
+    this.addDomainEvent(new PaymentVoidedEvent(this.id, reason));
   }
 
   public getTotalCapturedAmount(): number {

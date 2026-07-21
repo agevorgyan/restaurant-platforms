@@ -17,7 +17,7 @@ export class PaymentCreatedEvent implements DomainEvent {
   }
 }
 
-export class AuthorizationCreatedEvent implements DomainEvent {
+export class AuthorizationCompletedEvent implements DomainEvent {
   public readonly dateTimeOccurred = new Date();
 
   constructor(
@@ -32,7 +32,7 @@ export class AuthorizationCreatedEvent implements DomainEvent {
   }
 }
 
-export class CaptureCreatedEvent implements DomainEvent {
+export class CaptureCompletedEvent implements DomainEvent {
   public readonly dateTimeOccurred = new Date();
 
   constructor(
@@ -47,7 +47,7 @@ export class CaptureCreatedEvent implements DomainEvent {
   }
 }
 
-export class RefundCreatedEvent implements DomainEvent {
+export class RefundCompletedEvent implements DomainEvent {
   public readonly dateTimeOccurred = new Date();
 
   constructor(
@@ -63,7 +63,7 @@ export class RefundCreatedEvent implements DomainEvent {
   }
 }
 
-export class ChargebackCreatedEvent implements DomainEvent {
+export class ChargebackRegisteredEvent implements DomainEvent {
   public readonly dateTimeOccurred = new Date();
 
   constructor(
@@ -105,6 +105,33 @@ export class PaymentFailedEvent implements DomainEvent {
 }
 
 export class PaymentCancelledEvent implements DomainEvent {
+  public readonly dateTimeOccurred = new Date();
+
+  constructor(
+    public readonly paymentId: string,
+    public readonly reason: string
+  ) {}
+
+  getAggregateId(): string {
+    return this.paymentId;
+  }
+}
+
+export class PaymentStatusChangedEvent implements DomainEvent {
+  public readonly dateTimeOccurred = new Date();
+
+  constructor(
+    public readonly paymentId: string,
+    public readonly oldStatus: string,
+    public readonly newStatus: string
+  ) {}
+
+  getAggregateId(): string {
+    return this.paymentId;
+  }
+}
+
+export class PaymentVoidedEvent implements DomainEvent {
   public readonly dateTimeOccurred = new Date();
 
   constructor(
