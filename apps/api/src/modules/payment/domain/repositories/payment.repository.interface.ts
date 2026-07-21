@@ -1,8 +1,8 @@
-import { IPayment } from '../entities/payment.interface';
+import { Payment } from '../aggregates/payment.aggregate';
 
 export interface IPaymentRepository {
-  findById(id: string): Promise<IPayment | null>;
-  findByReference(restaurantId: string, reference: string): Promise<IPayment | null>;
-  findByOrderId(orderId: string): Promise<IPayment[]>;
-  save(payment: IPayment): Promise<void>;
+  findById(id: string): Promise<Payment | null>;
+  findByPaymentIntentId(paymentIntentId: string): Promise<Payment | null>;
+  findByOrderId(orderId: string): Promise<Payment[]>;
+  save(payment: Payment): Promise<void>;
 }
