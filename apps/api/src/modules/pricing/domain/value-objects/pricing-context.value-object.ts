@@ -1,48 +1,38 @@
-import { Money } from './money.value-object';
+import { ValueObject } from '@saas/core';
+import { CurrencyCode } from '../../../finance/domain/value-objects/currency-code.enum';
 
-export interface IPricingContextItemModifier {
-  id: string;
-  priceAdjustment: Money;
-  quantity: number;
+export interface PricingContextProps {
+  restaurantId: string;
+  branchId?: string;
+  customerId?: string;
+  loyaltyTier?: string;
+  currencyCode: CurrencyCode;
+  orderChannel: string;
+  deliveryMethod: string;
+  calculationDate: Date;
 }
 
-export interface IPricingContextItem {
-  id: string;
-  unitPrice: Money;
-  quantity: number;
-  modifiers: IPricingContextItemModifier[];
-}
+export class PricingContext extends ValueObject<PricingContextProps> {
+  private constructor(props: PricingContextProps) {
+    super(props);
+  }
 
-export interface IPricingContextPromotion {
-  id: string;
-  type: 'Percentage' | 'FixedAmount';
-  value: number; // percentage (0-100) or minor units
-}
+  public static create(props: PricingContextProps): PricingContext {
+    if (!props.restaurantId) {
+      throw new Error('Restaurant ID is required in pricing context');
+    }
+    if (!props.currencyCode) {
+      throw new Error('Currency Code is required in pricing context');
+    }
+    return new PricingContext(props);
+  }
 
-export interface IPricingContextTaxRule {
-  name: string;
-  percentage: number;
-}
-
-export interface IPricingContextTaxPolicy {
-  calculationMode: 'Inclusive' | 'Exclusive' | 'Compound';
-  rules: IPricingContextTaxRule[];
-}
-
-export interface IPricingContextServiceCharge {
-  name: string;
-  type: 'Percentage' | 'Fixed';
-  value: number; // percentage or minor units
-}
-
-export class PricingContext {
-  constructor(
-    public readonly currency: string,
-    public readonly items: IPricingContextItem[],
-    public readonly promotions: IPricingContextPromotion[] = [],
-    public readonly taxPolicy: IPricingContextTaxPolicy | null = null,
-    public readonly serviceCharges: IPricingContextServiceCharge[] = [],
-    public readonly deliveryFee: Money | null = null,
-    public readonly tip: Money | null = null
-  ) {}
+  get restaurantId(): string { return this.props.restaurantId; }
+  get branchId(): string | undefined { return this.props.branchId; }
+  get customerId(): string | undefined { return this.props.customerId; }
+  get loyaltyTier(): string | undefined { return this.props.loyaltyTier; }
+  get currencyCode(): CurrencyCode { return this.props.currencyCode; }
+  get orderChannel(): string { return this.props.orderChannel; }
+  get deliveryMethod(): string { return this.props.deliveryMethod; }
+  get calculationDate(): Date { return this.props.calculationDate; }
 }
