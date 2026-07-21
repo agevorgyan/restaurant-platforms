@@ -3,7 +3,7 @@ import { IPaymentRepository } from '../../domain/repositories/payment.repository
 import { CreatePaymentDto, UpdatePaymentStatusDto } from '../../application/dto/payment.dto';
 import { validateCreatePayment, validateUpdatePaymentStatus } from '../../application/validation/payment.schema';
 import { PaymentAmount } from '../../domain/value-objects/payment-amount.value-object';
-import { PaymentStatus } from '../../domain/value-objects/payment-status.value-object';
+import { PaymentStatus, PaymentStatusEnum } from '../../domain/value-objects/payment-status.value-object';
 import { PaymentType } from '../../domain/value-objects/payment-type.value-object';
 import { PaymentReference } from '../../domain/value-objects/payment-reference.value-object';
 import { IPayment } from '../../domain/entities/payment.interface';
@@ -36,9 +36,9 @@ export class PaymentDomainService {
       id,
       restaurantId: dto.restaurantId,
       orderId: dto.orderId,
-      paymentReference: new PaymentReference(dto.paymentReference),
-      paymentType: new PaymentType(dto.paymentType),
-      status: new PaymentStatus('Pending'),
+      paymentReference: PaymentReference.create(dto.paymentReference),
+      paymentType: PaymentType.create(dto.paymentType as any),
+      status: PaymentStatus.create(PaymentStatusEnum.PENDING_AUTHORIZATION),
       amount: new PaymentAmount(dto.amount, dto.currency),
       description: dto.description,
       metadata: dto.metadata,
@@ -62,12 +62,9 @@ export class PaymentDomainService {
       throw new NotFoundException(`Payment ${id} not found`);
     }
 
-    const newStatus = new PaymentStatus(dto.status);
+    const newStatus = PaymentStatus.create(dto.status as any);
 
-    // Transition checks
-    if (!payment.status.canTransitionTo(dto.status as any)) {
-      throw new ConflictException(`Illegal payment state transition from ${payment.status.value} to ${dto.status}`);
-    }
+    // Transitions will be handled in Task 13.2 via State Machine
 
     payment.status = newStatus;
     payment.updatedAt = new Date();

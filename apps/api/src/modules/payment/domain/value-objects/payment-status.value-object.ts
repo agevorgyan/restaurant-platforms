@@ -1,32 +1,36 @@
-export type PaymentStatusType = 'Pending' | 'Authorized' | 'Captured' | 'Cancelled' | 'Failed' | 'Refunded';
+import { ValueObject } from '@saas/core';
 
-export class PaymentStatus {
-  constructor(public readonly value: PaymentStatusType) {
-    this.validate(value);
+export enum PaymentStatusEnum {
+  CREATED = 'Created',
+  PENDING_AUTHORIZATION = 'PendingAuthorization',
+  AUTHORIZED = 'Authorized',
+  PARTIALLY_CAPTURED = 'PartiallyCaptured',
+  CAPTURED = 'Captured',
+  PARTIALLY_REFUNDED = 'PartiallyRefunded',
+  REFUNDED = 'Refunded',
+  FAILED = 'Failed',
+  CANCELLED = 'Cancelled',
+  VOIDED = 'Voided',
+  CHARGEBACK = 'Chargeback'
+}
+
+export interface PaymentStatusProps {
+  value: PaymentStatusEnum;
+}
+
+export class PaymentStatus extends ValueObject<PaymentStatusProps> {
+  private constructor(props: PaymentStatusProps) {
+    super(props);
   }
 
-  private validate(status: string): void {
-    const valid = ['Pending', 'Authorized', 'Captured', 'Cancelled', 'Failed', 'Refunded'];
-    if (!valid.includes(status)) {
-      throw new Error(`Invalid Payment Status: ${status}`);
+  public static create(value: PaymentStatusEnum): PaymentStatus {
+    if (!Object.values(PaymentStatusEnum).includes(value)) {
+      throw new Error(`Unsupported payment status: ${value}`);
     }
+    return new PaymentStatus({ value });
   }
 
-  public isTerminal(): boolean {
-    return this.value === 'Refunded';
-  }
-
-  public canTransitionTo(newStatus: PaymentStatusType): boolean {
-    if (this.isTerminal()) {
-      return false;
-    }
-    if (this.value === 'Cancelled' && newStatus === 'Captured') {
-      return false; // Cancelled payments cannot be captured
-    }
-    return true;
-  }
-
-  public canChangeAmount(): boolean {
-    return this.value !== 'Captured' && this.value !== 'Refunded' && this.value !== 'Cancelled';
+  get value(): PaymentStatusEnum {
+    return this.props.value;
   }
 }
