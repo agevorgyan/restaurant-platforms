@@ -1,14 +1,31 @@
-export type OrderTypeEnum = 'DineIn' | 'Takeaway' | 'Delivery' | 'Pickup' | 'QRTable';
+import { ValueObject } from '@saas/core';
 
-export class OrderType {
-  constructor(public readonly value: OrderTypeEnum) {
-    this.validate(value);
+export enum OrderTypeEnum {
+  DELIVERY = 'Delivery',
+  PICKUP = 'Pickup',
+  DINE_IN = 'Dine-In',
+  DRIVE_THRU = 'Drive-Thru',
+  CATERING = 'Catering',
+  SCHEDULED = 'Scheduled'
+}
+
+export interface OrderTypeProps {
+  value: OrderTypeEnum;
+}
+
+export class OrderType extends ValueObject<OrderTypeProps> {
+  private constructor(props: OrderTypeProps) {
+    super(props);
   }
 
-  private validate(type: string): void {
-    const valid = ['DineIn', 'Takeaway', 'Delivery', 'Pickup', 'QRTable'];
-    if (!valid.includes(type)) {
-      throw new Error(`Invalid Order Type: ${type}`);
+  public static create(value: OrderTypeEnum): OrderType {
+    if (!Object.values(OrderTypeEnum).includes(value)) {
+      throw new Error(`Unsupported order type: ${value}`);
     }
+    return new OrderType({ value });
+  }
+
+  get value(): OrderTypeEnum {
+    return this.props.value;
   }
 }

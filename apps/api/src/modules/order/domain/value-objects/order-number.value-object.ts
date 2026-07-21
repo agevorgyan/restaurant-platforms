@@ -1,11 +1,27 @@
-export class OrderNumber {
-  constructor(public readonly value: string) {
-    this.validate(value);
+import { ValueObject } from '@saas/core';
+
+export interface OrderNumberProps {
+  value: string;
+}
+
+export class OrderNumber extends ValueObject<OrderNumberProps> {
+  private constructor(props: OrderNumberProps) {
+    super(props);
   }
 
-  private validate(orderNumber: string): void {
-    if (!orderNumber || orderNumber.trim() === '') {
-      throw new Error('Order number cannot be empty');
+  public static create(value: string): OrderNumber {
+    if (!value || value.trim().length === 0) {
+      throw new Error('OrderNumber cannot be empty');
     }
+
+    if (value.length > 50) {
+      throw new Error('OrderNumber cannot exceed 50 characters');
+    }
+
+    return new OrderNumber({ value: value.trim() });
+  }
+
+  get value(): string {
+    return this.props.value;
   }
 }

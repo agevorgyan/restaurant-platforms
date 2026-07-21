@@ -20,7 +20,7 @@ export class OrderService {
       throw new BadRequestException(errors);
     }
 
-    const orderNumberObj = new OrderNumber(dto.orderNumber);
+    const orderNumberObj = OrderNumber.create(dto.orderNumber);
     
     // Business Rule: Order number must be unique per restaurant
     const existingOrder = await this.repository.findByOrderNumber(dto.restaurantId, orderNumberObj.value);
@@ -28,8 +28,8 @@ export class OrderService {
       throw new BadRequestException(`Order number '${orderNumberObj.value}' already exists for this restaurant`);
     }
 
-    const orderTypeObj = new OrderType(dto.orderType as OrderTypeEnum);
-    const orderStatusObj = new OrderStatus('Draft');
+    const orderTypeObj = OrderType.create(dto.orderType as OrderTypeEnum);
+    const orderStatusObj = OrderStatus.create(OrderStatusEnum.DRAFT);
 
     const order: IOrder = {
       id: crypto.randomUUID(),
@@ -70,7 +70,7 @@ export class OrderService {
     const updates: Partial<IOrder> = { updatedAt: new Date() };
 
     if (dto.orderType) {
-      const newOrderType = new OrderType(dto.orderType as OrderTypeEnum);
+      const newOrderType = OrderType.create(dto.orderType as OrderTypeEnum);
       // Business Rule: Confirmed orders cannot change order type.
       if (!order.status.canChangeType() && newOrderType.value !== order.orderType.value) {
         throw new BadRequestException('Confirmed orders cannot change order type');
@@ -79,7 +79,7 @@ export class OrderService {
     }
 
     if (dto.status) {
-      const newStatus = new OrderStatus(dto.status as OrderStatusEnum);
+      const newStatus = OrderStatus.create(dto.status as OrderStatusEnum);
       updates.status = newStatus;
       
       if (newStatus.value === 'Cancelled' && order.status.value !== 'Cancelled') {
