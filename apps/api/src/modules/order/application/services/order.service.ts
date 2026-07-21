@@ -47,7 +47,7 @@ export class OrderService {
     };
 
     const created = await this.repository.create(order);
-    new OrderCreatedEvent(created);
+    new OrderCreatedEvent(created.id, created.restaurantId, created.branchId);
     return created;
   }
 
@@ -83,7 +83,7 @@ export class OrderService {
       updates.status = newStatus;
       
       if (newStatus.value === 'Cancelled' && order.status.value !== 'Cancelled') {
-        new OrderCancelledEvent(order.id, order.restaurantId);
+        new OrderCancelledEvent(order.id, order.restaurantId, 'Cancelled by user');
       }
     }
 
