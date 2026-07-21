@@ -117,6 +117,15 @@ export class Order extends AggregateRoot<OrderProps> {
     this.updateTimestamp();
   }
 
+  /**
+   * Internal method used by the StateMachine/TransitionManager to safely mutate status.
+   * Do NOT use this directly from Application Services.
+   */
+  public changeStatus(newStatus: OrderStatus): void {
+    this.props.status = newStatus;
+    this.updateTimestamp();
+  }
+
   private updateTimestamp(): void {
     this.props.updatedAt = OrderTimestamp.now();
   }
