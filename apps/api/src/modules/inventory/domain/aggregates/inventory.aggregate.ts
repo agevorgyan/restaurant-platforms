@@ -165,6 +165,27 @@ export class Inventory extends AggregateRoot<InventoryProps> {
     this.incrementVersion();
   }
 
+  public allocateFromBatch(batchId: string, amount: Quantity): void {
+    if (this.state.value !== InventoryStateEnum.ACTIVE) {
+      throw new Error('Cannot allocate from inactive inventory');
+    }
+
+    const batch = this.props.batches.find(b => b.id === batchId && b.isActive);
+    if (!batch) {
+      throw new Error(`Active batch not found: ${batchId}`);
+    }
+
+    batch.subtractQuantity(amount);
+    
+    // Subtraction from onHand must be explicit but not emit general adjust event since it's allocation
+    if (amount.isGreaterThan(this.props.onHandQuantity.quantity)) {
+      throw new Error('Cannot subtract more than on-hand quantity');
+    }
+    this.props.onHandQuantity = this.props.onHandQuantity.subtract(amount);
+    this.recalculateAvailable();
+    this.incrementVersion();
+  }
+
   public addReservation(reservation: InventoryReservation): void {
     if (this.state.value !== InventoryStateEnum.ACTIVE) {
       throw new Error('Cannot reserve stock from inactive inventory');

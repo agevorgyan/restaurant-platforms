@@ -50,6 +50,10 @@ export class InventoryBatch extends Entity<InventoryBatchProps> {
     return this.props.isActive;
   }
 
+  get createdAt(): Date {
+    return this.props.createdAt;
+  }
+
   public deactivate(): void {
     this.props.isActive = false;
   }
