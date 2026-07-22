@@ -1,0 +1,8 @@
+export enum KitchenTicketStatus {
+  PENDING = 'PENDING',
+  QUEUED = 'QUEUED',
+  IN_PREPARATION = 'IN_PREPARATION',
+  READY = 'READY',
+  SERVED = 'SERVED',
+  CANCELLED = 'CANCELLED',
+}

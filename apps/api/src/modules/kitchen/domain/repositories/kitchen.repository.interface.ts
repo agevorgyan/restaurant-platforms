@@ -1,8 +1,7 @@
-import { IKitchen } from '../entities/kitchen.interface';
-
-export interface IKitchenRepository {
-  findById(id: string): Promise<IKitchen | null>;
-  findByNameAndBranchId(name: string, branchId: string): Promise<IKitchen | null>;
-  findDefaultByBranchId(branchId: string): Promise<IKitchen | null>;
-  save(kitchen: IKitchen): Promise<void>;
+// Note: KitchenAggregate will be implemented in a subsequent task.
+export interface KitchenRepository {
+  findById(id: string): Promise<any | null>;
+  findByNameAndBranchId(name: string, branchId: string): Promise<any | null>;
+  findDefaultByBranchId(branchId: string): Promise<any | null>;
+  save(kitchen: any): Promise<void>;
 }

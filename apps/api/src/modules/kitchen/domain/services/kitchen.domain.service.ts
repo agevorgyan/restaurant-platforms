@@ -1,5 +1,5 @@
-import { Injectable, BadRequestException, ConflictException, NotFoundException } from '@nestjs/common';
-import { IKitchenRepository } from '../../domain/repositories/kitchen.repository.interface';
+import { Injectable, Inject, BadRequestException, ConflictException, NotFoundException } from '@nestjs/common';
+import { KitchenRepository } from '../../domain/repositories/kitchen.repository.interface';
 import { CreateKitchenDto, UpdateKitchenStatusDto } from '../../application/dto/kitchen.dto';
 import { validateCreateKitchen, validateUpdateKitchenStatus } from '../../application/validation/kitchen.schema';
 import { KitchenStatus } from '../../domain/value-objects/kitchen-status.value-object';
@@ -13,7 +13,10 @@ import {
 
 @Injectable()
 export class KitchenDomainService {
-  constructor(private readonly repository: IKitchenRepository) {}
+  constructor(
+    @Inject('KitchenRepository')
+    private readonly repository: KitchenRepository,
+  ) {}
 
   public async createKitchen(id: string, dto: CreateKitchenDto): Promise<IKitchen> {
     const errors = validateCreateKitchen(dto);
