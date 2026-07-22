@@ -21,6 +21,12 @@ import { PlannedQuantity } from '../value-objects/planned-quantity.value-object'
 import { Quantity } from '../../../inventory/domain/value-objects/quantity.value-object';
 import { UnitPrecision } from '../../../inventory/domain/value-objects/unit-precision.value-object';
 
+import { WorkflowRequest } from '../value-objects/workflow-request.value-object';
+import { WorkflowResult } from '../value-objects/workflow-result.value-object';
+import { AssignmentPlan } from '../value-objects/assignment-plan.value-object';
+import { QueueSnapshot } from '../value-objects/queue-snapshot.value-object';
+import { EstimatedCompletionTime } from '../value-objects/estimated-completion-time.value-object';
+
 describe('Kitchen Value Objects', () => {
   describe('KitchenId', () => {
     it('should create with auto-generated id if not provided', () => {
@@ -148,6 +154,57 @@ describe('Kitchen Value Objects', () => {
     });
     it('should throw on negative quantity', () => {
       expect(() => Quantity.create(-5, UnitPrecision.create(2))).toThrow();
+    });
+  });
+
+  describe('WorkflowRequest', () => {
+    it('should create valid request', () => {
+      const request = WorkflowRequest.create('SYSTEM', 'ticket-1');
+      expect(request.kitchenTicketId).toBe('ticket-1');
+      expect(request.triggeredBy).toBe('SYSTEM');
+    });
+    it('should throw if no IDs provided', () => {
+      expect(() => WorkflowRequest.create('SYSTEM')).toThrow();
+    });
+  });
+
+  describe('WorkflowResult', () => {
+    it('should create success result', () => {
+      const result = WorkflowResult.success('Done');
+      expect(result.success).toBe(true);
+      expect(result.message).toBe('Done');
+    });
+    it('should create failure result', () => {
+      const result = WorkflowResult.failure('Error', ['msg']);
+      expect(result.success).toBe(false);
+      expect(result.errors).toContain('msg');
+    });
+  });
+
+  describe('AssignmentPlan', () => {
+    it('should create valid plan', () => {
+      const plan = AssignmentPlan.create([{ itemId: 'i-1', stationId: 's-1' }]);
+      expect(plan.mappings).toHaveLength(1);
+    });
+    it('should throw on empty mappings', () => {
+      expect(() => AssignmentPlan.create([])).toThrow();
+    });
+  });
+
+  describe('QueueSnapshot', () => {
+    it('should create valid snapshot', () => {
+      const snapshot = QueueSnapshot.create('s-1', [{ id: 'i-1', priorityValue: 1, enteredAt: new Date() }]);
+      expect(snapshot.getDepth()).toBe(1);
+    });
+  });
+
+  describe('EstimatedCompletionTime', () => {
+    it('should create valid estimated time from now', () => {
+      const time = EstimatedCompletionTime.fromNow(10);
+      expect(time.estimatedAt).toBeInstanceOf(Date);
+    });
+    it('should throw on negative minutes', () => {
+      expect(() => EstimatedCompletionTime.fromNow(-5)).toThrow();
     });
   });
 });
