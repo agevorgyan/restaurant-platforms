@@ -5,6 +5,12 @@ import { KitchenVersion } from '../value-objects/kitchen-version.value-object';
 import { RecipeName } from '../value-objects/recipe-name.value-object';
 import { RecipeCode } from '../value-objects/recipe-code.value-object';
 
+import { KitchenTicketNumber } from '../value-objects/kitchen-ticket-number.value-object';
+import { KitchenTicketReference } from '../value-objects/kitchen-ticket-reference.value-object';
+import { KitchenTicketStatus } from '../value-objects/kitchen-ticket-status.value-object';
+import { KitchenTicketStatus as KitchenTicketStatusEnum } from '../enums/kitchen-ticket-status.enum';
+import { KitchenEstimatedPreparationTime } from '../value-objects/kitchen-estimated-preparation-time.value-object';
+
 describe('Kitchen Value Objects', () => {
   describe('KitchenId', () => {
     it('should create with auto-generated id if not provided', () => {
@@ -61,6 +67,38 @@ describe('Kitchen Value Objects', () => {
     });
     it('should throw on invalid characters', () => {
       expect(() => RecipeCode.create('PASTA!@#')).toThrow();
+    });
+  });
+
+  describe('KitchenTicketNumber', () => {
+    it('should create valid number', () => {
+      expect(KitchenTicketNumber.create('TKT-100').value).toBe('TKT-100');
+    });
+    it('should throw on empty', () => {
+      expect(() => KitchenTicketNumber.create('')).toThrow();
+    });
+  });
+
+  describe('KitchenTicketReference', () => {
+    it('should create valid reference', () => {
+      expect(KitchenTicketReference.create('tkt-1').ticketId).toBe('tkt-1');
+    });
+  });
+
+  describe('KitchenTicketStatus', () => {
+    it('should handle transitions correctly', () => {
+      const status = KitchenTicketStatus.create(KitchenTicketStatusEnum.PENDING);
+      expect(status.canTransitionTo(KitchenTicketStatusEnum.QUEUED)).toBe(true);
+      expect(status.canTransitionTo(KitchenTicketStatusEnum.READY)).toBe(false);
+    });
+  });
+
+  describe('KitchenEstimatedPreparationTime', () => {
+    it('should create valid time', () => {
+      expect(KitchenEstimatedPreparationTime.create(15).minutes).toBe(15);
+    });
+    it('should throw on negative time', () => {
+      expect(() => KitchenEstimatedPreparationTime.create(-5)).toThrow();
     });
   });
 });
