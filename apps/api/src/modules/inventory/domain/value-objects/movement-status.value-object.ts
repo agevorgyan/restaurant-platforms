@@ -1,25 +1,25 @@
-export type MovementStatusType = 'Draft' | 'Posted' | 'Cancelled';
+import { ValueObject } from '@saas/core';
 
-export class MovementStatus {
-  constructor(public readonly value: MovementStatusType) {
-    if (!this.isValid(value)) {
-      throw new Error(`Invalid movement status: ${value}`);
-    }
+export enum MovementStatusEnum {
+  PENDING = 'PENDING',
+  COMPLETED = 'COMPLETED',
+  CANCELLED = 'CANCELLED',
+}
+
+export interface MovementStatusProps {
+  value: MovementStatusEnum;
+}
+
+export class MovementStatus extends ValueObject<MovementStatusProps> {
+  private constructor(props: MovementStatusProps) {
+    super(props);
   }
 
-  private isValid(value: string): value is MovementStatusType {
-    return ['Draft', 'Posted', 'Cancelled'].includes(value);
+  public static create(value: MovementStatusEnum): MovementStatus {
+    return new MovementStatus({ value });
   }
 
-  public isPosted(): boolean {
-    return this.value === 'Posted';
-  }
-
-  public isCancelled(): boolean {
-    return this.value === 'Cancelled';
-  }
-
-  public isDraft(): boolean {
-    return this.value === 'Draft';
+  get value(): MovementStatusEnum {
+    return this.props.value;
   }
 }

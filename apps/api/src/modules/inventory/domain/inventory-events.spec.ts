@@ -14,9 +14,12 @@ import {
 } from './events/inventory-adjustment.events';
 import {
   InventoryCreatedEvent,
-  InventoryUpdatedEvent,
-  InventoryActivatedEvent,
-  InventoryDeactivatedEvent
+  StockReservedEvent,
+  ReservationReleasedEvent,
+  InventoryAdjustedEvent,
+  InventoryLowStockEvent,
+  InventoryOutOfStockEvent,
+  InventoryExpiredBatchDetectedEvent
 } from './events/inventory.events';
 import {
   RecipeCreatedEvent,
@@ -71,17 +74,26 @@ describe('Inventory Domain Events', () => {
   });
 
   it('Inventory events should instantiate correctly with readonly properties', () => {
-    const created = new InventoryCreatedEvent('inv1', 'res1');
-    assert.strictEqual(created.inventoryId, 'inv1');
+    const created = new InventoryCreatedEvent('inv1', 'res1', 'ing1', 'loc1');
+    assert.strictEqual(created.aggregateId, 'inv1');
 
-    const updated = new InventoryUpdatedEvent('inv1', 'res1');
-    assert.strictEqual(updated.inventoryId, 'inv1');
+    const reserved = new StockReservedEvent('inv1', 'res1', 'resv1', 10, 90);
+    assert.strictEqual(reserved.aggregateId, 'inv1');
 
-    const activated = new InventoryActivatedEvent('inv1', 'res1');
-    assert.strictEqual(activated.inventoryId, 'inv1');
+    const released = new ReservationReleasedEvent('inv1', 'res1', 'resv1', 100);
+    assert.strictEqual(released.aggregateId, 'inv1');
 
-    const deactivated = new InventoryDeactivatedEvent('inv1', 'res1');
-    assert.strictEqual(deactivated.inventoryId, 'inv1');
+    const adjusted = new InventoryAdjustedEvent('inv1', 'res1', 100, 100);
+    assert.strictEqual(adjusted.aggregateId, 'inv1');
+
+    const lowStock = new InventoryLowStockEvent('inv1', 'res1', 10, 20);
+    assert.strictEqual(lowStock.aggregateId, 'inv1');
+
+    const outOfStock = new InventoryOutOfStockEvent('inv1', 'res1');
+    assert.strictEqual(outOfStock.aggregateId, 'inv1');
+
+    const expired = new InventoryExpiredBatchDetectedEvent('inv1', 'res1', 'batch1', 5);
+    assert.strictEqual(expired.aggregateId, 'inv1');
   });
 
   it('Recipe events should instantiate correctly with readonly properties', () => {

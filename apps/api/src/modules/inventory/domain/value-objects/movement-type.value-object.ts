@@ -1,26 +1,35 @@
-export type MovementTypeEnum = 
-  | 'StockIn' 
-  | 'StockOut' 
-  | 'TransferIn' 
-  | 'TransferOut' 
-  | 'Consumption' 
-  | 'Production' 
-  | 'Waste' 
-  | 'Return' 
-  | 'Adjustment';
+import { ValueObject } from '@saas/core';
 
-export class MovementType {
-  constructor(public readonly value: MovementTypeEnum) {
-    if (!this.isValid(value)) {
-      throw new Error(`Invalid movement type: ${value}`);
-    }
+export enum MovementTypeEnum {
+  RECEIVE = 'RECEIVE',
+  CONSUME = 'CONSUME',
+  RESERVE = 'RESERVE',
+  RELEASE_RESERVATION = 'RELEASE_RESERVATION',
+  TRANSFER_IN = 'TRANSFER_IN',
+  TRANSFER_OUT = 'TRANSFER_OUT',
+  WASTE = 'WASTE',
+  ADJUSTMENT = 'ADJUSTMENT',
+  RETURN = 'RETURN',
+  EXPIRATION = 'EXPIRATION',
+  CYCLE_COUNT_CORRECTION = 'CYCLE_COUNT_CORRECTION',
+  PRODUCTION_CONSUMPTION = 'PRODUCTION_CONSUMPTION',
+  PRODUCTION_OUTPUT = 'PRODUCTION_OUTPUT',
+}
+
+export interface MovementTypeProps {
+  value: MovementTypeEnum;
+}
+
+export class MovementType extends ValueObject<MovementTypeProps> {
+  private constructor(props: MovementTypeProps) {
+    super(props);
   }
 
-  private isValid(value: string): value is MovementTypeEnum {
-    const types = [
-      'StockIn', 'StockOut', 'TransferIn', 'TransferOut', 
-      'Consumption', 'Production', 'Waste', 'Return', 'Adjustment'
-    ];
-    return types.includes(value);
+  public static create(value: MovementTypeEnum): MovementType {
+    return new MovementType({ value });
+  }
+
+  get value(): MovementTypeEnum {
+    return this.props.value;
   }
 }
