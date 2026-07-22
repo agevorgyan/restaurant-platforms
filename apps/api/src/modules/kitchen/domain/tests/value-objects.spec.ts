@@ -2,6 +2,9 @@ import { KitchenId } from '../value-objects/kitchen-id.value-object';
 import { StationReference } from '../value-objects/station-reference.value-object';
 import { KitchenVersion } from '../value-objects/kitchen-version.value-object';
 
+import { RecipeName } from '../value-objects/recipe-name.value-object';
+import { RecipeCode } from '../value-objects/recipe-code.value-object';
+
 describe('Kitchen Value Objects', () => {
   describe('KitchenId', () => {
     it('should create with auto-generated id if not provided', () => {
@@ -37,6 +40,27 @@ describe('Kitchen Value Objects', () => {
       const v = KitchenVersion.create();
       const nextV = v.increment();
       expect(nextV.version).toBe(2);
+    });
+  });
+
+  describe('RecipeName', () => {
+    it('should create valid name', () => {
+      expect(RecipeName.create('Pasta').value).toBe('Pasta');
+    });
+    it('should throw on empty name', () => {
+      expect(() => RecipeName.create('')).toThrow();
+    });
+  });
+
+  describe('RecipeCode', () => {
+    it('should create valid code', () => {
+      expect(RecipeCode.create('PASTA-01').value).toBe('PASTA-01');
+    });
+    it('should format code to uppercase', () => {
+      expect(RecipeCode.create('pasta-01').value).toBe('PASTA-01');
+    });
+    it('should throw on invalid characters', () => {
+      expect(() => RecipeCode.create('PASTA!@#')).toThrow();
     });
   });
 });
