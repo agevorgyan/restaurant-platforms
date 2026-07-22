@@ -1,8 +1,8 @@
-import { IIngredient } from '../entities/ingredient.interface';
+import { Ingredient } from '../aggregates/ingredient.aggregate';
 
 export interface IIngredientRepository {
-  findById(id: string): Promise<IIngredient | null>;
-  findByCodeAndRestaurantId(code: string, restaurantId: string): Promise<IIngredient | null>;
-  findByBarcode(barcode: string): Promise<IIngredient | null>;
-  save(ingredient: IIngredient): Promise<void>;
+  save(ingredient: Ingredient): Promise<void>;
+  findById(id: string, restaurantId: string): Promise<Ingredient | null>;
+  findBySku(sku: string, restaurantId: string): Promise<Ingredient | null>;
+  findByCode(code: string, restaurantId: string): Promise<Ingredient | null>;
 }

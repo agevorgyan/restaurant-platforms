@@ -39,18 +39,18 @@ import {
 
 describe('Inventory Domain Events', () => {
   it('Ingredient events should instantiate correctly with readonly properties', () => {
-    const created = new IngredientCreatedEvent('ing1', 'res1');
-    assert.strictEqual(created.ingredientId, 'ing1');
+    const created = new IngredientCreatedEvent('ing1', 'res1', 'C01', 'SKU-1');
+    assert.strictEqual(created.aggregateId, 'ing1');
     assert.strictEqual(created.restaurantId, 'res1');
 
-    const updated = new IngredientUpdatedEvent('ing1', 'res1');
-    assert.strictEqual(updated.ingredientId, 'ing1');
+    const updated = new IngredientUpdatedEvent('ing1', 'res1', 2);
+    assert.strictEqual(updated.aggregateId, 'ing1');
 
     const activated = new IngredientActivatedEvent('ing1', 'res1');
-    assert.strictEqual(activated.ingredientId, 'ing1');
+    assert.strictEqual(activated.aggregateId, 'ing1');
 
     const archived = new IngredientArchivedEvent('ing1', 'res1');
-    assert.strictEqual(archived.ingredientId, 'ing1');
+    assert.strictEqual(archived.aggregateId, 'ing1');
   });
 
   it('InventoryAdjustment events should instantiate correctly with readonly properties', () => {
