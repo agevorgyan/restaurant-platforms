@@ -1,21 +1,29 @@
-export type IngredientStatusType = 'Draft' | 'Active' | 'Inactive' | 'Archived';
+import { ValueObject } from '@saas/core';
 
-export class IngredientStatus {
-  constructor(public readonly value: IngredientStatusType) {
-    if (!this.isValid(value)) {
-      throw new Error(`Invalid ingredient status: ${value}`);
+export enum IngredientStatusEnum {
+  DRAFT = 'DRAFT',
+  ACTIVE = 'ACTIVE',
+  ARCHIVED = 'ARCHIVED',
+  DISCONTINUED = 'DISCONTINUED'
+}
+
+export interface IngredientStatusProps {
+  value: IngredientStatusEnum;
+}
+
+export class IngredientStatus extends ValueObject<IngredientStatusProps> {
+  private constructor(props: IngredientStatusProps) {
+    super(props);
+  }
+
+  public static create(value: IngredientStatusEnum = IngredientStatusEnum.DRAFT): IngredientStatus {
+    if (!Object.values(IngredientStatusEnum).includes(value)) {
+      throw new Error(`Invalid Ingredient Status: ${value}`);
     }
+    return new IngredientStatus({ value });
   }
 
-  private isValid(value: string): value is IngredientStatusType {
-    return ['Draft', 'Active', 'Inactive', 'Archived'].includes(value);
-  }
-
-  public isActive(): boolean {
-    return this.value === 'Active';
-  }
-
-  public isArchived(): boolean {
-    return this.value === 'Archived';
+  get value(): IngredientStatusEnum {
+    return this.props.value;
   }
 }

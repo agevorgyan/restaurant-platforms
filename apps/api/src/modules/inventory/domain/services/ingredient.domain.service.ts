@@ -6,7 +6,7 @@ import { IIngredient } from '../entities/ingredient.interface';
 import { IngredientCode } from '../value-objects/ingredient-code.value-object';
 import { IngredientCategory } from '../value-objects/ingredient-category.value-object';
 import { UnitOfMeasure } from '../value-objects/unit-of-measure.value-object';
-import { IngredientStatus } from '../value-objects/ingredient-status.value-object';
+import { IngredientStatus, IngredientStatusEnum } from '../value-objects/ingredient-status.value-object';
 import { StorageCondition } from '../value-objects/storage-condition.value-object';
 import { ShelfLife } from '../value-objects/shelf-life.value-object';
 import { AllergenInformation } from '../value-objects/allergen-information.value-object';
@@ -40,14 +40,14 @@ export class IngredientDomainService {
     const ingredient: IIngredient = {
       id,
       restaurantId: dto.restaurantId,
-      ingredientCode: new IngredientCode(dto.ingredientCode),
+      ingredientCode: IngredientCode.create(dto.ingredientCode),
       name: dto.name,
       description: dto.description,
       category: new IngredientCategory(dto.category as any),
-      unitOfMeasure: new UnitOfMeasure(dto.unitOfMeasure as any),
-      status: new IngredientStatus('Draft'), // Initially draft
+      unitOfMeasure: UnitOfMeasure.create(dto.unitOfMeasure as any),
+      status: IngredientStatus.create(IngredientStatusEnum.DRAFT), // Initially draft
       defaultStorageCondition: new StorageCondition(dto.defaultStorageCondition as any),
-      defaultShelfLife: new ShelfLife(dto.defaultShelfLife),
+      defaultShelfLife: ShelfLife.create(dto.defaultShelfLife),
       allergenInformation: new AllergenInformation(dto.allergens || []),
       barcode: dto.barcode,
       createdAt: new Date(),
@@ -65,7 +65,7 @@ export class IngredientDomainService {
 
     const ingredient = await this.getIngredient(id);
 
-    if (ingredient.status.isArchived()) {
+    if (ingredient.status.value === IngredientStatusEnum.ARCHIVED) {
       throw new ConflictException('Archived ingredients are read-only');
     }
 
@@ -89,7 +89,7 @@ export class IngredientDomainService {
     }
     
     if (dto.defaultShelfLife !== undefined) {
-      ingredient.defaultShelfLife = new ShelfLife(dto.defaultShelfLife);
+      ingredient.defaultShelfLife = ShelfLife.create(dto.defaultShelfLife);
     }
 
     if (dto.allergens !== undefined) {
@@ -106,12 +106,12 @@ export class IngredientDomainService {
   public async activateIngredient(id: string): Promise<IIngredient> {
     const ingredient = await this.getIngredient(id);
 
-    if (ingredient.status.isArchived()) {
+    if (ingredient.status.value === IngredientStatusEnum.ARCHIVED) {
       throw new ConflictException('Cannot activate an archived ingredient');
     }
 
-    if (!ingredient.status.isActive()) {
-      ingredient.status = new IngredientStatus('Active');
+    if (ingredient.status.value !== IngredientStatusEnum.ACTIVE) {
+      ingredient.status = IngredientStatus.create(IngredientStatusEnum.ACTIVE);
       ingredient.updatedAt = new Date();
       await this.repository.save(ingredient);
       new IngredientActivatedEvent(ingredient.id, ingredient.restaurantId);
@@ -123,8 +123,8 @@ export class IngredientDomainService {
   public async archiveIngredient(id: string): Promise<IIngredient> {
     const ingredient = await this.getIngredient(id);
 
-    if (!ingredient.status.isArchived()) {
-      ingredient.status = new IngredientStatus('Archived');
+    if (ingredient.status.value !== IngredientStatusEnum.ARCHIVED) {
+      ingredient.status = IngredientStatus.create(IngredientStatusEnum.ARCHIVED);
       ingredient.updatedAt = new Date();
       await this.repository.save(ingredient);
       new IngredientArchivedEvent(ingredient.id, ingredient.restaurantId);
@@ -135,7 +135,7 @@ export class IngredientDomainService {
 
   public async useInRecipe(id: string): Promise<void> {
     const ingredient = await this.getIngredient(id);
-    if (!ingredient.status.isActive()) {
+    if (ingredient.status.value !== IngredientStatusEnum.ACTIVE) {
       throw new ConflictException('Only Active ingredients can be used in recipes');
     }
   }

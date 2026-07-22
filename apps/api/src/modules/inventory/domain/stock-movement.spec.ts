@@ -1,4 +1,3 @@
-import { describe, it } from 'node:test';
 import * as assert from 'node:assert';
 import { MovementType } from './value-objects/movement-type.value-object';
 import { MovementReason } from './value-objects/movement-reason.value-object';

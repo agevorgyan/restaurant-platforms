@@ -1,12 +1,11 @@
-import { describe, it } from 'node:test';
 import * as assert from 'node:assert';
 import { IngredientCode } from './value-objects/ingredient-code.value-object';
 import { IngredientCategory } from './value-objects/ingredient-category.value-object';
-import { UnitOfMeasure } from './value-objects/unit-of-measure.value-object';
+import { UnitOfMeasure, UnitOfMeasureEnum } from './value-objects/unit-of-measure.value-object';
 import { StorageCondition } from './value-objects/storage-condition.value-object';
 import { ShelfLife } from './value-objects/shelf-life.value-object';
 import { AllergenInformation } from './value-objects/allergen-information.value-object';
-import { IngredientStatus } from './value-objects/ingredient-status.value-object';
+import { IngredientStatus, IngredientStatusEnum } from './value-objects/ingredient-status.value-object';
 import { validateCreateIngredient, validateUpdateIngredient } from '../application/validation/ingredient.schema';
 import { IngredientDomainService } from './services/ingredient.domain.service';
 import { IIngredientRepository } from './repositories/ingredient.repository.interface';
@@ -15,8 +14,8 @@ import { IIngredient } from './entities/ingredient.interface';
 describe('Ingredient Domain', () => {
   describe('Value Objects', () => {
     it('IngredientCode should not be empty', () => {
-      assert.doesNotThrow(() => new IngredientCode('ING01'));
-      assert.throws(() => new IngredientCode(''), /Ingredient code must not be empty/);
+      assert.doesNotThrow(() => IngredientCode.create('ING01'));
+      assert.throws(() => IngredientCode.create(''), /Ingredient code cannot be empty/);
     });
 
     it('IngredientCategory should validate categories', () => {
@@ -26,9 +25,9 @@ describe('Ingredient Domain', () => {
     });
 
     it('UnitOfMeasure should validate units', () => {
-      assert.doesNotThrow(() => new UnitOfMeasure('Kilogram'));
-      assert.doesNotThrow(() => new UnitOfMeasure('Liter'));
-      assert.throws(() => new UnitOfMeasure('Gallon' as any), /Invalid unit of measure/);
+      assert.doesNotThrow(() => UnitOfMeasure.create(UnitOfMeasureEnum.KILOGRAM));
+      assert.doesNotThrow(() => UnitOfMeasure.create(UnitOfMeasureEnum.LITER));
+      assert.throws(() => UnitOfMeasure.create('Gallon' as any), /Invalid Unit of Measure/);
     });
 
     it('StorageCondition should validate conditions', () => {
@@ -37,9 +36,9 @@ describe('Ingredient Domain', () => {
     });
 
     it('ShelfLife should be greater than zero', () => {
-      assert.doesNotThrow(() => new ShelfLife(30));
-      assert.throws(() => new ShelfLife(0), /Shelf life must be greater than zero/);
-      assert.throws(() => new ShelfLife(-5), /Shelf life must be greater than zero/);
+      assert.doesNotThrow(() => ShelfLife.create(30));
+      assert.throws(() => ShelfLife.create(0), /Shelf life must be a non-negative integer of days greater than zero/);
+      assert.throws(() => ShelfLife.create(-5), /Shelf life must be a non-negative integer of days greater than zero/);
     });
 
     it('AllergenInformation should handle arrays', () => {
@@ -50,9 +49,9 @@ describe('Ingredient Domain', () => {
     });
 
     it('IngredientStatus should validate statuses', () => {
-      assert.doesNotThrow(() => new IngredientStatus('Draft'));
-      assert.doesNotThrow(() => new IngredientStatus('Active'));
-      assert.throws(() => new IngredientStatus('Deleted' as any), /Invalid ingredient status/);
+      assert.doesNotThrow(() => IngredientStatus.create(IngredientStatusEnum.DRAFT));
+      assert.doesNotThrow(() => IngredientStatus.create(IngredientStatusEnum.ACTIVE));
+      assert.throws(() => IngredientStatus.create('Deleted' as any), /Invalid Ingredient Status/);
     });
   });
 
@@ -105,14 +104,13 @@ describe('Ingredient Domain', () => {
         ingredientCode: 'C01',
         name: 'Chicken Breast',
         category: 'Poultry',
-        unitOfMeasure: 'Kilogram',
+        unitOfMeasure: UnitOfMeasureEnum.KILOGRAM as any,
         defaultStorageCondition: 'Refrigerated',
         defaultShelfLife: 7
       });
 
       assert.strictEqual(ingredient.id, 'ing1');
-      assert.strictEqual(ingredient.status.value, 'Draft');
-      assert.strictEqual(ingredient.status.isActive(), false);
+      assert.strictEqual(ingredient.status.value, IngredientStatusEnum.DRAFT);
     });
 
     it('should prevent duplicate codes on creation', async () => {
@@ -124,7 +122,7 @@ describe('Ingredient Domain', () => {
           ingredientCode: 'C01',
           name: 'Chicken Leg',
           category: 'Poultry',
-          unitOfMeasure: 'Kilogram',
+          unitOfMeasure: UnitOfMeasureEnum.KILOGRAM as any,
           defaultStorageCondition: 'Refrigerated',
           defaultShelfLife: 7
         });
@@ -137,7 +135,23 @@ describe('Ingredient Domain', () => {
     it('should allow using in recipes only when active', async () => {
       findByCodeResult = null;
       const service = new IngredientDomainService(mockRepo);
-      mockIngredient.status = new IngredientStatus('Draft'); // Ensure draft
+      mockIngredient = {
+        id: 'ing1',
+        restaurantId: 'rest1',
+        ingredientCode: IngredientCode.create('ING01'),
+        name: 'Salt',
+        description: '',
+        category: null,
+        unitOfMeasure: UnitOfMeasure.create(UnitOfMeasureEnum.KILOGRAM),
+        status: IngredientStatus.create(IngredientStatusEnum.DRAFT),
+        defaultStorageCondition: null,
+        defaultShelfLife: null,
+        allergenInformation: null,
+        barcode: null,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      } as any;
+      mockIngredient.status = IngredientStatus.create(IngredientStatusEnum.DRAFT); // Ensure draft
 
       try {
         await service.useInRecipe('ing1');

@@ -1,21 +1,32 @@
-export type InventoryStatusType = 'Active' | 'Inactive' | 'Archived';
+import { ValueObject } from '@saas/core';
 
-export class InventoryStatus {
-  constructor(public readonly value: InventoryStatusType) {
-    if (!this.isValid(value)) {
-      throw new Error(`Invalid inventory status: ${value}`);
+export enum InventoryStatusEnum {
+  AVAILABLE = 'AVAILABLE',
+  RESERVED = 'RESERVED',
+  LOW_STOCK = 'LOW_STOCK',
+  OUT_OF_STOCK = 'OUT_OF_STOCK',
+  EXPIRED = 'EXPIRED',
+  BLOCKED = 'BLOCKED',
+  INACTIVE = 'INACTIVE'
+}
+
+export interface InventoryStatusProps {
+  value: InventoryStatusEnum;
+}
+
+export class InventoryStatus extends ValueObject<InventoryStatusProps> {
+  private constructor(props: InventoryStatusProps) {
+    super(props);
+  }
+
+  public static create(value: InventoryStatusEnum = InventoryStatusEnum.AVAILABLE): InventoryStatus {
+    if (!Object.values(InventoryStatusEnum).includes(value)) {
+      throw new Error(`Invalid Inventory Status: ${value}`);
     }
+    return new InventoryStatus({ value });
   }
 
-  private isValid(value: string): value is InventoryStatusType {
-    return ['Active', 'Inactive', 'Archived'].includes(value);
-  }
-
-  public isActive(): boolean {
-    return this.value === 'Active';
-  }
-
-  public isArchived(): boolean {
-    return this.value === 'Archived';
+  get value(): InventoryStatusEnum {
+    return this.props.value;
   }
 }

@@ -1,6 +1,5 @@
-import { describe, it } from 'node:test';
 import * as assert from 'node:assert';
-import { InventoryStatus } from './value-objects/inventory-status.value-object';
+import { InventoryStatus, InventoryStatusEnum } from './value-objects/inventory-status.value-object';
 import { InventoryType } from './value-objects/inventory-type.value-object';
 import { InventoryLocation } from './value-objects/inventory-location.value-object';
 import { InventoryCapacity } from './value-objects/inventory-capacity.value-object';
@@ -12,10 +11,10 @@ import { IInventory } from './entities/inventory.interface';
 describe('Inventory Domain', () => {
   describe('Value Objects', () => {
     it('InventoryStatus should validate correctly', () => {
-      assert.doesNotThrow(() => new InventoryStatus('Active'));
-      assert.doesNotThrow(() => new InventoryStatus('Inactive'));
-      assert.doesNotThrow(() => new InventoryStatus('Archived'));
-      assert.throws(() => new InventoryStatus('Deleted' as any), /Invalid inventory status/);
+      assert.doesNotThrow(() => InventoryStatus.create(InventoryStatusEnum.AVAILABLE));
+      assert.doesNotThrow(() => InventoryStatus.create(InventoryStatusEnum.OUT_OF_STOCK));
+      assert.doesNotThrow(() => InventoryStatus.create(InventoryStatusEnum.BLOCKED));
+      assert.throws(() => InventoryStatus.create('Deleted' as any), /Invalid Inventory Status/);
     });
 
     it('InventoryType should validate correctly', () => {
@@ -81,14 +80,14 @@ describe('Inventory Domain', () => {
       });
 
       assert.strictEqual(inventory.id, 'inv1');
-      assert.strictEqual(inventory.status.isActive(), false);
-      assert.strictEqual(inventory.status.value, 'Inactive');
+      assert.strictEqual(inventory.status.value === InventoryStatusEnum.AVAILABLE, false);
+      assert.strictEqual(inventory.status.value, InventoryStatusEnum.OUT_OF_STOCK);
     });
 
     it('should activate inventory', async () => {
       const service = new InventoryDomainService(mockRepo);
       await service.activateInventory('inv1');
-      assert.strictEqual(mockInventory.status.isActive(), true);
+      assert.strictEqual(mockInventory.status.value === InventoryStatusEnum.AVAILABLE, true);
     });
 
     it('should allow accepting stock only when active', async () => {

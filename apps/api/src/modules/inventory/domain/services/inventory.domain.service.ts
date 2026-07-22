@@ -3,7 +3,7 @@ import { IInventoryRepository } from '../repositories/inventory.repository.inter
 import { CreateInventoryDto, UpdateInventoryDto } from '../../application/dto/inventory.dto';
 import { validateCreateInventory, validateUpdateInventory } from '../../application/validation/inventory.schema';
 import { IInventory } from '../entities/inventory.interface';
-import { InventoryStatus } from '../value-objects/inventory-status.value-object';
+import { InventoryStatus, InventoryStatusEnum } from '../value-objects/inventory-status.value-object';
 import { InventoryType } from '../value-objects/inventory-type.value-object';
 import { InventoryLocation } from '../value-objects/inventory-location.value-object';
 import { InventoryCapacity } from '../value-objects/inventory-capacity.value-object';
@@ -34,7 +34,7 @@ export class InventoryDomainService {
       name: dto.name,
       code: dto.code,
       type: new InventoryType(dto.type as any),
-      status: new InventoryStatus('Inactive'), // Initially inactive
+      status: InventoryStatus.create(InventoryStatusEnum.OUT_OF_STOCK), // Initially inactive
       location: new InventoryLocation(dto.location),
       capacity: new InventoryCapacity(dto.capacity),
       createdAt: new Date(),
@@ -52,7 +52,7 @@ export class InventoryDomainService {
 
     const inventory = await this.getInventory(id);
 
-    if (inventory.status.isArchived()) {
+    if (inventory.status.value === InventoryStatusEnum.BLOCKED) {
       throw new ConflictException('Archived inventories are read-only');
     }
 
@@ -73,12 +73,12 @@ export class InventoryDomainService {
   public async activateInventory(id: string): Promise<IInventory> {
     const inventory = await this.getInventory(id);
 
-    if (inventory.status.isArchived()) {
+    if (inventory.status.value === InventoryStatusEnum.BLOCKED) {
       throw new ConflictException('Cannot activate an archived inventory');
     }
 
-    if (!inventory.status.isActive()) {
-      inventory.status = new InventoryStatus('Active');
+    if (inventory.status.value !== InventoryStatusEnum.AVAILABLE) {
+      inventory.status = InventoryStatus.create(InventoryStatusEnum.AVAILABLE);
       inventory.updatedAt = new Date();
       await this.repository.save(inventory);
       new InventoryActivatedEvent(inventory.id, inventory.restaurantId);
@@ -90,12 +90,12 @@ export class InventoryDomainService {
   public async deactivateInventory(id: string): Promise<IInventory> {
     const inventory = await this.getInventory(id);
 
-    if (inventory.status.isArchived()) {
+    if (inventory.status.value === InventoryStatusEnum.BLOCKED) {
       throw new ConflictException('Cannot deactivate an archived inventory');
     }
 
-    if (inventory.status.isActive()) {
-      inventory.status = new InventoryStatus('Inactive');
+    if (inventory.status.value === InventoryStatusEnum.AVAILABLE) {
+      inventory.status = InventoryStatus.create(InventoryStatusEnum.OUT_OF_STOCK);
       inventory.updatedAt = new Date();
       await this.repository.save(inventory);
       new InventoryDeactivatedEvent(inventory.id, inventory.restaurantId);
@@ -107,8 +107,8 @@ export class InventoryDomainService {
   public async archiveInventory(id: string): Promise<IInventory> {
     const inventory = await this.getInventory(id);
 
-    if (!inventory.status.isArchived()) {
-      inventory.status = new InventoryStatus('Archived');
+    if (inventory.status.value !== InventoryStatusEnum.BLOCKED) {
+      inventory.status = InventoryStatus.create(InventoryStatusEnum.BLOCKED);
       inventory.updatedAt = new Date();
       await this.repository.save(inventory);
     }
@@ -118,7 +118,7 @@ export class InventoryDomainService {
 
   public async acceptStock(id: string): Promise<void> {
     const inventory = await this.getInventory(id);
-    if (!inventory.status.isActive()) {
+    if (inventory.status.value !== InventoryStatusEnum.AVAILABLE) {
       throw new ConflictException('Only Active inventories may accept stock');
     }
   }
