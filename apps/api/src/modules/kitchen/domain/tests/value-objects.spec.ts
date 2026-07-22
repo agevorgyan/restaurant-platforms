@@ -11,6 +11,16 @@ import { KitchenTicketStatus } from '../value-objects/kitchen-ticket-status.valu
 import { KitchenTicketStatus as KitchenTicketStatusEnum } from '../enums/kitchen-ticket-status.enum';
 import { KitchenEstimatedPreparationTime } from '../value-objects/kitchen-estimated-preparation-time.value-object';
 
+import { ProductionNumber } from '../value-objects/production-number.value-object';
+import { ProductionReference } from '../value-objects/production-reference.value-object';
+import { ProductionStatus } from '../value-objects/production-status.value-object';
+import { ProductionStatus as ProductionStatusEnum } from '../enums/production-status.enum';
+import { ProductionType } from '../value-objects/production-type.value-object';
+import { ProductionType as ProductionTypeEnum } from '../enums/production-type.enum';
+import { PlannedQuantity } from '../value-objects/planned-quantity.value-object';
+import { Quantity } from '../../../inventory/domain/value-objects/quantity.value-object';
+import { UnitPrecision } from '../../../inventory/domain/value-objects/unit-precision.value-object';
+
 describe('Kitchen Value Objects', () => {
   describe('KitchenId', () => {
     it('should create with auto-generated id if not provided', () => {
@@ -99,6 +109,45 @@ describe('Kitchen Value Objects', () => {
     });
     it('should throw on negative time', () => {
       expect(() => KitchenEstimatedPreparationTime.create(-5)).toThrow();
+    });
+  });
+
+  describe('ProductionNumber', () => {
+    it('should create valid number', () => {
+      expect(ProductionNumber.create('PROD-100').value).toBe('PROD-100');
+    });
+    it('should throw on empty', () => {
+      expect(() => ProductionNumber.create('')).toThrow();
+    });
+  });
+
+  describe('ProductionReference', () => {
+    it('should create valid reference', () => {
+      expect(ProductionReference.create('prod-1').productionId).toBe('prod-1');
+    });
+  });
+
+  describe('ProductionStatus', () => {
+    it('should handle transitions correctly', () => {
+      const status = ProductionStatus.create(ProductionStatusEnum.PLANNED);
+      expect(status.canTransitionTo(ProductionStatusEnum.SCHEDULED)).toBe(true);
+      expect(status.canTransitionTo(ProductionStatusEnum.COMPLETED)).toBe(false);
+    });
+  });
+
+  describe('ProductionType', () => {
+    it('should create valid type', () => {
+      expect(ProductionType.create(ProductionTypeEnum.MANUFACTURING).value).toBe(ProductionTypeEnum.MANUFACTURING);
+    });
+  });
+
+  describe('PlannedQuantity', () => {
+    it('should create valid planned quantity', () => {
+      const qty = Quantity.create(10, UnitPrecision.create(2));
+      expect(PlannedQuantity.create(qty).quantity.value).toBe(10);
+    });
+    it('should throw on negative quantity', () => {
+      expect(() => Quantity.create(-5, UnitPrecision.create(2))).toThrow();
     });
   });
 });
