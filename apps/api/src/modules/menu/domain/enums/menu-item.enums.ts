@@ -1,0 +1,17 @@
+export enum MenuItemType {
+  FOOD = 'FOOD',
+  BEVERAGE = 'BEVERAGE',
+  DESSERT = 'DESSERT',
+  COMBO = 'COMBO',
+  SERVICE = 'SERVICE',
+  GIFT_CARD = 'GIFT_CARD',
+  MERCHANDISE = 'MERCHANDISE'
+}
+
+export enum MenuItemLifecycleStatus {
+  DRAFT = 'DRAFT',
+  PUBLISHED = 'PUBLISHED',
+  AVAILABLE = 'AVAILABLE',
+  UNAVAILABLE = 'UNAVAILABLE',
+  ARCHIVED = 'ARCHIVED'
+}
