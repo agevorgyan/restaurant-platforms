@@ -2,7 +2,7 @@ import { DomainEvent } from '../domain';
 import { EventEnvelope } from '../envelope';
 import { EventName, EventVersion } from '../types';
 
-export interface IDomainEvent<T> extends DomainEvent<T> {}
+export type IDomainEvent<T> = DomainEvent<T>;
 
 export interface IEventSerializer {
   serialize<T>(envelope: EventEnvelope<T>): string | Buffer;
