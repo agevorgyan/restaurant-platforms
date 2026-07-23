@@ -54,7 +54,7 @@ export class MenuService {
     };
 
     const created = await this.repository.create(menu);
-    new MenuCreatedEvent(created);
+    new MenuCreatedEvent(created.id);
     return created;
   }
 
@@ -103,9 +103,9 @@ export class MenuService {
       updates.status = newStatus;
       
       if (newStatus.value === 'Published') {
-        new MenuPublishedEvent(menu.id, menu.restaurantId);
+        new MenuPublishedEvent(menu.id);
       } else if (newStatus.value === 'Archived') {
-        new MenuArchivedEvent(menu.id, menu.restaurantId);
+        new MenuArchivedEvent(menu.id);
       }
     }
 
@@ -118,7 +118,7 @@ export class MenuService {
     if (dto.isDefault !== undefined && dto.isDefault === false) updates.isDefault = false;
 
     const updated = await this.repository.update(id, updates);
-    new MenuUpdatedEvent(updated);
+    new MenuUpdatedEvent(updated.id);
     return updated;
   }
 
