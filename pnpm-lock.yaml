@@ -173,6 +173,10 @@ importers:
         version: 5.9.3
 
   packages/core:
+    dependencies:
+      '@saas/types':
+        specifier: workspace:*
+        version: link:../types
     devDependencies:
       '@types/node':
         specifier: ^20.0.0

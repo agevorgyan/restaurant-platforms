@@ -8,6 +8,7 @@
     "dev": "npx --yes turbo run dev",
     "lint": "npx --yes turbo run lint",
     "typecheck": "npx --yes turbo run typecheck",
+    "test": "npx --yes turbo run test",
     "format": "prettier --write \"**/*.{ts,tsx,md,json,yaml,yml}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,md,json,yaml,yml}\""
   },

@@ -1,11 +1,13 @@
-export abstract class ValueObject<T extends Record<string, any>> {
-  public readonly props: T;
+import { DeepReadonly } from '@saas/types';
 
-  protected constructor(props: T) {
+export abstract class ValueObject<TProps> {
+  public readonly props: TProps;
+
+  protected constructor(props: TProps) {
     this.props = Object.freeze(props);
   }
 
-  public equals(vo?: ValueObject<T>): boolean {
+  public equals(vo?: ValueObject<TProps>): boolean {
     if (vo === null || vo === undefined) {
       return false;
     }
