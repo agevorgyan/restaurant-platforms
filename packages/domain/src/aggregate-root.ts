@@ -3,14 +3,14 @@ import { Identifier } from './identifier';
 import { DomainEvent } from '@saas/events';
 
 export abstract class AggregateRoot<TId extends Identifier<unknown>> extends Entity<TId> {
-  private _domainEvents: DomainEvent[] = [];
+  private _domainEvents: DomainEvent<unknown>[] = [];
   private _version: number = 0;
 
-  get domainEvents(): DomainEvent[] {
+  get domainEvents(): DomainEvent<unknown>[] {
     return this._domainEvents;
   }
 
-  public pullEvents(): DomainEvent[] {
+  public pullEvents(): DomainEvent<unknown>[] {
     const events = [...this._domainEvents];
     this.clearEvents();
     return events;
@@ -28,7 +28,7 @@ export abstract class AggregateRoot<TId extends Identifier<unknown>> extends Ent
     this._version += 1;
   }
 
-  protected record(event: DomainEvent): void {
+  protected record(event: DomainEvent<unknown>): void {
     this._domainEvents.push(event);
   }
 }
