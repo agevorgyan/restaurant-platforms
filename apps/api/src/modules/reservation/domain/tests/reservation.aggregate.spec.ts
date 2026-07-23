@@ -1,5 +1,5 @@
 import { Reservation } from '../aggregates/reservation.aggregate';
-import { ReservationId } from '../value-objects/reservation-id.value-object';
+
 import { BranchReference } from '../value-objects/branch-reference.value-object';
 import { ReservationPartySize } from '../value-objects/reservation-party-size.value-object';
 import { ReservationDuration } from '../value-objects/reservation-duration.value-object';
