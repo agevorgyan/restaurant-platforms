@@ -33,11 +33,12 @@ export enum PurchaseRequisitionStatus {
 }
 
 export enum GoodsReceiptStatus {
-  PENDING = 'PENDING',
-  IN_TRANSIT = 'IN_TRANSIT',
-  RECEIVED = 'RECEIVED',
-  INSPECTED = 'INSPECTED',
-  REJECTED = 'REJECTED'
+  DRAFT = 'DRAFT',
+  RECEIVING = 'RECEIVING',
+  INSPECTION = 'INSPECTION',
+  COMPLETED = 'COMPLETED',
+  REJECTED = 'REJECTED',
+  CANCELLED = 'CANCELLED'
 }
 
 export enum SupplierStatus {
