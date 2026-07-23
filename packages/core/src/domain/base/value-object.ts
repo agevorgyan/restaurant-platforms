@@ -1,6 +1,4 @@
-import { DeepReadonly } from '@saas/types';
-
-export abstract class ValueObject<TProps> {
+export abstract class ValueObject<TProps extends Record<string, unknown>> {
   public readonly props: TProps;
 
   protected constructor(props: TProps) {

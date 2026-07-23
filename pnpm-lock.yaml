@@ -118,7 +118,7 @@ importers:
         version: 9.39.5(jiti@2.7.0)
       eslint-config-next:
         specifier: 16.2.10
-        version: 16.2.10(@typescript-eslint/parser@8.64.0(eslint@9.39.5(jiti@2.7.0))(typescript@5.9.3))(eslint@9.39.5(jiti@2.7.0))(typescript@5.9.3)
+        version: 16.2.10(@typescript-eslint/parser@8.64.0(eslint@8.57.1)(typescript@5.9.3))(eslint@9.39.5(jiti@2.7.0))(typescript@5.9.3)
       tailwindcss:
         specifier: ^4
         version: 4.3.2
@@ -155,7 +155,7 @@ importers:
         version: 9.39.5(jiti@2.7.0)
       eslint-config-next:
         specifier: 16.2.10
-        version: 16.2.10(@typescript-eslint/parser@8.64.0(eslint@8.57.1)(typescript@5.9.3))(eslint@9.39.5(jiti@2.7.0))(typescript@5.9.3)
+        version: 16.2.10(@typescript-eslint/parser@8.64.0(eslint@9.39.5(jiti@2.7.0))(typescript@5.9.3))(eslint@9.39.5(jiti@2.7.0))(typescript@5.9.3)
       tailwindcss:
         specifier: ^4
         version: 4.3.2
@@ -204,6 +204,19 @@ importers:
         specifier: ^5.4.0
         version: 5.9.3
 
+  packages/domain:
+    dependencies:
+      '@saas/events':
+        specifier: workspace:*
+        version: link:../events
+    devDependencies:
+      '@types/node':
+        specifier: ^20.0.0
+        version: 20.19.43
+      typescript:
+        specifier: ^5.4.0
+        version: 5.9.3
+
   packages/events:
     dependencies:
       '@saas/core':
@@ -245,11 +258,36 @@ importers:
         specifier: ^5.4.0
         version: 5.9.3
 
+  packages/policies:
+    devDependencies:
+      '@types/node':
+        specifier: ^20.0.0
+        version: 20.19.43
+      typescript:
+        specifier: ^5.4.0
+        version: 5.9.3
+
   packages/redis:
     dependencies:
       ioredis:
         specifier: ^5.4.1
         version: 5.11.1
+    devDependencies:
+      '@types/node':
+        specifier: ^20.0.0
+        version: 20.19.43
+      typescript:
+        specifier: ^5.4.0
+        version: 5.9.3
+
+  packages/repositories:
+    dependencies:
+      '@saas/core':
+        specifier: workspace:*
+        version: link:../core
+      '@saas/types':
+        specifier: workspace:*
+        version: link:../types
     devDependencies:
       '@types/node':
         specifier: ^20.0.0
