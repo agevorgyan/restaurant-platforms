@@ -33,3 +33,25 @@ export class CommunicationPolicy {
     }
   }
 }
+export class AddressPolicy {
+  public static validate(address: any): void {
+    if (!address.countryCode || address.countryCode.code.length !== 2) {
+      throw new Error('Valid ISO CountryCode required');
+    }
+  }
+}
+
+export class AddressVerificationPolicy {
+  public static validate(address: any): void {
+    if (address.verification.status.status !== 'VERIFIED') {
+      throw new Error('Address is not verified');
+    }
+  }
+}
+
+export class DefaultAddressPolicy {
+  public static validate(addresses: any[]): void {
+    // Enforcement handled by Specification in aggregate
+    void addresses;
+  }
+}

@@ -20,3 +20,17 @@ export enum ContactMethod {
   PHONE = 'PHONE',
   APP_NOTIFICATION = 'APP_NOTIFICATION'
 }
+
+export enum AddressType {
+  HOME = 'HOME',
+  WORK = 'WORK',
+  BILLING = 'BILLING',
+  DELIVERY = 'DELIVERY',
+  OTHER = 'OTHER'
+}
+
+export enum VerificationStatusEnum {
+  UNVERIFIED = 'UNVERIFIED',
+  VERIFIED = 'VERIFIED',
+  FAILED = 'FAILED'
+}
