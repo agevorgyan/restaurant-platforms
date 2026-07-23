@@ -1,34 +1,31 @@
-export class ReservationSpecification {
-  public isSatisfiedBy(reservation: any): boolean {
-    void reservation;
-    return true;
+import { Reservation } from '../aggregates/reservation.aggregate';
+
+export class ReservationConsistencySpecification {
+  public static isConsistent(reservation: Reservation): boolean {
+    return reservation.partySize.size > 0 && reservation.duration.minutes > 0;
   }
 }
 
-export class ReservationValidationSpecification {
-  public isSatisfiedBy(data: any): boolean {
-    void data;
-    return true;
+export class ReservationCapacitySpecification {
+  public static fits(partySize: number, tableCapacity: number): boolean {
+    return partySize <= tableCapacity;
   }
 }
 
-export class AvailabilitySpecification {
-  public isSatisfiedBy(time: any): boolean {
-    void time;
-    return true;
+export class ReservationStatusSpecification {
+  public static canCheckIn(status: string): boolean {
+    return status === 'CONFIRMED';
   }
 }
 
-export class CapacitySpecification {
-  public isSatisfiedBy(partySize: any, tableCapacity: any): boolean {
-    void partySize; void tableCapacity;
-    return true;
+export class ReservationGuestSpecification {
+  public static hasValidContact(reservation: Reservation): boolean {
+    return !!(reservation.contact.phone || reservation.contact.email);
   }
 }
 
-export class WaitlistSpecification {
-  public isSatisfiedBy(waitlistEntry: any): boolean {
-    void waitlistEntry;
-    return true;
+export class ReservationAssignmentSpecification {
+  public static isAssigned(reservation: Reservation): boolean {
+    return reservation.assignments.length > 0;
   }
 }

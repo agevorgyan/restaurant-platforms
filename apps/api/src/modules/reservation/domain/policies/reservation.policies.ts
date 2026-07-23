@@ -1,29 +1,33 @@
-export class ReservationPolicy {
-  public static enforce(reservation: any): void {
-    void reservation;
+import { Reservation } from '../aggregates/reservation.aggregate';
+import { ReservationDomainError } from '../exceptions/reservation.exceptions';
+
+export class ReservationLifecyclePolicy {
+  public static enforce(reservation: Reservation): void {
+    if (!reservation) throw new ReservationDomainError('Reservation is required');
   }
 }
 
 export class ReservationValidationPolicy {
-  public static enforce(data: any): void {
-    void data;
+  public static enforceNew(partySize: number, duration: number): void {
+    if (partySize <= 0) throw new ReservationDomainError('Party size must be greater than 0');
+    if (duration <= 0) throw new ReservationDomainError('Duration must be greater than 0');
   }
 }
 
-export class CapacityPolicy {
-  public static enforce(partySize: any): void {
-    void partySize;
+export class ReservationAssignmentPolicy {
+  public static enforce(assignment: any): void {
+    if (!assignment) throw new ReservationDomainError('Assignment cannot be null');
   }
 }
 
-export class AvailabilityPolicy {
-  public static enforce(time: any): void {
-    void time;
+export class ReservationConfirmationPolicy {
+  public static enforce(status: string): void {
+    if (status === 'CANCELLED') throw new ReservationDomainError('Cannot confirm a cancelled reservation');
   }
 }
 
-export class WaitlistPolicy {
-  public static enforce(entry: any): void {
-    void entry;
+export class ReservationCancellationPolicy {
+  public static enforce(status: string): void {
+    if (status === 'COMPLETED') throw new ReservationDomainError('Cannot cancel completed reservation');
   }
 }
