@@ -19,8 +19,11 @@ export enum PurchaseOrderStatus {
 export enum PurchaseRequisitionStatus {
   DRAFT = 'DRAFT',
   SUBMITTED = 'SUBMITTED',
+  PENDING_APPROVAL = 'PENDING_APPROVAL',
   APPROVED = 'APPROVED',
   REJECTED = 'REJECTED',
+  CONVERTED_TO_PO = 'CONVERTED_TO_PO',
+  CLOSED = 'CLOSED',
   FULFILLED = 'FULFILLED',
   CANCELLED = 'CANCELLED'
 }
