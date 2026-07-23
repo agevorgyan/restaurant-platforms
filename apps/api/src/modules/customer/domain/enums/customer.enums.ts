@@ -1,13 +1,18 @@
 export enum CustomerStatus {
+  DRAFT = 'DRAFT',
+  REGISTERED = 'REGISTERED',
+  VERIFIED = 'VERIFIED',
   ACTIVE = 'ACTIVE',
-  INACTIVE = 'INACTIVE',
   SUSPENDED = 'SUSPENDED',
   ARCHIVED = 'ARCHIVED'
 }
 
 export enum CustomerType {
-  INDIVIDUAL = 'INDIVIDUAL',
-  CORPORATE = 'CORPORATE'
+  GUEST = 'GUEST',
+  REGISTERED = 'REGISTERED',
+  CORPORATE = 'CORPORATE',
+  VIP = 'VIP',
+  EMPLOYEE = 'EMPLOYEE'
 }
 
 export enum ContactMethod {
