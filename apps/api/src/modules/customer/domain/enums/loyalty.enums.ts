@@ -1,7 +1,9 @@
 export enum LoyaltyStatus {
+  PENDING = 'PENDING',
   ACTIVE = 'ACTIVE',
   SUSPENDED = 'SUSPENDED',
-  EXPIRED = 'EXPIRED'
+  CLOSED = 'CLOSED',
+  ARCHIVED = 'ARCHIVED'
 }
 
 export enum LoyaltyTier {
@@ -9,4 +11,13 @@ export enum LoyaltyTier {
   SILVER = 'SILVER',
   GOLD = 'GOLD',
   PLATINUM = 'PLATINUM'
+}
+
+export enum TransactionType {
+  EARN = 'EARN',
+  REDEEM = 'REDEEM',
+  EXPIRE = 'EXPIRE',
+  ADJUSTMENT = 'ADJUSTMENT',
+  REFUND = 'REFUND',
+  PROMOTION = 'PROMOTION'
 }
