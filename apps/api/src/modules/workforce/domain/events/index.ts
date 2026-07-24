@@ -5,3 +5,4 @@ export * from './schedule-events';
 export * from './availability-events';
 export * from './role-events';
 export * from './skills-profile-events';
+export * from './payroll-preparation-events';

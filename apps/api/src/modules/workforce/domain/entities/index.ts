@@ -25,3 +25,8 @@ export * from './certification';
 export * from './training-record';
 export * from './qualification';
 export * from './certification-attachment';
+export * from './payroll-attendance-summary';
+export * from './payroll-shift-summary';
+export * from './payroll-adjustment';
+export * from './payroll-export-record';
+export * from './payroll-validation-issue';

@@ -4,3 +4,4 @@ export * from './attendance-services';
 export * from './availability-services';
 export * from './role-services';
 export * from './skills-profile-services';
+export * from './payroll-preparation-services';

@@ -53,3 +53,6 @@ export * from './certification-name';
 export * from './certification-status';
 export * from './validity-period';
 export * from './license-number';
+export * from './payroll-period';
+export * from './preparation-status';
+export * from './payroll-hours';

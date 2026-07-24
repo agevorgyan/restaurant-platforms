@@ -43,3 +43,4 @@ export class CorrectAttendanceDto {
 export * from './availability.dto';
 export * from './role.dto';
 export * from './skills-profile.dto';
+export * from './payroll-preparation.dto';
