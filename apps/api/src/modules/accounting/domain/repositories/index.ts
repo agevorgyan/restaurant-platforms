@@ -25,3 +25,10 @@ export interface IAccountsReceivableRepository extends IRepository<AccountsRecei
   findByCustomer(customerReference: string): Promise<AccountsReceivable[]>;
   findOutstanding(): Promise<AccountsReceivable[]>;
 }
+
+import { AccountsPayable } from '../aggregates/accounts-payable';
+
+export interface IAccountsPayableRepository extends IRepository<AccountsPayable> {
+  findBySupplier(supplierReference: string): Promise<AccountsPayable[]>;
+  findOutstanding(): Promise<AccountsPayable[]>;
+}

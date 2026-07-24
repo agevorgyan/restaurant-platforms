@@ -14,3 +14,8 @@ export * from './payment-allocation';
 export * from './write-off-record';
 export * from './collection-attempt';
 export * from './receivable-history-entry';
+export * from './payable-line';
+export * from './credit-note';
+export * from './approval-record';
+export * from './payment-schedule';
+export * from './payable-history-entry';

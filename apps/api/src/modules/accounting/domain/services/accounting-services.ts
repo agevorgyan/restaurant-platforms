@@ -1,40 +1,8 @@
-import { IDomainService } from '@saas/domain';
+import { IDomainService } from '@saas/core';
 
-export class LedgerBalanceService implements IDomainService {
-  public calculateCurrentBalance(openingBalance: number, credits: number, debits: number): number {
-    return openingBalance + credits - debits;
-  }
-}
-
-export class LedgerValidationService implements IDomainService {
-  public validateLedgerClosure(unpostedEntriesCount: number): boolean {
-    return unpostedEntriesCount === 0;
-  }
-}
-
-export class LedgerClosingService implements IDomainService {
-  public validateClosure(currentStatus: string): boolean {
-    return currentStatus === 'OPEN';
-  }
-}
-
-export class DoubleEntryValidationService implements IDomainService {
-  public validateLines(lines: any[]): boolean {
-    return lines.length >= 2;
-  }
-}
-
-export class JournalBalancingService implements IDomainService {
-  public calculateTotals(debits: number[], credits: number[]): { totalDebit: number, totalCredit: number } {
-    const totalDebit = debits.reduce((sum, val) => sum + val, 0);
-    const totalCredit = credits.reduce((sum, val) => sum + val, 0);
-    return { totalDebit, totalCredit };
-  }
-}
-
-export class PostingService implements IDomainService {
-  public canPost(status: string, periodStatus: string): boolean {
-    return status === 'APPROVED' && periodStatus === 'OPEN';
+export class DoubleEntryService implements IDomainService {
+  public validateDoubleEntry(debits: number, credits: number): boolean {
+    return Math.abs(debits - credits) < 0.0001;
   }
 }
 
@@ -80,5 +48,27 @@ export class ReceivableBalanceService implements IDomainService {
 export class CollectionEvaluationService implements IDomainService {
   public requiresCollection(status: string, dueDate: Date, currentDate: Date): boolean {
     return (status === 'ISSUED' || status === 'PARTIALLY_PAID') && currentDate > dueDate;
+  }
+}
+
+export class PayableBalanceService implements IDomainService {
+  public calculateOutstanding(originalAmount: number, allocations: number[], creditNotes: number[], writeOffs: number[]): number {
+    const totalAllocated = allocations.reduce((sum, a) => sum + a, 0);
+    const totalCreditNotes = creditNotes.reduce((sum, c) => sum + c, 0);
+    const totalWrittenOff = writeOffs.reduce((sum, w) => sum + w, 0);
+    return originalAmount - totalAllocated - totalCreditNotes - totalWrittenOff;
+  }
+}
+
+export class CreditNoteService implements IDomainService {
+  public canApply(outstandingAmount: number, creditNoteAmount: number): boolean {
+    return outstandingAmount >= creditNoteAmount && creditNoteAmount > 0;
+  }
+}
+
+export class PaymentScheduleService implements IDomainService {
+  public validateSchedule(originalAmount: number, scheduledAmounts: number[]): boolean {
+    const totalScheduled = scheduledAmounts.reduce((sum, a) => sum + a, 0);
+    return totalScheduled <= originalAmount;
   }
 }

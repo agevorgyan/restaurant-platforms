@@ -1,46 +1,21 @@
 import { Specification } from '@saas/domain-rules';
 
-export class LedgerStatusSpecification extends Specification<string> {
-  public isSatisfiedBy(status: string): boolean {
-    return ['DRAFT', 'OPEN', 'CLOSED', 'ARCHIVED'].includes(status);
+export class BalancedJournalSpecification extends Specification<{ debits: number, credits: number }> {
+  public isSatisfiedBy(candidate: { debits: number, credits: number }): boolean {
+    const delta = Math.abs(candidate.debits - candidate.credits);
+    return delta < 0.0001; // epsilon equality
   }
 }
 
-export class FiscalYearSpecification extends Specification<{ start: Date, end: Date }> {
-  public isSatisfiedBy(dates: { start: Date, end: Date }): boolean {
-    return dates.end > dates.start;
+export class PostingPeriodSpecification extends Specification<{ periodId: string, isOpen: boolean }> {
+  public isSatisfiedBy(candidate: { periodId: string, isOpen: boolean }): boolean {
+    return candidate.isOpen;
   }
 }
 
-export class CurrencySpecification extends Specification<string> {
-  public isSatisfiedBy(currencyCode: string): boolean {
-    return currencyCode.length === 3;
-  }
-}
-
-export class LedgerConfigurationSpecification extends Specification<{ allowBackdatedEntries: boolean, automatedClosing: boolean }> {
-  public isSatisfiedBy(config: { allowBackdatedEntries: boolean, automatedClosing: boolean }): boolean {
-    return true;
-  }
-}
-
-export class BalancedJournalSpecification extends Specification<{ totalDebit: number, totalCredit: number }> {
-  public isSatisfiedBy(candidate: { totalDebit: number, totalCredit: number }): boolean {
-    // Handling floating point equality
-    return Math.abs(candidate.totalDebit - candidate.totalCredit) < 0.0001;
-  }
-}
-
-export class PostingPeriodSpecification extends Specification<{ status: string }> {
-  public isSatisfiedBy(candidate: { status: string }): boolean {
-    return candidate.status === 'OPEN';
-  }
-}
-
-export class ExchangeRateSpecification extends Specification<{ currency: string, baseCurrency: string, exchangeRate: number | null }> {
-  public isSatisfiedBy(candidate: { currency: string, baseCurrency: string, exchangeRate: number | null }): boolean {
-    if (candidate.currency === candidate.baseCurrency) return true;
-    return candidate.exchangeRate !== null && candidate.exchangeRate > 0;
+export class ExchangeRateSpecification extends Specification<{ rate: number }> {
+  public isSatisfiedBy(candidate: { rate: number }): boolean {
+    return candidate.rate > 0;
   }
 }
 
@@ -105,5 +80,29 @@ export class AllocationSpecification extends Specification<{ status: string }> {
 export class WriteOffApprovalSpecification extends Specification<{ approverId: string }> {
   public isSatisfiedBy(context: { approverId: string }): boolean {
     return context.approverId.trim().length > 0;
+  }
+}
+
+export class SupplierInvoiceSpecification extends Specification<{ invoiceNumber: string }> {
+  public isSatisfiedBy(context: { invoiceNumber: string }): boolean {
+    return context.invoiceNumber.trim().length > 0;
+  }
+}
+
+export class PaymentTermsSpecification extends Specification<{ terms: string }> {
+  public isSatisfiedBy(context: { terms: string }): boolean {
+    return context.terms.trim().length > 0;
+  }
+}
+
+export class CreditNoteSpecification extends Specification<{ outstandingAmount: number, creditNoteAmount: number }> {
+  public isSatisfiedBy(context: { outstandingAmount: number, creditNoteAmount: number }): boolean {
+    return context.outstandingAmount >= context.creditNoteAmount && context.creditNoteAmount > 0;
+  }
+}
+
+export class ApprovalSpecification extends Specification<{ status: string }> {
+  public isSatisfiedBy(context: { status: string }): boolean {
+    return context.status === 'REGISTERED';
   }
 }
