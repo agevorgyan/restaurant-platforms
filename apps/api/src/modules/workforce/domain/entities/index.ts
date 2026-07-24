@@ -6,3 +6,7 @@ export * from './availability';
 export * from './assigned-employee';
 export * from './break-period';
 export * from './shift-note';
+export * from './scheduled-shift';
+export * from './schedule-assignment';
+export * from './schedule-note';
+export * from './schedule-conflict';
