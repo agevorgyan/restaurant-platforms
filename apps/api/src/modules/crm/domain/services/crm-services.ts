@@ -22,3 +22,28 @@ export class LeadConversionService implements IDomainService {
     return `OPP-${leadId.substring(0, 8).toUpperCase()}`;
   }
 }
+
+export class OpportunityScoringService implements IDomainService {
+  public evaluateProbability(stage: string, durationDays: number, contactCount: number): number {
+    let probability = 10;
+    if (stage === 'PROPOSAL') probability += 20;
+    if (stage === 'NEGOTIATION') probability += 50;
+    if (contactCount > 5) probability += 10;
+    if (durationDays > 90) probability -= 20;
+    return Math.max(0, Math.min(100, probability));
+  }
+}
+
+export class PipelineEvaluationService implements IDomainService {
+  public evaluatePipelineHealth(winProbability: number, revenue: number, daysStagnant: number): string {
+    if (daysStagnant > 60) return 'AT_RISK';
+    if (winProbability > 70 && revenue > 50000) return 'HEALTHY';
+    return 'NEEDS_ATTENTION';
+  }
+}
+
+export class SalesForecastService implements IDomainService {
+  public calculateWeightedForecast(revenue: number, winProbability: number): number {
+    return revenue * (winProbability / 100);
+  }
+}

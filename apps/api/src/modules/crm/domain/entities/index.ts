@@ -2,3 +2,8 @@ export * from './lead-contact';
 export * from './lead-tag';
 export * from './lead-qualification';
 export * from './lead-history-entry';
+export * from './opportunity-contact';
+export * from './opportunity-product';
+export * from './opportunity-competitor';
+export * from './opportunity-note';
+export * from './opportunity-history-entry';
