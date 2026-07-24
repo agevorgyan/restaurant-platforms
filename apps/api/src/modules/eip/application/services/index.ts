@@ -5,3 +5,4 @@ export * from './forecast-engine.service';
 export * from './benchmark-engine.service';
 export * from './insights.service';
 export * from './reporting.service';
+export * from './datamart.service';

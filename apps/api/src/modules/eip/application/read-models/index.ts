@@ -4,3 +4,4 @@ export * from './forecast.read-model';
 export * from './benchmark.read-model';
 export * from './insights.read-model';
 export * from './reporting.read-model';
+export * from './datamart.read-model';
