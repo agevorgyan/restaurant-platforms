@@ -20,3 +20,8 @@ export * from './compensation-history-entry';
 export * from './adjustment-line';
 export * from './approval-record';
 export * from './adjustment-attachment';
+export * from './tax-bracket';
+export * from './tax-rule';
+export * from './tax-exemption';
+export * from './contribution-rule';
+export * from './tax-history-entry';

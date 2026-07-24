@@ -121,3 +121,28 @@ export class AdjustmentStatusSpecification extends Specification<string> {
     return ['DRAFT', 'SUBMITTED', 'APPROVED', 'APPLIED', 'CANCELLED', 'ARCHIVED'].includes(status);
   }
 }
+
+export class TaxProfileEffectivePeriodSpecification extends Specification<{ start: Date, end?: Date, newStart: Date, newEnd?: Date }> {
+  public isSatisfiedBy(dates: { start: Date, end?: Date, newStart: Date, newEnd?: Date }): boolean {
+    if (!dates.end) return dates.newStart > dates.start;
+    return dates.newStart > dates.end || (dates.newEnd !== undefined && dates.newEnd < dates.start);
+  }
+}
+
+export class TaxRuleSpecification extends Specification<{ brackets: { rate: number }[] }> {
+  public isSatisfiedBy(rule: { brackets: { rate: number }[] }): boolean {
+    return rule.brackets.every(b => b.rate >= 0 && b.rate <= 1);
+  }
+}
+
+export class TaxExemptionSpecification extends Specification<{ amount: number, limitAmount: number | null }> {
+  public isSatisfiedBy(exemption: { amount: number, limitAmount: number | null }): boolean {
+    return exemption.amount >= 0 && (exemption.limitAmount === null || exemption.limitAmount >= exemption.amount);
+  }
+}
+
+export class TaxJurisdictionSpecification extends Specification<string> {
+  public isSatisfiedBy(jurisdiction: string): boolean {
+    return jurisdiction.trim().length > 0;
+  }
+}

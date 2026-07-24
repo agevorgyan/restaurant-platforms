@@ -12,3 +12,4 @@ export * from './compensation-package-core';
 export * from './compensation-rates';
 export * from './compensation-policies';
 export * from './payroll-adjustment-core';
+export * from './tax-profile-core';

@@ -3,6 +3,7 @@ import { PayrollRun } from '../aggregates/payroll-run';
 import { EmployeePayroll } from '../aggregates/employee-payroll';
 import { CompensationPackage } from '../aggregates/compensation-package';
 import { PayrollAdjustment } from '../aggregates/payroll-adjustment';
+import { TaxProfile } from '../aggregates/tax-profile';
 
 export interface IPayrollRunRepository extends IRepository<PayrollRun> {
   findByPeriod(startDate: Date, endDate: Date): Promise<PayrollRun[]>;
@@ -24,6 +25,7 @@ export interface IPayrollAdjustmentRepository extends IRepository<PayrollAdjustm
   findByStatus(status: string): Promise<PayrollAdjustment[]>;
 }
 
-export interface ITaxProfileRepository extends IRepository<any> {
-  findByEmployeeId(employeeId: string): Promise<any | null>;
+export interface ITaxProfileRepository extends IRepository<TaxProfile> {
+  findByJurisdiction(jurisdiction: string): Promise<TaxProfile[]>;
+  findActiveByEmployeeId(employeeId: string): Promise<TaxProfile | null>;
 }

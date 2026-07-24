@@ -103,3 +103,32 @@ export class AdjustmentApplicationService implements IDomainService {
     return status === 'APPROVED' && effectiveDate <= new Date();
   }
 }
+
+export class TaxCalculationService implements IDomainService {
+  public calculateTax(taxableIncome: number, brackets: { minIncome: number, maxIncome: number | null, rate: number, fixedAmount: number }[]): number {
+    let totalTax = 0;
+    for (const bracket of brackets) {
+      if (taxableIncome > bracket.minIncome) {
+        const taxableAmountInBracket = bracket.maxIncome ? Math.min(taxableIncome, bracket.maxIncome) - bracket.minIncome : taxableIncome - bracket.minIncome;
+        totalTax += (taxableAmountInBracket * bracket.rate) + bracket.fixedAmount;
+      }
+    }
+    return totalTax;
+  }
+}
+
+export class TaxRuleEvaluationService implements IDomainService {
+  public evaluateRules(income: number, rules: any[]): boolean {
+    return rules.length > 0;
+  }
+}
+
+export class ContributionCalculationService implements IDomainService {
+  public calculateContribution(baseSalary: number, rate: number, maxCap: number | null): number {
+    let contribution = baseSalary * rate;
+    if (maxCap !== null && contribution > maxCap) {
+      contribution = maxCap;
+    }
+    return contribution;
+  }
+}
