@@ -1,4 +1,4 @@
-import { Identifier, DomainPrimitive, ValueObject } from '@saas/domain';
+import { Identifier, DomainPrimitive } from '@saas/domain';
 
 export class FinancialPeriodId extends Identifier<string> {
   private constructor(value: string) { super(value); }
