@@ -3,3 +3,4 @@ export * from './dashboard.service';
 export * from './forecast-strategies.service';
 export * from './forecast-engine.service';
 export * from './benchmark-engine.service';
+export * from './insights.service';
