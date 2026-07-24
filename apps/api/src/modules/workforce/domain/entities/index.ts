@@ -13,3 +13,7 @@ export * from './schedule-conflict';
 export * from './attendance-break';
 export * from './attendance-correction';
 export * from './attendance-audit-entry';
+export * from './availability-request';
+export * from './approval-decision';
+export * from './availability-comment';
+export * from './attachment-reference';

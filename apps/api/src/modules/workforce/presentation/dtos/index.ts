@@ -39,3 +39,5 @@ export class CorrectAttendanceDto {
   proposedCheckOut!: Date;
   reason!: string;
 }
+
+export * from './availability.dto';
