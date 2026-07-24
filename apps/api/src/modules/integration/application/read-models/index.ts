@@ -4,3 +4,4 @@ export * from './webhook.read-model';
 export * from './connector.read-model';
 export * from './workflow.read-model';
 export * from './identity.read-model';
+export * from './developer.read-model';
