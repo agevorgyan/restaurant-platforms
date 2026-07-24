@@ -106,3 +106,33 @@ export class ApprovalSpecification extends Specification<{ status: string }> {
     return context.status === 'REGISTERED';
   }
 }
+
+export class OpenPeriodSpecification extends Specification<{ status: string }> {
+  public isSatisfiedBy(context: { status: string }): boolean {
+    return context.status === 'OPEN';
+  }
+}
+
+export class PeriodOverlapSpecification extends Specification<{ periods: { start: Date, end: Date }[], newStart: Date, newEnd: Date }> {
+  public isSatisfiedBy(context: { periods: { start: Date, end: Date }[], newStart: Date, newEnd: Date }): boolean {
+    for (const period of context.periods) {
+      if (context.newStart <= period.end && context.newEnd >= period.start) {
+        return false;
+      }
+    }
+    return true;
+  }
+}
+
+export class PostingAllowedSpecification extends Specification<{ status: string }> {
+  public isSatisfiedBy(context: { status: string }): boolean {
+    return context.status === 'OPEN' || context.status === 'DRAFT';
+  }
+}
+
+export class FiscalCalendarSpecification extends Specification<{ hasActivePeriods: boolean }> {
+  public isSatisfiedBy(context: { hasActivePeriods: boolean }): boolean {
+    // True if safe to modify (e.g. no active periods yet in the calendar)
+    return !context.hasActivePeriods;
+  }
+}

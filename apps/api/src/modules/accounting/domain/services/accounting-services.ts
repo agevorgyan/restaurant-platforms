@@ -72,3 +72,27 @@ export class PaymentScheduleService implements IDomainService {
     return totalScheduled <= originalAmount;
   }
 }
+
+export class PeriodValidationService implements IDomainService {
+  public validatePeriod(startDate: Date, endDate: Date): boolean {
+    return startDate < endDate;
+  }
+}
+
+export class PeriodClosingService implements IDomainService {
+  public canClose(unpostedJournalsCount: number): boolean {
+    return unpostedJournalsCount === 0;
+  }
+}
+
+export class FiscalCalendarService implements IDomainService {
+  public validateCalendar(year: number, periodsCount: number): boolean {
+    return year > 1900 && periodsCount > 0 && periodsCount <= 13; // Usually 12, sometimes 13th for adjustments
+  }
+}
+
+export class PostingPeriodService implements IDomainService {
+  public isDateInPeriod(date: Date, periodStart: Date, periodEnd: Date): boolean {
+    return date >= periodStart && date <= periodEnd;
+  }
+}

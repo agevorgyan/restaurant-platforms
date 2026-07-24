@@ -19,3 +19,8 @@ export * from './credit-note';
 export * from './approval-record';
 export * from './payment-schedule';
 export * from './payable-history-entry';
+export * from './period-calendar';
+export * from './closing-record';
+export * from './reopening-record';
+export * from './period-approval-record';
+export * from './period-history-entry';

@@ -32,3 +32,11 @@ export interface IAccountsPayableRepository extends IRepository<AccountsPayable>
   findBySupplier(supplierReference: string): Promise<AccountsPayable[]>;
   findOutstanding(): Promise<AccountsPayable[]>;
 }
+
+import { FinancialPeriod } from '../aggregates/financial-period';
+
+export interface IFinancialPeriodRepository extends IRepository<FinancialPeriod> {
+  findActivePeriod(): Promise<FinancialPeriod | null>;
+  findByFiscalDate(date: Date): Promise<FinancialPeriod | null>;
+  findOverlapping(startDate: Date, endDate: Date): Promise<FinancialPeriod[]>;
+}
