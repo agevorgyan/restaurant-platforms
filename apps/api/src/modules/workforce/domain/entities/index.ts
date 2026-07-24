@@ -20,3 +20,8 @@ export * from './attachment-reference';
 export * from './permission';
 export * from './role-assignment';
 export * from './role-hierarchy';
+export * from './skill';
+export * from './certification';
+export * from './training-record';
+export * from './qualification';
+export * from './certification-attachment';
