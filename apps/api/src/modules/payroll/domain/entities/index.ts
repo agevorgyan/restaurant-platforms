@@ -25,3 +25,8 @@ export * from './tax-rule';
 export * from './tax-exemption';
 export * from './contribution-rule';
 export * from './tax-history-entry';
+export * from './document-line';
+export * from './document-section';
+export * from './document-attachment';
+export * from './digital-signature';
+export * from './document-approval-record';

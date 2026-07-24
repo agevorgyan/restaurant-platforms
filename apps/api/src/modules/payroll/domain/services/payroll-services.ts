@@ -132,3 +132,21 @@ export class ContributionCalculationService implements IDomainService {
     return contribution;
   }
 }
+
+export class DocumentGenerationService implements IDomainService {
+  public generate(context: any): any {
+    return { generated: true, timestamp: new Date() };
+  }
+}
+
+export class DocumentValidationService implements IDomainService {
+  public validate(document: any): boolean {
+    return document !== null && document.status !== 'INVALIDATED';
+  }
+}
+
+export class DocumentApprovalService implements IDomainService {
+  public canApprove(status: string): boolean {
+    return status === 'GENERATED';
+  }
+}

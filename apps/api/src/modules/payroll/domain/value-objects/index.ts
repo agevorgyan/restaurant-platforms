@@ -13,3 +13,4 @@ export * from './compensation-rates';
 export * from './compensation-policies';
 export * from './payroll-adjustment-core';
 export * from './tax-profile-core';
+export * from './payroll-document-core';

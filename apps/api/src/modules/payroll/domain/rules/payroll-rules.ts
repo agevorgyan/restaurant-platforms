@@ -146,3 +146,21 @@ export class TaxJurisdictionSpecification extends Specification<string> {
     return jurisdiction.trim().length > 0;
   }
 }
+
+export class DocumentCompletenessSpecification extends Specification<{ hasSections: boolean, hasLines: boolean }> {
+  public isSatisfiedBy(candidate: { hasSections: boolean, hasLines: boolean }): boolean {
+    return candidate.hasSections && candidate.hasLines;
+  }
+}
+
+export class DocumentApprovalSpecification extends Specification<{ status: string }> {
+  public isSatisfiedBy(candidate: { status: string }): boolean {
+    return candidate.status === 'GENERATED';
+  }
+}
+
+export class DocumentFinalizationSpecification extends Specification<{ status: string }> {
+  public isSatisfiedBy(candidate: { status: string }): boolean {
+    return candidate.status === 'APPROVED';
+  }
+}
