@@ -3,3 +3,4 @@ export * from './email-core';
 export * from './sms-core';
 export * from './push-core';
 export * from './inapp-core';
+export * from './conversation-core';
