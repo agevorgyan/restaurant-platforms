@@ -17,3 +17,6 @@ export * from './availability-request';
 export * from './approval-decision';
 export * from './availability-comment';
 export * from './attachment-reference';
+export * from './permission';
+export * from './role-assignment';
+export * from './role-hierarchy';
