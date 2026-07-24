@@ -77,7 +77,7 @@ export class Lead extends AggregateRoot<LeadId> {
 
     lead.record(new LeadCreated(id.toValue(), lead.version(), {
       leadId: id.toValue(),
-      email: lead.contactInfo.value.email,
+      email: lead.contactInfo.toValue().email,
       source: lead.source.toValue()
     }));
 
@@ -103,8 +103,8 @@ export class Lead extends AggregateRoot<LeadId> {
     this.assertNotArchived();
     this.assertNotConverted();
 
-    const hasEmail = !!this.contactInfo.value.email;
-    const hasPhone = !!this.contactInfo.value.phone;
+    const hasEmail = !!this.contactInfo.toValue().email;
+    const hasPhone = !!this.contactInfo.toValue().phone;
 
     if (!qualificationService.canQualify(this._score.toValue(), hasEmail, hasPhone)) {
       throw new Error('Lead does not meet qualification criteria (score >= 50 and contact info present).');
@@ -141,7 +141,7 @@ export class Lead extends AggregateRoot<LeadId> {
 
     const newScoreValue = scoringService.calculateScore(
       this.industry.toValue(),
-      this.expectedRevenue.value.amount,
+      this.expectedRevenue.toValue().amount,
       this._contacts.length
     );
 

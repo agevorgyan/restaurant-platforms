@@ -44,3 +44,32 @@ export class RevenueSpecification extends Specification<{ amount: number }> {
     return context.amount >= 0;
   }
 }
+
+export class ParticipantSpecification extends Specification<{ participantsCount: number }> {
+  public isSatisfiedBy(context: { participantsCount: number }): boolean {
+    return context.participantsCount >= 1;
+  }
+}
+
+export class FollowUpSpecification extends Specification<{ interactionDate: Date, followUpDate: Date }> {
+  public isSatisfiedBy(context: { interactionDate: Date, followUpDate: Date }): boolean {
+    return context.followUpDate >= context.interactionDate;
+  }
+}
+
+export class InteractionStatusSpecification extends Specification<{ status: string }> {
+  public isSatisfiedBy(context: { status: string }): boolean {
+    return context.status === 'OPEN';
+  }
+}
+
+export class InteractionChannelSpecification extends Specification<{ channel: string }> {
+  public isSatisfiedBy(context: { channel: string }): boolean {
+    const valid = [
+      'PHONE', 'EMAIL', 'SMS', 'WHATSAPP', 'TELEGRAM', 
+      'FACEBOOK_MESSENGER', 'INSTAGRAM_DIRECT', 'WEBSITE_CHAT', 
+      'POS', 'IN_PERSON_MEETING', 'VIDEO_MEETING'
+    ];
+    return valid.includes(context.channel);
+  }
+}

@@ -1,4 +1,4 @@
-import { Identifier, DomainPrimitive, ValueObject } from '@saas/domain';
+import { Identifier, DomainPrimitive } from '@saas/domain';
 
 export class LeadId extends Identifier<string> {
   private constructor(value: string) { super(value); }
@@ -47,28 +47,28 @@ export class LeadScore extends DomainPrimitive<number> {
   }
 }
 
-export interface ContactInformationProps extends Record<string, unknown> {
+export interface ContactInformationProps {
   email: string;
   phone?: string;
   firstName: string;
   lastName: string;
 }
 
-export class ContactInformation extends ValueObject<ContactInformationProps> {
-  private constructor(props: ContactInformationProps) { super(props); }
+export class ContactInformation extends DomainPrimitive<ContactInformationProps> {
+  private constructor(value: ContactInformationProps) { super(value); }
   public static create(props: ContactInformationProps): ContactInformation {
     if (!props.email || !props.firstName || !props.lastName) throw new Error('Email, first name, and last name are required.');
     return new ContactInformation(props);
   }
 }
 
-export interface ExpectedRevenueProps extends Record<string, unknown> {
+export interface ExpectedRevenueProps {
   amount: number;
   currency: string;
 }
 
-export class ExpectedRevenue extends ValueObject<ExpectedRevenueProps> {
-  private constructor(props: ExpectedRevenueProps) { super(props); }
+export class ExpectedRevenue extends DomainPrimitive<ExpectedRevenueProps> {
+  private constructor(value: ExpectedRevenueProps) { super(value); }
   public static create(props: ExpectedRevenueProps): ExpectedRevenue {
     if (props.amount < 0) throw new Error('Expected revenue cannot be negative.');
     return new ExpectedRevenue(props);

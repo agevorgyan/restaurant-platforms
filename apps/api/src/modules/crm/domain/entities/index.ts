@@ -7,3 +7,8 @@ export * from './opportunity-product';
 export * from './opportunity-competitor';
 export * from './opportunity-note';
 export * from './opportunity-history-entry';
+export * from './interaction-participant';
+export * from './interaction-note';
+export * from './interaction-followup-reference';
+export * from './interaction-attachment-reference';
+export * from './interaction-history-entry';

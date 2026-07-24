@@ -10,9 +10,9 @@ import {
   EstimatedCloseDate,
   WinProbability,
   Currency,
-  OpportunityPriority,
-  ExpectedRevenue
+  OpportunityPriority
 } from '../value-objects/opportunity-core';
+import { ExpectedRevenue } from '../value-objects/lead-core';
 import { OpportunityContact } from '../entities/opportunity-contact';
 import { OpportunityProduct } from '../entities/opportunity-product';
 import { OpportunityCompetitor } from '../entities/opportunity-competitor';
