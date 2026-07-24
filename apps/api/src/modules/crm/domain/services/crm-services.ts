@@ -130,3 +130,44 @@ export class JourneyAnalyticsService {
     return Math.max(1, Math.floor((end.getTime() - startDate.getTime()) / msInDay));
   }
 }
+
+export class EngagementScoringService {
+  public calculateScoreAdjustment(responseType: string): number {
+    const weights: Record<string, number> = {
+      'Opened': 1,
+      'Clicked': 3,
+      'Visited Website': 5,
+      'Downloaded Resource': 10,
+      'Registered': 20,
+      'Purchased': 50,
+      'Unsubscribed': -10,
+      'Spam Complaint': -50,
+      'Hard Bounce': -5,
+      'Soft Bounce': -2
+    };
+    return weights[responseType] || 0;
+  }
+}
+
+export class AttributionService {
+  public determineAttributionModel(campaignType: string): string {
+    if (campaignType === 'AWARENESS') return 'FIRST_TOUCH';
+    if (campaignType === 'CONVERSION') return 'LAST_TOUCH';
+    return 'LINEAR';
+  }
+}
+
+export class ConversionEvaluationService {
+  public evaluateConversionValue(conversionType: string, baseValue: number): number {
+    if (conversionType === 'Purchased') return baseValue;
+    if (conversionType === 'Registered') return baseValue * 0.1; // Assigned lead value
+    return 0;
+  }
+}
+
+export class CampaignAnalyticsService {
+  public calculateEngagementRate(opens: number, sends: number): number {
+    if (sends === 0) return 0;
+    return (opens / sends) * 100;
+  }
+}

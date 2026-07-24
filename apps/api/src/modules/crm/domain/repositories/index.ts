@@ -28,3 +28,11 @@ export interface ICustomerJourneyRepository extends IRepository<CustomerJourney>
   findActiveJourney(customerReference: string, journeyType: string): Promise<CustomerJourney | null>;
   findJourneysByStage(stage: string): Promise<CustomerJourney[]>;
 }
+
+import { CampaignEngagement } from '../aggregates/campaign-engagement';
+
+export interface ICampaignEngagementRepository extends IRepository<CampaignEngagement> {
+  findByCampaign(campaignReference: string): Promise<CampaignEngagement[]>;
+  findByTarget(targetReference: string): Promise<CampaignEngagement[]>;
+  findByCampaignAndTarget(campaignReference: string, targetReference: string): Promise<CampaignEngagement | null>;
+}

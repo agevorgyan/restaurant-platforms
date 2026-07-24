@@ -18,3 +18,12 @@ export * from './journey-goal';
 export * from './journey-checkpoint';
 export * from './journey-tag';
 export * from './journey-history-entry';
+
+export * from './campaign-response';
+export * from './campaign-click-event';
+export * from './campaign-open-event';
+export * from './campaign-visit-event';
+export * from './campaign-conversion-event';
+export * from './campaign-unsubscribe-record';
+export * from './campaign-bounce-record';
+export * from './engagement-history-entry';

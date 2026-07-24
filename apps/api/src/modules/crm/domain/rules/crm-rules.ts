@@ -105,3 +105,27 @@ export class JourneyStatusSpecification extends Specification<{ status: string }
     return context.status === 'ACTIVE' || context.status === 'PAUSED';
   }
 }
+
+export class EngagementTimelineSpecification extends Specification<{ newEventTime: Date, lastEventTime: Date | null }> {
+  public isSatisfiedBy(context: { newEventTime: Date, lastEventTime: Date | null }): boolean {
+    if (!context.lastEventTime) return true;
+    return context.newEventTime.getTime() >= context.lastEventTime.getTime();
+  }
+}
+
+export class ConversionSpecification extends Specification<{ isAlreadyConverted: boolean }> {
+  public isSatisfiedBy(context: { isAlreadyConverted: boolean }): boolean {
+    return !context.isAlreadyConverted;
+  }
+}
+
+export class ResponseSpecification extends Specification<{ responseType: string }> {
+  public isSatisfiedBy(context: { responseType: string }): boolean {
+    const validResponses = [
+      'Opened', 'Clicked', 'Visited Website', 'Downloaded Resource', 
+      'Registered', 'Purchased', 'Unsubscribed', 'Spam Complaint', 
+      'Hard Bounce', 'Soft Bounce'
+    ];
+    return validResponses.includes(context.responseType);
+  }
+}
