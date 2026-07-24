@@ -20,3 +20,11 @@ export interface IInteractionRepository extends IRepository<Interaction> {
   findByParticipant(entityType: string, entityId: string): Promise<Interaction[]>;
   findPendingFollowUps(assigneeId: string): Promise<Interaction[]>;
 }
+
+import { CustomerJourney } from '../aggregates/customer-journey';
+
+export interface ICustomerJourneyRepository extends IRepository<CustomerJourney> {
+  findByCustomer(customerReference: string): Promise<CustomerJourney[]>;
+  findActiveJourney(customerReference: string, journeyType: string): Promise<CustomerJourney | null>;
+  findJourneysByStage(stage: string): Promise<CustomerJourney[]>;
+}

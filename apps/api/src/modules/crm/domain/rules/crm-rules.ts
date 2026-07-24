@@ -73,3 +73,35 @@ export class InteractionChannelSpecification extends Specification<{ channel: st
     return valid.includes(context.channel);
   }
 }
+
+export class JourneyStageSpecification extends Specification<{ currentStage: string, nextStage: string }> {
+  public isSatisfiedBy(context: { currentStage: string, nextStage: string }): boolean {
+    const stageSequence = [
+      'ANONYMOUS', 'LEAD', 'QUALIFIED_LEAD', 'OPPORTUNITY', 
+      'CUSTOMER', 'RETURNING_CUSTOMER', 'VIP'
+    ];
+    const currentIndex = stageSequence.indexOf(context.currentStage);
+    const nextIndex = stageSequence.indexOf(context.nextStage);
+    
+    // Can jump forward, but generally not backward unless going to INACTIVE/LOST
+    return nextIndex > currentIndex || ['INACTIVE', 'LOST'].includes(context.nextStage);
+  }
+}
+
+export class JourneyHealthSpecification extends Specification<{ score: number }> {
+  public isSatisfiedBy(context: { score: number }): boolean {
+    return context.score >= 0 && context.score <= 100;
+  }
+}
+
+export class JourneyMilestoneSpecification extends Specification<{ sequence: number, latestSequence: number }> {
+  public isSatisfiedBy(context: { sequence: number, latestSequence: number }): boolean {
+    return context.sequence > context.latestSequence;
+  }
+}
+
+export class JourneyStatusSpecification extends Specification<{ status: string }> {
+  public isSatisfiedBy(context: { status: string }): boolean {
+    return context.status === 'ACTIVE' || context.status === 'PAUSED';
+  }
+}

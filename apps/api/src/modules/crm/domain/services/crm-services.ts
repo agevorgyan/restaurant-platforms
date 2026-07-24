@@ -93,3 +93,40 @@ export class FollowUpRecommendationService {
     return followUp;
   }
 }
+
+export class JourneyEvaluationService {
+  public evaluateRiskLevel(healthScore: number, daysSinceLastActivity: number): string {
+    if (healthScore < 30 || daysSinceLastActivity > 90) return 'CRITICAL';
+    if (healthScore < 50 || daysSinceLastActivity > 60) return 'HIGH';
+    if (healthScore < 75 || daysSinceLastActivity > 30) return 'MEDIUM';
+    return 'LOW';
+  }
+}
+
+export class JourneyHealthService {
+  public calculateHealthImpact(currentScore: number, eventImpact: number): number {
+    return Math.max(0, Math.min(100, currentScore + eventImpact));
+  }
+}
+
+export class JourneyRecommendationService {
+  public recommendNextMilestone(currentStage: string): string | null {
+    const defaultMilestones: Record<string, string> = {
+      'ANONYMOUS': 'Capture Contact Info',
+      'LEAD': 'Complete Qualification',
+      'QUALIFIED_LEAD': 'Book Discovery Call',
+      'OPPORTUNITY': 'Send Proposal',
+      'CUSTOMER': 'Complete Onboarding',
+      'RETURNING_CUSTOMER': 'Upsell Premium Features'
+    };
+    return defaultMilestones[currentStage] || null;
+  }
+}
+
+export class JourneyAnalyticsService {
+  public calculateVelocity(startDate: Date, endDate: Date | null): number {
+    const end = endDate || new Date();
+    const msInDay = 1000 * 60 * 60 * 24;
+    return Math.max(1, Math.floor((end.getTime() - startDate.getTime()) / msInDay));
+  }
+}

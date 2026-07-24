@@ -12,3 +12,9 @@ export * from './interaction-note';
 export * from './interaction-followup-reference';
 export * from './interaction-attachment-reference';
 export * from './interaction-history-entry';
+
+export * from './journey-milestone';
+export * from './journey-goal';
+export * from './journey-checkpoint';
+export * from './journey-tag';
+export * from './journey-history-entry';
