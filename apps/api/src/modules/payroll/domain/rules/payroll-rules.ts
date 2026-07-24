@@ -55,4 +55,20 @@ export class FinalizationSpecification extends Specification<PayrollStatusEnum> 
     return status === PayrollStatusEnum.APPROVED;
   }
 }
+export class GrossSalarySpecification extends Specification<number> {
+  public isSatisfiedBy(grossAmount: number): boolean {
+    return grossAmount >= 0;
+  }
+}
 
+export class TaxCalculationSpecification extends Specification<{ grossAmount: number, taxAmount: number }> {
+  public isSatisfiedBy(candidate: { grossAmount: number, taxAmount: number }): boolean {
+    return candidate.taxAmount >= 0 && candidate.taxAmount <= candidate.grossAmount;
+  }
+}
+
+export class EmployeeApprovalSpecification extends Specification<{ status: string, netAmount: number, grossAmount: number }> {
+  public isSatisfiedBy(candidate: { status: string, netAmount: number, grossAmount: number }): boolean {
+    return candidate.status === 'CALCULATED' && candidate.netAmount >= 0 && candidate.grossAmount >= 0;
+  }
+}

@@ -47,3 +47,20 @@ export class PayrollConsistencyService implements IDomainService {
   }
 }
 
+export class SalaryCalculationService implements IDomainService {
+  public calculateBaseSalary(baseSalary: number, regularHours: number, hourlyRate: number): number {
+    return baseSalary > 0 ? baseSalary : regularHours * hourlyRate;
+  }
+}
+
+export class BonusCalculationService implements IDomainService {
+  public calculateTotalBonus(bonuses: { amount: number }[]): number {
+    return bonuses.reduce((sum, b) => sum + b.amount, 0);
+  }
+}
+
+export class DeductionCalculationService implements IDomainService {
+  public calculateTotalDeduction(deductions: { amount: number }[]): number {
+    return deductions.reduce((sum, d) => sum + d.amount, 0);
+  }
+}

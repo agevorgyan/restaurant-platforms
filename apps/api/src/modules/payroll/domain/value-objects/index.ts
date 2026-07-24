@@ -6,3 +6,5 @@ export * from './payroll-run-type';
 export * from './payroll-dates';
 export * from './currency';
 export * from './money-types';
+export * from './employee-payroll-core';
+export * from './work-hours';

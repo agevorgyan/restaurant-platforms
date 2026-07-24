@@ -7,3 +7,8 @@ export * from './employee-payroll-summary';
 export * from './payroll-calculation-issue';
 export * from './payroll-approval';
 export * from './payroll-audit-entry';
+export * from './worked-hours-entry';
+export * from './payroll-bonus';
+export * from './payroll-deduction';
+export * from './payroll-tax';
+export * from './payroll-adjustment';
