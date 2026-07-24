@@ -49,3 +49,37 @@ export class JournalApprovalSpecification extends Specification<{ status: string
     return candidate.status === 'PENDING_APPROVAL';
   }
 }
+
+export class UniqueAccountCodeSpecification extends Specification<{ codes: string[], candidate: string }> {
+  public isSatisfiedBy(context: { codes: string[], candidate: string }): boolean {
+    return !context.codes.includes(context.candidate);
+  }
+}
+
+export class HierarchyIntegritySpecification extends Specification<{ edges: { parent: string | null, child: string }[], candidateParent: string, candidateChild: string }> {
+  public isSatisfiedBy(context: { edges: { parent: string | null, child: string }[], candidateParent: string, candidateChild: string }): boolean {
+    let current: string | null = context.candidateParent;
+    const visited = new Set<string>();
+    while (current) {
+      if (current === context.candidateChild) return false;
+      if (visited.has(current)) return false;
+      visited.add(current);
+      const edge = context.edges.find(e => e.child === current);
+      if (!edge || !edge.parent) break;
+      current = edge.parent;
+    }
+    return true;
+  }
+}
+
+export class PostingAccountSpecification extends Specification<{ isActive: boolean }> {
+  public isSatisfiedBy(candidate: { isActive: boolean }): boolean {
+    return candidate.isActive;
+  }
+}
+
+export class AccountActivationSpecification extends Specification<{ isChartActive: boolean }> {
+  public isSatisfiedBy(candidate: { isChartActive: boolean }): boolean {
+    return candidate.isChartActive;
+  }
+}

@@ -43,3 +43,22 @@ export class ExchangeRateService implements IDomainService {
     return rate > 0;
   }
 }
+
+export class AccountValidationService implements IDomainService {
+  public validate(code: string, name: string): boolean {
+    return code.trim().length > 0 && name.trim().length > 0;
+  }
+}
+
+export class AccountHierarchyService implements IDomainService {
+  public canMove(accountId: string, newParentId: string | null, edges: { parent: string | null, child: string }[]): boolean {
+    if (accountId === newParentId) return false;
+    return true;
+  }
+}
+
+export class AccountMappingService implements IDomainService {
+  public validateMapping(accountId: string, externalCode: string): boolean {
+    return externalCode.length > 0;
+  }
+}

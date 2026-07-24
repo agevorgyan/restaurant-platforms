@@ -4,3 +4,8 @@ export * from './ledger-history-entry';
 export * from './journal-line';
 export * from './attachment-reference';
 export * from './journal-approval-record';
+export * from './account';
+export * from './account-hierarchy';
+export * from './account-alias';
+export * from './account-mapping';
+export * from './account-history-entry';
