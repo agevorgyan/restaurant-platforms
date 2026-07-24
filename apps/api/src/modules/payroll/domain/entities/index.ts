@@ -3,3 +3,7 @@ export * from './bonus';
 export * from './deduction';
 export * from './tax-item';
 export * from './export-record';
+export * from './employee-payroll-summary';
+export * from './payroll-calculation-issue';
+export * from './payroll-approval';
+export * from './payroll-audit-entry';

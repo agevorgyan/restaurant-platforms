@@ -1,9 +1,15 @@
 import { DomainEvent } from '@saas/events';
 import { EventMetadata } from '@saas/events/src/metadata';
 
-export class PayrollCreated extends DomainEvent<{ payrollId: string, periodStartDate: Date, periodEndDate: Date }> {
+export class PayrollRunCreated extends DomainEvent<{ payrollId: string, periodStartDate: Date, periodEndDate: Date }> {
   constructor(aggregateId: string, aggregateVersion: number, payload: { payrollId: string, periodStartDate: Date, periodEndDate: Date }, metadata: EventMetadata = {}) {
-    super(crypto.randomUUID(), 'PayrollCreated', aggregateId, 'PayrollRun', aggregateVersion, new Date(), payload, metadata);
+    super(crypto.randomUUID(), 'PayrollRunCreated', aggregateId, 'PayrollRun', aggregateVersion, new Date(), payload, metadata);
+  }
+}
+
+export class PayrollCalculationStarted extends DomainEvent<{ payrollId: string }> {
+  constructor(aggregateId: string, aggregateVersion: number, payload: { payrollId: string }, metadata: EventMetadata = {}) {
+    super(crypto.randomUUID(), 'PayrollCalculationStarted', aggregateId, 'PayrollRun', aggregateVersion, new Date(), payload, metadata);
   }
 }
 
@@ -19,15 +25,33 @@ export class PayrollApproved extends DomainEvent<{ payrollId: string, approvedBy
   }
 }
 
+export class PayrollRejected extends DomainEvent<{ payrollId: string, rejectedBy: string, reason: string }> {
+  constructor(aggregateId: string, aggregateVersion: number, payload: { payrollId: string, rejectedBy: string, reason: string }, metadata: EventMetadata = {}) {
+    super(crypto.randomUUID(), 'PayrollRejected', aggregateId, 'PayrollRun', aggregateVersion, new Date(), payload, metadata);
+  }
+}
+
 export class PayrollFinalized extends DomainEvent<{ payrollId: string, finalizedBy: string }> {
   constructor(aggregateId: string, aggregateVersion: number, payload: { payrollId: string, finalizedBy: string }, metadata: EventMetadata = {}) {
     super(crypto.randomUUID(), 'PayrollFinalized', aggregateId, 'PayrollRun', aggregateVersion, new Date(), payload, metadata);
   }
 }
 
+export class PayrollReopened extends DomainEvent<{ payrollId: string, reopenedBy: string }> {
+  constructor(aggregateId: string, aggregateVersion: number, payload: { payrollId: string, reopenedBy: string }, metadata: EventMetadata = {}) {
+    super(crypto.randomUUID(), 'PayrollReopened', aggregateId, 'PayrollRun', aggregateVersion, new Date(), payload, metadata);
+  }
+}
+
 export class PayrollExported extends DomainEvent<{ payrollId: string, exportFormat: string, destination: string }> {
   constructor(aggregateId: string, aggregateVersion: number, payload: { payrollId: string, exportFormat: string, destination: string }, metadata: EventMetadata = {}) {
     super(crypto.randomUUID(), 'PayrollExported', aggregateId, 'PayrollRun', aggregateVersion, new Date(), payload, metadata);
+  }
+}
+
+export class PayrollArchived extends DomainEvent<{ payrollId: string, archivedBy: string }> {
+  constructor(aggregateId: string, aggregateVersion: number, payload: { payrollId: string, archivedBy: string }, metadata: EventMetadata = {}) {
+    super(crypto.randomUUID(), 'PayrollArchived', aggregateId, 'PayrollRun', aggregateVersion, new Date(), payload, metadata);
   }
 }
 

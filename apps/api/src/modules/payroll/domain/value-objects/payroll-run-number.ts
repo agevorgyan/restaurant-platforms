@@ -1,11 +1,11 @@
 import { DomainPrimitive } from '@saas/domain';
 
-export class PayrollNumber extends DomainPrimitive<string> {
+export class PayrollRunNumber extends DomainPrimitive<string> {
   private constructor(value: string) { super(value); }
-  public static create(value: string): PayrollNumber {
+  public static create(value: string): PayrollRunNumber {
     if (!value || value.trim().length === 0) {
       throw new Error('Payroll number cannot be empty.');
     }
-    return new PayrollNumber(value.trim());
+    return new PayrollRunNumber(value.trim());
   }
 }

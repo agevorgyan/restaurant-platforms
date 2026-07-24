@@ -33,3 +33,17 @@ export class PayrollExportService implements IDomainService {
     };
   }
 }
+
+export class PayrollApprovalService implements IDomainService {
+  public validateApprovalConstraints(totalEmployees: number, totalGross: number, issuesCount: number): boolean {
+    return totalEmployees > 0 && totalGross > 0 && issuesCount === 0;
+  }
+}
+
+export class PayrollConsistencyService implements IDomainService {
+  public checkConsistency(summariesGross: number[], totalExpectedGross: number): boolean {
+    const calculatedGross = summariesGross.reduce((sum, current) => sum + current, 0);
+    return Math.abs(calculatedGross - totalExpectedGross) < 0.01; // handling floating point
+  }
+}
+

@@ -37,3 +37,22 @@ export class TaxProfileSpecification extends Specification<{ hasActiveProfile: b
     return candidate.hasActiveProfile || candidate.isTaxExempt;
   }
 }
+
+export class PayrollCompletenessSpecification extends Specification<number> {
+  public isSatisfiedBy(employeeCount: number): boolean {
+    return employeeCount > 0;
+  }
+}
+
+export class ApprovalRequiredSpecification extends Specification<PayrollStatusEnum> {
+  public isSatisfiedBy(status: PayrollStatusEnum): boolean {
+    return status === PayrollStatusEnum.CALCULATED;
+  }
+}
+
+export class FinalizationSpecification extends Specification<PayrollStatusEnum> {
+  public isSatisfiedBy(status: PayrollStatusEnum): boolean {
+    return status === PayrollStatusEnum.APPROVED;
+  }
+}
+
