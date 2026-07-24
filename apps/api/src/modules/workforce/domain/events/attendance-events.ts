@@ -1,38 +1,62 @@
 import { DomainEvent } from '@saas/events';
 import { EventMetadata } from '@saas/events/src/metadata';
 
-export interface AttendanceRecordedPayload {
+export interface AttendanceCreatedPayload {
   attendanceId: string;
   staffId: string;
   shiftId: string;
-  checkInTime: Date;
 }
 
-export class AttendanceRecorded extends DomainEvent<AttendanceRecordedPayload> {
-  constructor(
-    aggregateId: string,
-    aggregateVersion: number,
-    payload: AttendanceRecordedPayload,
-    metadata: EventMetadata = {}
-  ) {
-    super(crypto.randomUUID(), 'AttendanceRecorded', aggregateId, 'AttendanceRecord', aggregateVersion, new Date(), payload, metadata);
+export class AttendanceCreated extends DomainEvent<AttendanceCreatedPayload> {
+  constructor(aggregateId: string, aggregateVersion: number, payload: AttendanceCreatedPayload, metadata: EventMetadata = {}) {
+    super(crypto.randomUUID(), 'AttendanceCreated', aggregateId, 'AttendanceRecord', aggregateVersion, new Date(), payload, metadata);
   }
 }
 
-export interface AttendanceCorrectedPayload {
+export interface EmployeeCheckedInPayload {
   attendanceId: string;
-  reason: string;
-  correctedCheckInTime?: Date;
-  correctedCheckOutTime?: Date;
+  checkInTime: Date;
+  source: string;
 }
 
-export class AttendanceCorrected extends DomainEvent<AttendanceCorrectedPayload> {
-  constructor(
-    aggregateId: string,
-    aggregateVersion: number,
-    payload: AttendanceCorrectedPayload,
-    metadata: EventMetadata = {}
-  ) {
+export class EmployeeCheckedIn extends DomainEvent<EmployeeCheckedInPayload> {
+  constructor(aggregateId: string, aggregateVersion: number, payload: EmployeeCheckedInPayload, metadata: EventMetadata = {}) {
+    super(crypto.randomUUID(), 'EmployeeCheckedIn', aggregateId, 'AttendanceRecord', aggregateVersion, new Date(), payload, metadata);
+  }
+}
+
+export class BreakStarted extends DomainEvent<{ attendanceId: string, breakId: string, startTime: Date }> {
+  constructor(aggregateId: string, aggregateVersion: number, payload: { attendanceId: string, breakId: string, startTime: Date }, metadata: EventMetadata = {}) {
+    super(crypto.randomUUID(), 'BreakStarted', aggregateId, 'AttendanceRecord', aggregateVersion, new Date(), payload, metadata);
+  }
+}
+
+export class BreakEnded extends DomainEvent<{ attendanceId: string, breakId: string, endTime: Date }> {
+  constructor(aggregateId: string, aggregateVersion: number, payload: { attendanceId: string, breakId: string, endTime: Date }, metadata: EventMetadata = {}) {
+    super(crypto.randomUUID(), 'BreakEnded', aggregateId, 'AttendanceRecord', aggregateVersion, new Date(), payload, metadata);
+  }
+}
+
+export class EmployeeCheckedOut extends DomainEvent<{ attendanceId: string, checkOutTime: Date, source: string }> {
+  constructor(aggregateId: string, aggregateVersion: number, payload: { attendanceId: string, checkOutTime: Date, source: string }, metadata: EventMetadata = {}) {
+    super(crypto.randomUUID(), 'EmployeeCheckedOut', aggregateId, 'AttendanceRecord', aggregateVersion, new Date(), payload, metadata);
+  }
+}
+
+export class AttendanceCorrected extends DomainEvent<{ attendanceId: string, correctionId: string, reason: string }> {
+  constructor(aggregateId: string, aggregateVersion: number, payload: { attendanceId: string, correctionId: string, reason: string }, metadata: EventMetadata = {}) {
     super(crypto.randomUUID(), 'AttendanceCorrected', aggregateId, 'AttendanceRecord', aggregateVersion, new Date(), payload, metadata);
+  }
+}
+
+export class AttendanceCorrectionApproved extends DomainEvent<{ attendanceId: string, correctionId: string }> {
+  constructor(aggregateId: string, aggregateVersion: number, payload: { attendanceId: string, correctionId: string }, metadata: EventMetadata = {}) {
+    super(crypto.randomUUID(), 'AttendanceCorrectionApproved', aggregateId, 'AttendanceRecord', aggregateVersion, new Date(), payload, metadata);
+  }
+}
+
+export class AttendanceCorrectionRejected extends DomainEvent<{ attendanceId: string, correctionId: string }> {
+  constructor(aggregateId: string, aggregateVersion: number, payload: { attendanceId: string, correctionId: string }, metadata: EventMetadata = {}) {
+    super(crypto.randomUUID(), 'AttendanceCorrectionRejected', aggregateId, 'AttendanceRecord', aggregateVersion, new Date(), payload, metadata);
   }
 }

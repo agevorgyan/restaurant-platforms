@@ -1,10 +1,10 @@
 import { DomainPrimitive } from '@saas/domain';
 
 export enum AttendanceStatusEnum {
-  PRESENT = 'PRESENT',
-  ABSENT = 'ABSENT',
-  LATE = 'LATE',
-  ON_LEAVE = 'ON_LEAVE'
+  ACTIVE = 'ACTIVE',
+  COMPLETED = 'COMPLETED',
+  CORRECTION_PENDING = 'CORRECTION_PENDING',
+  LOCKED = 'LOCKED'
 }
 
 export class AttendanceStatus extends DomainPrimitive<AttendanceStatusEnum> {
@@ -17,5 +17,22 @@ export class AttendanceStatus extends DomainPrimitive<AttendanceStatusEnum> {
       throw new Error(`Invalid attendance status: ${value}`);
     }
     return new AttendanceStatus(value);
+  }
+
+  public canTransitionTo(nextStatus: AttendanceStatusEnum): boolean {
+    const current = this.value;
+    if (current === AttendanceStatusEnum.LOCKED) {
+      return false; // Terminal state
+    }
+    if (current === AttendanceStatusEnum.ACTIVE) {
+      return nextStatus === AttendanceStatusEnum.COMPLETED || nextStatus === AttendanceStatusEnum.LOCKED;
+    }
+    if (current === AttendanceStatusEnum.COMPLETED) {
+      return nextStatus === AttendanceStatusEnum.CORRECTION_PENDING || nextStatus === AttendanceStatusEnum.LOCKED;
+    }
+    if (current === AttendanceStatusEnum.CORRECTION_PENDING) {
+      return nextStatus === AttendanceStatusEnum.COMPLETED || nextStatus === AttendanceStatusEnum.LOCKED;
+    }
+    return false;
   }
 }

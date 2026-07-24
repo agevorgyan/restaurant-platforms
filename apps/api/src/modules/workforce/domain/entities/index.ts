@@ -10,3 +10,6 @@ export * from './scheduled-shift';
 export * from './schedule-assignment';
 export * from './schedule-note';
 export * from './schedule-conflict';
+export * from './attendance-break';
+export * from './attendance-correction';
+export * from './attendance-audit-entry';
