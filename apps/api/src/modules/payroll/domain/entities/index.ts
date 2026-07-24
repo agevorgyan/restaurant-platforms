@@ -17,3 +17,6 @@ export * from './allowance';
 export * from './recurring-bonus';
 export * from './recurring-deduction';
 export * from './compensation-history-entry';
+export * from './adjustment-line';
+export * from './approval-record';
+export * from './adjustment-attachment';

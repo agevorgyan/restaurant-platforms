@@ -82,3 +82,24 @@ export class AllowanceCalculationService implements IDomainService {
     return allowances.reduce((sum, a) => sum + a.amount, 0);
   }
 }
+
+export class AdjustmentValidationService implements IDomainService {
+  public validateAdjustmentAmount(amount: number, type: string): boolean {
+    if (amount === 0) return false;
+    if (type === 'PENALTY' && amount > 0) return false; // penalties should be negative
+    if (type === 'BONUS' && amount < 0) return false; // bonuses should be positive
+    return true;
+  }
+}
+
+export class AdjustmentApprovalService implements IDomainService {
+  public canApprove(status: string): boolean {
+    return status === 'SUBMITTED';
+  }
+}
+
+export class AdjustmentApplicationService implements IDomainService {
+  public canApply(status: string, effectiveDate: Date): boolean {
+    return status === 'APPROVED' && effectiveDate <= new Date();
+  }
+}

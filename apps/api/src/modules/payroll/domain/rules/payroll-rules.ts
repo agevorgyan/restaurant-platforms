@@ -97,3 +97,27 @@ export class AllowanceSpecification extends Specification<{ amount: number }> {
     return allowance.amount >= 0;
   }
 }
+
+export class AdjustmentAmountSpecification extends Specification<number> {
+  public isSatisfiedBy(amount: number): boolean {
+    return amount !== 0;
+  }
+}
+
+export class AdjustmentApprovalSpecification extends Specification<{ status: string }> {
+  public isSatisfiedBy(candidate: { status: string }): boolean {
+    return candidate.status === 'SUBMITTED';
+  }
+}
+
+export class ApplicationSpecification extends Specification<{ status: string }> {
+  public isSatisfiedBy(candidate: { status: string }): boolean {
+    return candidate.status === 'APPROVED';
+  }
+}
+
+export class AdjustmentStatusSpecification extends Specification<string> {
+  public isSatisfiedBy(status: string): boolean {
+    return ['DRAFT', 'SUBMITTED', 'APPROVED', 'APPLIED', 'CANCELLED', 'ARCHIVED'].includes(status);
+  }
+}

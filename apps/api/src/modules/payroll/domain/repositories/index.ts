@@ -2,6 +2,7 @@ import { IRepository } from '@saas/domain';
 import { PayrollRun } from '../aggregates/payroll-run';
 import { EmployeePayroll } from '../aggregates/employee-payroll';
 import { CompensationPackage } from '../aggregates/compensation-package';
+import { PayrollAdjustment } from '../aggregates/payroll-adjustment';
 
 export interface IPayrollRunRepository extends IRepository<PayrollRun> {
   findByPeriod(startDate: Date, endDate: Date): Promise<PayrollRun[]>;
@@ -16,6 +17,11 @@ export interface IEmployeePayrollRepository extends IRepository<EmployeePayroll>
 export interface ICompensationPackageRepository extends IRepository<CompensationPackage> {
   findByEmployeeId(employeeId: string): Promise<CompensationPackage[]>;
   findActiveByEmployeeId(employeeId: string): Promise<CompensationPackage | null>;
+}
+
+export interface IPayrollAdjustmentRepository extends IRepository<PayrollAdjustment> {
+  findByEmployeeId(employeeId: string): Promise<PayrollAdjustment[]>;
+  findByStatus(status: string): Promise<PayrollAdjustment[]>;
 }
 
 export interface ITaxProfileRepository extends IRepository<any> {
