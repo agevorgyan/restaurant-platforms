@@ -9,3 +9,8 @@ export * from './account-hierarchy';
 export * from './account-alias';
 export * from './account-mapping';
 export * from './account-history-entry';
+export * from './receivable-line';
+export * from './payment-allocation';
+export * from './write-off-record';
+export * from './collection-attempt';
+export * from './receivable-history-entry';

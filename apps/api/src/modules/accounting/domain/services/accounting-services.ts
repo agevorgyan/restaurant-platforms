@@ -62,3 +62,23 @@ export class AccountMappingService implements IDomainService {
     return externalCode.length > 0;
   }
 }
+
+export class PaymentAllocationService implements IDomainService {
+  public canAllocate(outstandingAmount: number, allocationAmount: number): boolean {
+    return outstandingAmount >= allocationAmount && allocationAmount > 0;
+  }
+}
+
+export class ReceivableBalanceService implements IDomainService {
+  public calculateOutstanding(originalAmount: number, allocations: number[], writeOffs: number[]): number {
+    const totalAllocated = allocations.reduce((sum, a) => sum + a, 0);
+    const totalWrittenOff = writeOffs.reduce((sum, w) => sum + w, 0);
+    return originalAmount - totalAllocated - totalWrittenOff;
+  }
+}
+
+export class CollectionEvaluationService implements IDomainService {
+  public requiresCollection(status: string, dueDate: Date, currentDate: Date): boolean {
+    return (status === 'ISSUED' || status === 'PARTIALLY_PAID') && currentDate > dueDate;
+  }
+}

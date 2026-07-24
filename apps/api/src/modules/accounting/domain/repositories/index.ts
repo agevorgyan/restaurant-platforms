@@ -18,3 +18,10 @@ export interface IChartOfAccountsRepository extends IRepository<ChartOfAccounts>
   findActiveChart(): Promise<ChartOfAccounts | null>;
   findByVersion(version: string): Promise<ChartOfAccounts | null>;
 }
+
+import { AccountsReceivable } from '../aggregates/accounts-receivable';
+
+export interface IAccountsReceivableRepository extends IRepository<AccountsReceivable> {
+  findByCustomer(customerReference: string): Promise<AccountsReceivable[]>;
+  findOutstanding(): Promise<AccountsReceivable[]>;
+}

@@ -83,3 +83,27 @@ export class AccountActivationSpecification extends Specification<{ isChartActiv
     return candidate.isChartActive;
   }
 }
+
+export class OutstandingBalanceSpecification extends Specification<{ outstandingAmount: number, allocationAmount: number }> {
+  public isSatisfiedBy(context: { outstandingAmount: number, allocationAmount: number }): boolean {
+    return context.outstandingAmount >= context.allocationAmount;
+  }
+}
+
+export class CreditTermsSpecification extends Specification<{ dueDate: Date, issueDate: Date }> {
+  public isSatisfiedBy(context: { dueDate: Date, issueDate: Date }): boolean {
+    return context.dueDate >= context.issueDate;
+  }
+}
+
+export class AllocationSpecification extends Specification<{ status: string }> {
+  public isSatisfiedBy(context: { status: string }): boolean {
+    return context.status !== 'CLOSED' && context.status !== 'WRITTEN_OFF';
+  }
+}
+
+export class WriteOffApprovalSpecification extends Specification<{ approverId: string }> {
+  public isSatisfiedBy(context: { approverId: string }): boolean {
+    return context.approverId.trim().length > 0;
+  }
+}
