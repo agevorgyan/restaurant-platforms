@@ -5,3 +5,4 @@ export * from './benchmark.read-model';
 export * from './insights.read-model';
 export * from './reporting.read-model';
 export * from './datamart.read-model';
+export * from './biconnector.read-model';

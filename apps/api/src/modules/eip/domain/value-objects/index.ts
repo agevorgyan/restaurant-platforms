@@ -4,3 +4,4 @@ export * from './eip-benchmark';
 export * from './eip-insights';
 export * from './eip-reporting';
 export * from './eip-datamart';
+export * from './eip-biconnector';
