@@ -12,3 +12,8 @@ export * from './payroll-bonus';
 export * from './payroll-deduction';
 export * from './payroll-tax';
 export * from './payroll-adjustment';
+export * from './salary-component';
+export * from './allowance';
+export * from './recurring-bonus';
+export * from './recurring-deduction';
+export * from './compensation-history-entry';

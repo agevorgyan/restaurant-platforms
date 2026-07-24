@@ -8,3 +8,6 @@ export * from './currency';
 export * from './money-types';
 export * from './employee-payroll-core';
 export * from './work-hours';
+export * from './compensation-package-core';
+export * from './compensation-rates';
+export * from './compensation-policies';

@@ -64,3 +64,21 @@ export class DeductionCalculationService implements IDomainService {
     return deductions.reduce((sum, d) => sum + d.amount, 0);
   }
 }
+
+export class CompensationValidationService implements IDomainService {
+  public validateRates(rates: number[]): boolean {
+    return rates.every(r => r >= 0);
+  }
+}
+
+export class SalaryPolicyService implements IDomainService {
+  public validateBaseSalary(amount: number): boolean {
+    return amount >= 0; // or complex minimum wage logic
+  }
+}
+
+export class AllowanceCalculationService implements IDomainService {
+  public calculateTotalAllowances(allowances: { amount: number }[]): number {
+    return allowances.reduce((sum, a) => sum + a.amount, 0);
+  }
+}

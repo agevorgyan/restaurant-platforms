@@ -72,3 +72,28 @@ export class EmployeeApprovalSpecification extends Specification<{ status: strin
     return candidate.status === 'CALCULATED' && candidate.netAmount >= 0 && candidate.grossAmount >= 0;
   }
 }
+
+export class SingleActivePackageSpecification extends Specification<any[]> {
+  public isSatisfiedBy(packages: any[]): boolean {
+    return packages.filter(p => p.status.toValue() === 'ACTIVE').length <= 1;
+  }
+}
+
+export class EffectivePeriodSpecification extends Specification<{ start: Date, end?: Date, newStart: Date, newEnd?: Date }> {
+  public isSatisfiedBy(dates: { start: Date, end?: Date, newStart: Date, newEnd?: Date }): boolean {
+    if (!dates.end) return dates.newStart > dates.start; // simplified overlap check
+    return dates.newStart > dates.end || (dates.newEnd !== undefined && dates.newEnd < dates.start);
+  }
+}
+
+export class SalaryRateSpecification extends Specification<number> {
+  public isSatisfiedBy(rate: number): boolean {
+    return rate >= 0;
+  }
+}
+
+export class AllowanceSpecification extends Specification<{ amount: number }> {
+  public isSatisfiedBy(allowance: { amount: number }): boolean {
+    return allowance.amount >= 0;
+  }
+}
