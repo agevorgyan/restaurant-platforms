@@ -17,3 +17,29 @@ export class LedgerClosingService implements IDomainService {
     return currentStatus === 'OPEN';
   }
 }
+
+export class DoubleEntryValidationService implements IDomainService {
+  public validateLines(lines: any[]): boolean {
+    return lines.length >= 2;
+  }
+}
+
+export class JournalBalancingService implements IDomainService {
+  public calculateTotals(debits: number[], credits: number[]): { totalDebit: number, totalCredit: number } {
+    const totalDebit = debits.reduce((sum, val) => sum + val, 0);
+    const totalCredit = credits.reduce((sum, val) => sum + val, 0);
+    return { totalDebit, totalCredit };
+  }
+}
+
+export class PostingService implements IDomainService {
+  public canPost(status: string, periodStatus: string): boolean {
+    return status === 'APPROVED' && periodStatus === 'OPEN';
+  }
+}
+
+export class ExchangeRateService implements IDomainService {
+  public validateRate(rate: number): boolean {
+    return rate > 0;
+  }
+}
