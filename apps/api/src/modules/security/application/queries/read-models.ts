@@ -86,3 +86,43 @@ export class PolicyEvaluationHistoryReadModel {
   timestamp!: Date;
 }
 
+export class SecretCatalogReadModel {
+  id!: string;
+  name!: string;
+  type!: string;
+  status!: string;
+  currentVersionId!: string;
+  lastRotatedAt?: Date;
+}
+
+export class KeyCatalogReadModel {
+  id!: string;
+  algorithm!: string;
+  currentVersion!: string;
+  isExportable!: boolean;
+  createdAt!: Date;
+}
+
+export class CertificateInventoryReadModel {
+  id!: string;
+  fingerprint!: string;
+  subject!: string;
+  issuer!: string;
+  expirationDate!: Date;
+  isActive!: boolean;
+}
+
+export class RotationHistoryReadModel {
+  id!: string;
+  secretId!: string;
+  previousVersionId!: string;
+  newVersionId!: string;
+  rotatedAt!: Date;
+}
+
+export class ExpirationDashboardReadModel {
+  expiringSecrets!: number;
+  expiringCertificates!: number;
+  soonestExpirationDate?: Date;
+}
+
