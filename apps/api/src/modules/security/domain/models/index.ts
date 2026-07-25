@@ -5,3 +5,4 @@ export * from './authorization.model';
 export * from './secrets.model';
 export * from './audit.model';
 export * from './threat.model';
+export * from './data-protection.model';

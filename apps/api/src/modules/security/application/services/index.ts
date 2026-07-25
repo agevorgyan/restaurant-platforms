@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */export * from './authentication.service';
+export * from './authentication.service';
 export * from './session.service';
 export * from './token.service';
 export * from './password.service';
@@ -10,3 +10,4 @@ export * from './authorization.services';
 export * from './secrets.services';
 export * from './audit.services';
 export * from './threat.services';
+export * from './data-protection.services';

@@ -3,3 +3,4 @@ export * from './authorization.controller';
 export * from './secrets.controller';
 export * from './audit.controller';
 export * from './threat.controller';
+export * from './data-protection.controller';

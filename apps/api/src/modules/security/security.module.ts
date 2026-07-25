@@ -5,6 +5,7 @@ import {
   SecretsController,
   AuditController,
   ThreatController,
+  DataProtectionController,
 } from './infrastructure/controllers';
 import { LocalSecretProvider } from './infrastructure/providers';
 import {
@@ -46,6 +47,14 @@ import {
   AlertService,
   SecurityResponseService,
   RuleEngineService,
+  DataProtectionService,
+  DataEncryptionService,
+  MaskingService,
+  TokenizationService,
+  PrivacyService,
+  DataRetentionService,
+  DeletionService,
+  DataClassificationService,
 } from './application/services';
 
 @Module({
@@ -55,6 +64,7 @@ import {
     SecretsController,
     AuditController,
     ThreatController,
+    DataProtectionController,
   ],
   providers: [
     LocalSecretProvider,
@@ -96,6 +106,14 @@ import {
     AlertService,
     SecurityResponseService,
     RuleEngineService,
+    DataProtectionService,
+    DataEncryptionService,
+    MaskingService,
+    TokenizationService,
+    PrivacyService,
+    DataRetentionService,
+    DeletionService,
+    DataClassificationService,
   ],
   exports: [
     AuthenticationService,
@@ -110,6 +128,8 @@ import {
     ComplianceService,
     ThreatDetectionService,
     IncidentService,
+    DataProtectionService,
+    DataClassificationService,
   ],
 })
 export class SecurityModule {}

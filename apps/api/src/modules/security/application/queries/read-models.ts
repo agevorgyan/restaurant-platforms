@@ -225,4 +225,49 @@ export class AttackStatisticsReadModel {
   periodEnd!: Date;
 }
 
+export class SensitiveDataInventoryReadModel {
+  resourceId!: string;
+  resourceType!: string;
+  classification!: string;
+  sensitiveFieldCount!: number;
+  isEncrypted!: boolean;
+  isMasked!: boolean;
+}
+
+export class ProtectionDashboardReadModel {
+  totalProtectedResources!: number;
+  encryptedResources!: number;
+  maskedResources!: number;
+  tokenizedFields!: number;
+  pendingPrivacyRequests!: number;
+}
+
+export class PrivacyRequestsReadModel {
+  id!: string;
+  type!: string;
+  subjectId!: string;
+  status!: string;
+  submittedAt!: Date;
+}
+
+export class RetentionStatusReadModel {
+  resourceId!: string;
+  retentionDays!: number;
+  expiresAt!: Date;
+  isArchived!: boolean;
+}
+
+export class DeletionHistoryReadModel {
+  resourceId!: string;
+  deletionMethod!: string;
+  deletedAt!: Date;
+  verifiedBy?: string;
+}
+
+export class ClassificationReportReadModel {
+  classification!: string;
+  resourceCount!: number;
+  lastUpdatedAt!: Date;
+}
+
 
