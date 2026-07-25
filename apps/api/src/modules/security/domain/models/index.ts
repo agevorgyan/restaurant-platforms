@@ -4,3 +4,4 @@ export * from './trusted-device.model';
 export * from './authorization.model';
 export * from './secrets.model';
 export * from './audit.model';
+export * from './threat.model';

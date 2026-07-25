@@ -174,4 +174,55 @@ export class RetentionDashboardReadModel {
   nextArchivalRun?: Date;
 }
 
+export class ThreatDashboardReadModel {
+  totalThreatsDetected!: number;
+  criticalThreats!: number;
+  openIncidents!: number;
+  averageRiskScore!: number;
+  periodStart!: Date;
+  periodEnd!: Date;
+}
+
+export class SecurityIncidentsReadModel {
+  id!: string;
+  title!: string;
+  severity!: string;
+  status!: string;
+  relatedThreatCount!: number;
+  createdAt!: Date;
+}
+
+export class ThreatTimelineReadModel {
+  id!: string;
+  type!: string;
+  level!: string;
+  actorId!: string;
+  score!: number;
+  detectedAt!: Date;
+}
+
+export class ActiveAlertsReadModel {
+  id!: string;
+  incidentId!: string;
+  channel!: string;
+  message!: string;
+  isAcknowledged!: boolean;
+  createdAt!: Date;
+}
+
+export class RiskScoresReadModel {
+  actorId!: string;
+  currentScore!: number;
+  scoreHistory!: Array<{ score: number; at: Date }>;
+}
+
+export class AttackStatisticsReadModel {
+  bruteForceAttempts!: number;
+  credentialStuffingAttempts!: number;
+  accountTakeoverAttempts!: number;
+  apiAbuseAttempts!: number;
+  periodStart!: Date;
+  periodEnd!: Date;
+}
+
 

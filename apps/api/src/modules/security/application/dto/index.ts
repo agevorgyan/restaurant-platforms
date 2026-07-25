@@ -6,3 +6,4 @@ export * from './passkey.dto';
 export * from './authorization.dto';
 export * from './secrets.dto';
 export * from './audit.dto';
+export * from './threat.dto';
