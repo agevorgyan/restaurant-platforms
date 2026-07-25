@@ -3,9 +3,16 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { IdentityModule } from './modules/identity/identity.module';
 import { RestaurantModule } from './modules/restaurant/restaurant.module';
+import { SecurityModule } from './modules/security/security.module';
+import { AutomationModule } from './modules/automation/automation.module';
 
 @Module({
-  imports: [IdentityModule, RestaurantModule],
+  imports: [
+    IdentityModule,
+    RestaurantModule,
+    SecurityModule,
+    AutomationModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
