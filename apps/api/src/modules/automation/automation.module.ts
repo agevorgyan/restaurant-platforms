@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { WorkflowController, RulesController } from './infrastructure/controllers';
+import { WorkflowController, RulesController, EventsController } from './infrastructure/controllers';
 import {
   WorkflowService,
   WorkflowExecutionService,
@@ -16,12 +16,21 @@ import {
   PolicyService,
   RuleVersionService,
   SimulationService,
+  EventPublisherService,
+  EventSubscriberService,
+  EventRouterService,
+  EventReplayService,
+  DeadLetterService,
+  RetryService,
+  CorrelationService,
+  SubscriptionService,
 } from './application/services';
 
 @Module({
   controllers: [
     WorkflowController,
     RulesController,
+    EventsController,
   ],
   providers: [
     WorkflowService,
@@ -39,12 +48,22 @@ import {
     PolicyService,
     RuleVersionService,
     SimulationService,
+    EventPublisherService,
+    EventSubscriberService,
+    EventRouterService,
+    EventReplayService,
+    DeadLetterService,
+    RetryService,
+    CorrelationService,
+    SubscriptionService,
   ],
   exports: [
     WorkflowService,
     WorkflowExecutionService,
     RuleService,
     RuleEvaluationService,
+    EventPublisherService,
+    SubscriptionService,
   ],
 })
 export class AutomationModule {}

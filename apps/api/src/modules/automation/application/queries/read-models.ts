@@ -94,3 +94,44 @@ export class RuleStatisticsReadModel {
   failuresCount!: number;
   averageLatencyMs!: number;
 }
+
+export class EventCatalogReadModel {
+  id!: string;
+  type!: string;
+  status!: string;
+  createdAt!: Date;
+}
+
+export class ActiveSubscriptionsReadModel {
+  id!: string;
+  topic!: string;
+  deliveryGuarantee!: string;
+  filterExpression?: string;
+  isEnabled!: boolean;
+}
+
+export class DeadLetterQueueReadModel {
+  eventId!: string;
+  originalTopic!: string;
+  code!: string;
+  message!: string;
+  deadLetteredAt!: Date;
+}
+
+export class ReplayHistoryReadModel {
+  eventId!: string;
+  replayedAt!: Date;
+  triggeredBy!: string;
+}
+
+export class EventStatisticsReadModel {
+  totalProcessedCount!: number;
+  failuresCount!: number;
+  dlqCount!: number;
+}
+
+export class DeliveryMetricsReadModel {
+  topic!: string;
+  deliveredCount!: number;
+  averageLatencyMs!: number;
+}
