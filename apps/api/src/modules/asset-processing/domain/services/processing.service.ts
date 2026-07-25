@@ -92,7 +92,7 @@ export class ProcessingPipelineService {
   constructor(private readonly registry: ProcessorRegistry) {}
 
   async executePipeline(jobId: string, asset: AssetReferenceProps, pipeline: ProcessorTypeEnum[]): Promise<ProcessingResultProps> {
-    let result: ProcessingResultProps = {
+    const result: ProcessingResultProps = {
       jobId,
       status: ProcessingStatusEnum.RUNNING,
       outputArtifacts: {},

@@ -3,7 +3,7 @@ import { AttendanceBreak } from '../entities/attendance-break';
 
 export class AttendanceCalculationService implements IDomainService {
   public calculateTotalWorkedMinutes(checkIn: Date, checkOut: Date, breaks: AttendanceBreak[]): number {
-    let totalMinutes = Math.floor((checkOut.getTime() - checkIn.getTime()) / 60000);
+    const totalMinutes = Math.floor((checkOut.getTime() - checkIn.getTime()) / 60000);
     let totalBreakMinutes = 0;
 
     for (const b of breaks) {
