@@ -126,3 +126,52 @@ export class ExpirationDashboardReadModel {
   soonestExpirationDate?: Date;
 }
 
+export class AuditTimelineReadModel {
+  id!: string;
+  category!: string;
+  severity!: string;
+  actorId!: string;
+  resourceId!: string;
+  action!: string;
+  resultStatus!: string;
+  timestamp!: Date;
+  status!: string;
+}
+
+export class ComplianceDashboardReadModel {
+  framework!: string;
+  lastGeneratedAt!: Date;
+  status!: string;
+  coveragePercentage!: number;
+}
+
+export class SecurityEventsReadModel {
+  eventId!: string;
+  severity!: string;
+  description!: string;
+  timestamp!: Date;
+}
+
+export class DataAccessHistoryReadModel {
+  id!: string;
+  actorId!: string;
+  resourceType!: string;
+  resourceId!: string;
+  timestamp!: Date;
+}
+
+export class EvidenceCatalogReadModel {
+  evidenceId!: string;
+  reportId!: string;
+  collectedAt!: Date;
+  url!: string;
+}
+
+export class RetentionDashboardReadModel {
+  totalRecords!: number;
+  recordsArchived!: number;
+  recordsExpired!: number;
+  nextArchivalRun?: Date;
+}
+
+

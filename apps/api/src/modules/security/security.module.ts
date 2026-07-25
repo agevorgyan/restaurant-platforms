@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { AuthenticationController, AuthorizationController, SecretsController } from './infrastructure/controllers';
+import { AuthenticationController, AuthorizationController, SecretsController, AuditController } from './infrastructure/controllers';
 import { LocalSecretProvider } from './infrastructure/providers';
 import {
   AuthenticationService,
@@ -26,6 +26,13 @@ import {
   SecretVersionService,
   EnvelopeEncryptionService,
   SecretAuditService,
+  AuditService,
+  ComplianceService,
+  EvidenceService,
+  RetentionService,
+  AuditSearchService,
+  ExportService,
+  IntegrityVerificationService,
 } from './application/services';
 
 @Module({
@@ -33,6 +40,7 @@ import {
     AuthenticationController,
     AuthorizationController,
     SecretsController,
+    AuditController,
   ],
   providers: [
     LocalSecretProvider,
@@ -60,6 +68,13 @@ import {
     SecretVersionService,
     EnvelopeEncryptionService,
     SecretAuditService,
+    AuditService,
+    ComplianceService,
+    EvidenceService,
+    RetentionService,
+    AuditSearchService,
+    ExportService,
+    IntegrityVerificationService,
   ],
   exports: [
     AuthenticationService,
@@ -70,6 +85,8 @@ import {
     PermissionService,
     SecretService,
     KeyManagementService,
+    AuditService,
+    ComplianceService,
   ],
 })
 export class SecurityModule {}

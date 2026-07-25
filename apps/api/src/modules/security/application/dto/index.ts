@@ -5,3 +5,4 @@ export * from './mfa.dto';
 export * from './passkey.dto';
 export * from './authorization.dto';
 export * from './secrets.dto';
+export * from './audit.dto';

@@ -8,3 +8,4 @@ export * from './identity-provider.service';
 export * from './trusted-device.service';
 export * from './authorization.services';
 export * from './secrets.services';
+export * from './audit.services';
