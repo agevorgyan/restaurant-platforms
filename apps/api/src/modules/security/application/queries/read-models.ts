@@ -41,3 +41,48 @@ export class FailedLoginReportReadModel {
   failuresCount!: number;
   lastFailureAt!: Date;
 }
+
+export class RoleCatalogReadModel {
+  id!: string;
+  name!: string;
+  tenantId?: string;
+  description?: string;
+  parentRoleId?: string;
+  permissions!: string[];
+}
+
+export class PermissionCatalogReadModel {
+  id!: string;
+  name!: string;
+  resourceType!: string;
+  action!: string;
+  scope!: string;
+  description?: string;
+}
+
+export class AuthorizationStatisticsReadModel {
+  totalRequests!: number;
+  allowedRequests!: number;
+  deniedRequests!: number;
+  periodStart!: Date;
+  periodEnd!: Date;
+}
+
+export class AccessDeniedReportReadModel {
+  id!: string;
+  userId!: string;
+  resourceId!: string;
+  action!: string;
+  reason!: string;
+  timestamp!: Date;
+}
+
+export class PolicyEvaluationHistoryReadModel {
+  id!: string;
+  policyId!: string;
+  userId!: string;
+  resourceId!: string;
+  decision!: string;
+  timestamp!: Date;
+}
+

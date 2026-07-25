@@ -6,3 +6,4 @@ export * from './passkey.service';
 export * from './mfa.service';
 export * from './identity-provider.service';
 export * from './trusted-device.service';
+export * from './authorization.services';

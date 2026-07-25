@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { AuthenticationController } from './infrastructure/controllers';
+import { AuthenticationController, AuthorizationController } from './infrastructure/controllers';
 import {
   AuthenticationService,
   SessionService,
@@ -9,10 +9,21 @@ import {
   MfaService,
   IdentityProviderService,
   TrustedDeviceService,
+  AuthorizationService,
+  RoleService,
+  PermissionService,
+  PolicyEngineService,
+  ResourceAuthorizationService,
+  DelegationService,
+  PermissionInheritanceService,
+  AuthorizationAuditService,
 } from './application/services';
 
 @Module({
-  controllers: [AuthenticationController],
+  controllers: [
+    AuthenticationController,
+    AuthorizationController,
+  ],
   providers: [
     AuthenticationService,
     SessionService,
@@ -22,11 +33,22 @@ import {
     MfaService,
     IdentityProviderService,
     TrustedDeviceService,
+    AuthorizationService,
+    RoleService,
+    PermissionService,
+    PolicyEngineService,
+    ResourceAuthorizationService,
+    DelegationService,
+    PermissionInheritanceService,
+    AuthorizationAuditService,
   ],
   exports: [
     AuthenticationService,
     SessionService,
     TokenService,
+    AuthorizationService,
+    RoleService,
+    PermissionService,
   ],
 })
 export class SecurityModule {}
