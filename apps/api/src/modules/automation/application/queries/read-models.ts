@@ -46,3 +46,51 @@ export class FailedWorkflowsReadModel {
   failedAt!: Date;
   reason!: string;
 }
+
+export class RuleCatalogReadModel {
+  id!: string;
+  name!: string;
+  version!: string;
+  status!: string;
+  priority!: number;
+  createdAt!: Date;
+  updatedAt!: Date;
+}
+
+export class DecisionTablesReadModel {
+  id!: string;
+  name!: string;
+  isEnabled!: boolean;
+  inputKeys!: string[];
+  outputKeys!: string[];
+  createdAt!: Date;
+}
+
+export class RuleExecutionsReadModel {
+  id!: string;
+  ruleId!: string;
+  version!: string;
+  result!: string;
+  firedActionsCount!: number;
+  evaluatedAt!: Date;
+}
+
+export class SimulationResultsReadModel {
+  simulatedAt!: Date;
+  matchedRulesCount!: number;
+  firedActionsCount!: number;
+  executionTimeMs!: number;
+}
+
+export class PolicyCatalogReadModel {
+  id!: string;
+  rulesetId!: string;
+  priority!: number;
+}
+
+export class RuleStatisticsReadModel {
+  totalEvaluations!: number;
+  matchesCount!: number;
+  failuresCount!: number;
+  averageLatencyMs!: number;
+}
