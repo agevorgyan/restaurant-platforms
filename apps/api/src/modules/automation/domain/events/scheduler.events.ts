@@ -7,7 +7,7 @@
  */
 
 import { ScheduleId, JobId, JobExecutionId, ExecutionResult } from '../value-objects/scheduler.value-objects';
-import { ScheduleStatus, TriggerType, MisfirePolicy } from '../enums/scheduler.enums';
+import { ScheduleStatus, JobTriggerType, MisfirePolicy } from '../enums/scheduler.enums';
 
 // ---------------------------------------------------------------------------
 // Schedule lifecycle events
@@ -131,7 +131,7 @@ export class JobQueued {
     public readonly jobExecutionId: JobExecutionId,
     public readonly scheduleId: ScheduleId,
     public readonly tenantId: string,
-    public readonly triggerType: TriggerType,
+    public readonly triggerType: JobTriggerType,
     public readonly scheduledAt: Date,
   ) {}
 }

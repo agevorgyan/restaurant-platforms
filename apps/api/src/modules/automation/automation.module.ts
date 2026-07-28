@@ -1,5 +1,11 @@
 import { Module } from '@nestjs/common';
-import { WorkflowController, RulesController, EventsController, SchedulerController } from './infrastructure/controllers';
+import {
+  WorkflowController,
+  RulesController,
+  EventsController,
+  SchedulerController,
+  OrchestrationController,
+} from './infrastructure/controllers';
 import {
   WorkflowService,
   WorkflowExecutionService,
@@ -21,7 +27,7 @@ import {
   EventRouterService,
   EventReplayService,
   DeadLetterService,
-  RetryService,
+  EventRetryService,
   CorrelationService,
   SubscriptionService,
   SchedulerService,
@@ -32,6 +38,15 @@ import {
   DistributedLockService,
   LeaderElectionService,
   SchedulePersistenceService,
+  // Orchestration Platform — 8 services
+  ExecutionGraphService,
+  ExecutionPersistenceService,
+  OrchestrationService,
+  RuntimeService,
+  TriggerService,
+  TemplateService,
+  CheckpointService,
+  OrchestrationCorrelationService,
 } from './application/services';
 
 @Module({
@@ -40,6 +55,8 @@ import {
     RulesController,
     EventsController,
     SchedulerController,
+    // Orchestration Platform
+    OrchestrationController,
   ],
   providers: [
     // Workflow Engine
@@ -65,7 +82,7 @@ import {
     EventRouterService,
     EventReplayService,
     DeadLetterService,
-    RetryService,
+    EventRetryService,
     CorrelationService,
     SubscriptionService,
     // Scheduler Platform
@@ -77,6 +94,15 @@ import {
     SchedulePersistenceService,
     JobExecutionService,
     SchedulerService,
+    // Orchestration Platform (registered dependency-first)
+    ExecutionGraphService,
+    ExecutionPersistenceService,
+    OrchestrationCorrelationService,
+    CheckpointService,
+    TriggerService,
+    TemplateService,
+    RuntimeService,
+    OrchestrationService,
   ],
   exports: [
     // Workflow Engine exports
@@ -92,7 +118,11 @@ import {
     SchedulerService,
     JobExecutionService,
     CronService,
+    // Orchestration Platform exports
+    OrchestrationService,
+    RuntimeService,
+    TriggerService,
+    TemplateService,
   ],
 })
 export class AutomationModule {}
-

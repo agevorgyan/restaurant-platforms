@@ -40,7 +40,7 @@ export class DeadLetterService {
 }
 
 @Injectable()
-export class RetryService {
+export class EventRetryService {
   async scheduleRetry(eventId: string, attemptCount: number): Promise<void> {}
 }
 

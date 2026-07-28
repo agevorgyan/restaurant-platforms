@@ -26,7 +26,7 @@ import {
   ScheduleStatus,
   JobStatus,
   JobType,
-  TriggerType,
+  JobTriggerType,
 } from '../enums/scheduler.enums';
 
 // ---------------------------------------------------------------------------
@@ -240,7 +240,7 @@ export class JobExecution {
   public readonly scheduleId: ScheduleId;
   public readonly tenantId: string;
   public readonly jobType: JobType;
-  public readonly triggerType: TriggerType;
+  public readonly triggerType: JobTriggerType;
   public readonly payload: JobPayload;
   public readonly scheduledAt: Date;
   public readonly queuedAt: Date;
@@ -260,7 +260,7 @@ export class JobExecution {
     scheduleId: ScheduleId;
     tenantId: string;
     jobType: JobType;
-    triggerType: TriggerType;
+    triggerType: JobTriggerType;
     payload: JobPayload;
     scheduledAt: Date;
   }) {

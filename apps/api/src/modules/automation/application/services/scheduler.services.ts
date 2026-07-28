@@ -45,7 +45,7 @@ import {
   ScheduleType,
   MisfirePolicy,
   BackoffStrategy,
-  TriggerType,
+  JobTriggerType,
   OverlapPolicy,
 } from '../../domain/enums/scheduler.enums';
 
@@ -305,7 +305,7 @@ export class JobExecutionService {
     payload: Record<string, unknown>;
     priority: JobPriority;
     scheduledAt: Date;
-    triggerType: TriggerType;
+    triggerType: JobTriggerType;
   }): Promise<string> {
     this.logger.log(
       `Enqueueing ${params.jobType} job for schedule ${params.scheduleId} (tenant ${params.tenantId})`,
@@ -930,7 +930,7 @@ export class MisfireHandlerService {
               payload: schedule.payload.data as Record<string, unknown>,
               priority: schedule.payload.priority,
               scheduledAt: missedAt,
-              triggerType: TriggerType.Recovery,
+              triggerType: JobTriggerType.Recovery,
             });
             executionIds.push(id);
           }
@@ -951,7 +951,7 @@ export class MisfireHandlerService {
           payload: schedule.payload.data as Record<string, unknown>,
           priority: schedule.payload.priority,
           scheduledAt: schedule.nextExecution.value,
-          triggerType: TriggerType.Recovery,
+          triggerType: JobTriggerType.Recovery,
         });
         return [id];
       }

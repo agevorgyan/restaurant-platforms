@@ -33,11 +33,11 @@ import {
   ScheduleStatus,
   JobStatus,
   JobType,
-  TriggerType,
   BackoffStrategy,
   ScheduleType,
   MisfirePolicy,
   OverlapPolicy,
+  JobTriggerType,
 } from './domain/enums/scheduler.enums';
 
 // ---------------------------------------------------------------------------
@@ -70,7 +70,7 @@ function makeJobExecution(): JobExecution {
     scheduleId: new ScheduleId('sched-001'),
     tenantId: 'tenant-001',
     jobType: JobType.Cleanup,
-    triggerType: TriggerType.Automatic,
+    triggerType: JobTriggerType.Automatic,
     payload: new JobPayload('tenant-001', {}),
     scheduledAt: new Date(),
   });

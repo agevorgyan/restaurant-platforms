@@ -128,7 +128,7 @@ export enum JobPriority {
 // ---------------------------------------------------------------------------
 
 /** Describes how the job execution was initiated. */
-export enum TriggerType {
+export enum JobTriggerType {
   Automatic = 'Automatic',
   Manual = 'Manual',
   EventDriven = 'EventDriven',

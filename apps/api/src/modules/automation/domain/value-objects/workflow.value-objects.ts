@@ -69,12 +69,6 @@ export class WorkflowTimeout {
   ) {}
 }
 
-export class RetryPolicy {
-  constructor(
-    public readonly maxAttempts: number,
-    public readonly backoffSeconds: number,
-  ) {}
-}
 
 export class CompensationAction {
   constructor(
