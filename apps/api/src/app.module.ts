@@ -7,6 +7,7 @@ import { SecurityModule } from './modules/security/security.module';
 import { AutomationModule } from './modules/automation/automation.module';
 import { IntegrationModule } from './modules/integration/integration.module';
 import { AiGatewayModule } from './modules/ai/ai-gateway.module';
+import { AnalyticsModule } from './modules/analytics/analytics.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { AiGatewayModule } from './modules/ai/ai-gateway.module';
     AutomationModule,
     IntegrationModule,
     AiGatewayModule,
+    AnalyticsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
