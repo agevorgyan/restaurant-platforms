@@ -5,6 +5,7 @@ import { IdentityModule } from './modules/identity/identity.module';
 import { RestaurantModule } from './modules/restaurant/restaurant.module';
 import { SecurityModule } from './modules/security/security.module';
 import { AutomationModule } from './modules/automation/automation.module';
+import { IntegrationModule } from './modules/integration/integration.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { AutomationModule } from './modules/automation/automation.module';
     RestaurantModule,
     SecurityModule,
     AutomationModule,
+    IntegrationModule,
   ],
   controllers: [AppController],
   providers: [AppService],
