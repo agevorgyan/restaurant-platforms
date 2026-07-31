@@ -1,0 +1,29 @@
+/**
+ * Enterprise AI Governance & Certification Platform - Domain Enums
+ */
+
+export enum PolicyStatus {
+  DRAFT = 'DRAFT',
+  ACTIVE = 'ACTIVE',
+  SUSPENDED = 'SUSPENDED',
+  DEPRECATED = 'DEPRECATED',
+  ARCHIVED = 'ARCHIVED',
+}
+
+export enum RiskLevel {
+  LOW = 'LOW',
+  MEDIUM = 'MEDIUM',
+  HIGH = 'HIGH',
+  CRITICAL = 'CRITICAL',
+}
+
+export enum PolicyType {
+  USAGE_POLICY = 'USAGE_POLICY',
+  COST_POLICY = 'COST_POLICY',
+  PROVIDER_POLICY = 'PROVIDER_POLICY',
+  PROMPT_POLICY = 'PROMPT_POLICY',
+  RETENTION_POLICY = 'RETENTION_POLICY',
+  PRIVACY_POLICY = 'PRIVACY_POLICY',
+  APPROVAL_POLICY = 'APPROVAL_POLICY',
+  RISK_POLICY = 'RISK_POLICY',
+}
