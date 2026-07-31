@@ -1,9 +1,9 @@
 /**
- * Enterprise AI Gateway, Prompt Platform, Embedding/Vector Platform & RAG Platform Module
+ * Enterprise AI Gateway, Prompt, Vector, RAG & Agent Platform Module
  *
  * Registers controllers, domain services, infrastructure repositories,
  * vector store adapters (pgvector / in-memory), RAG context assemblers,
- * and AI provider adapters into NestJS DI container.
+ * agent execution engines, and AI provider adapters into NestJS DI container.
  */
 
 import { Module } from '@nestjs/common';
@@ -11,6 +11,7 @@ import { EnterpriseAiGatewayController } from './presentation/controllers/enterp
 import { EnterprisePromptController } from './presentation/controllers/enterprise-prompt.controller';
 import { EnterpriseVectorController } from './presentation/controllers/enterprise-vector.controller';
 import { EnterpriseRagController } from './presentation/controllers/enterprise-rag.controller';
+import { EnterpriseAgentController } from './presentation/controllers/enterprise-agent.controller';
 
 // AI Gateway Services & Tokens
 import {
@@ -54,6 +55,14 @@ import {
   RERANKER_TOKEN,
 } from './application/services/rag-platform.services';
 
+// Agent Platform Services & Tokens
+import {
+  PlanningService,
+  AgentApprovalService,
+  EnterpriseAgentPlatformService,
+  AGENT_REPOSITORY_TOKEN,
+} from './application/services/agent-platform.services';
+
 // Repositories & Adapters
 import {
   InMemoryProviderRepository,
@@ -63,6 +72,7 @@ import { InMemoryPromptRepository } from './infrastructure/repositories/in-memor
 import { InMemoryEmbeddingRepository } from './infrastructure/repositories/in-memory-embedding.repository';
 import { InMemoryVectorStoreAdapter, PgVectorStoreAdapter } from './infrastructure/repositories/pgvector-store.adapter';
 import { InMemoryRagRepository } from './infrastructure/repositories/in-memory-rag.repository';
+import { InMemoryAgentRepository } from './infrastructure/repositories/in-memory-agent.repository';
 
 // Infrastructure Adapters
 import {
@@ -82,6 +92,7 @@ import { IntegrationModule } from '../integration/integration.module';
     EnterprisePromptController,
     EnterpriseVectorController,
     EnterpriseRagController,
+    EnterpriseAgentController,
   ],
   providers: [
     // AI Gateway Repositories
@@ -121,6 +132,12 @@ import { IntegrationModule } from '../integration/integration.module';
       useClass: RerankingService,
     },
 
+    // Agent Platform Repositories
+    {
+      provide: AGENT_REPOSITORY_TOKEN,
+      useClass: InMemoryAgentRepository,
+    },
+
     // Provider Adapters
     OpenAiProviderAdapter,
     AnthropicProviderAdapter,
@@ -157,6 +174,11 @@ import { IntegrationModule } from '../integration/integration.module';
     ContextAssemblerService,
     GroundingService,
     EnterpriseRagPlatformService,
+
+    // Agent Platform Domain Services
+    PlanningService,
+    AgentApprovalService,
+    EnterpriseAgentPlatformService,
   ],
   exports: [
     EnterpriseAiGatewayPlatformService,
@@ -183,6 +205,11 @@ import { IntegrationModule } from '../integration/integration.module';
     RerankingService,
     ContextAssemblerService,
     GroundingService,
+
+    // Agent Exports
+    EnterpriseAgentPlatformService,
+    PlanningService,
+    AgentApprovalService,
   ],
 })
 export class AiGatewayModule {}
