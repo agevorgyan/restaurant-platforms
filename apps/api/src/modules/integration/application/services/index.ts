@@ -7,6 +7,7 @@ export * from './http-platform.services';
 export * from './webhook-platform.services';
 export * from './transformation-platform.services';
 export * from './bridge-platform.services';
+export * from './catalog-platform.services';
 export * from './workflow.service';
 export * from './identity.service';
 export * from './developer.service';

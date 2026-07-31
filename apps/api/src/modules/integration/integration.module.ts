@@ -1,5 +1,5 @@
 /**
- * Enterprise Integration Module - Connector, HTTP, Webhook, Transformation & Event Bridge Integration
+ * Enterprise Integration Module - Connector, HTTP, Webhook, Transformation, Bridge & Catalog Integration
  *
  * Registers NestJS controllers, domain services, infrastructure repositories,
  * and hexagonal adapters into the dependency injection container for:
@@ -8,6 +8,7 @@
  * 3. Enterprise Webhook Platform
  * 4. Enterprise Data Transformation Platform
  * 5. Enterprise Integration Event Bridge
+ * 6. Enterprise Integration Catalog
  */
 
 import { Module } from '@nestjs/common';
@@ -19,6 +20,7 @@ import {
   EnterpriseSchemaController,
 } from './presentation/controllers/enterprise-transformation.controller';
 import { EnterpriseBridgeController } from './presentation/controllers/enterprise-bridge.controller';
+import { EnterpriseCatalogController } from './presentation/controllers/enterprise-catalog.controller';
 
 // Connector Platform Services & Tokens
 import {
@@ -92,6 +94,16 @@ import {
   BRIDGE_ROUTE_REGISTRY_TOKEN,
 } from './application/services/bridge-platform.services';
 
+// Catalog Platform Services & Tokens
+import {
+  TemplateService,
+  CertificationService,
+  CompatibilityService,
+  MarketplaceService,
+  IntegrationCatalogPlatformService,
+  CATALOG_REPOSITORY_TOKEN,
+} from './application/services/catalog-platform.services';
+
 // Infrastructure Repositories
 import { InMemoryConnectorRepository } from './infrastructure/repositories/in-memory-connector.repository';
 import { InMemoryCircuitBreakerRepository } from './infrastructure/repositories/in-memory-circuit-breaker.repository';
@@ -113,6 +125,7 @@ import {
   InMemoryBridgeDLQRepository,
   InMemoryBridgeRouteRegistry,
 } from './infrastructure/repositories/in-memory-bridge.repository';
+import { InMemoryCatalogRepository } from './infrastructure/repositories/in-memory-catalog.repository';
 
 // Infrastructure Adapters
 import {
@@ -140,6 +153,7 @@ import { SafeExpressionEngineAdapter } from './infrastructure/adapters/expressio
     EnterpriseTransformationController,
     EnterpriseSchemaController,
     EnterpriseBridgeController,
+    EnterpriseCatalogController,
   ],
   providers: [
     // Connector Repositories & Adapters
@@ -237,6 +251,12 @@ import { SafeExpressionEngineAdapter } from './infrastructure/adapters/expressio
       useClass: InMemoryBridgeRouteRegistry,
     },
 
+    // Catalog Repositories & Adapters
+    {
+      provide: CATALOG_REPOSITORY_TOKEN,
+      useClass: InMemoryCatalogRepository,
+    },
+
     // Connector Platform Domain Services
     CredentialReferenceService,
     ConfigurationService,
@@ -277,6 +297,13 @@ import { SafeExpressionEngineAdapter } from './infrastructure/adapters/expressio
     TranslationService,
     PublicationService,
     IntegrationBridgePlatformService,
+
+    // Catalog Platform Domain Services
+    TemplateService,
+    CertificationService,
+    CompatibilityService,
+    MarketplaceService,
+    IntegrationCatalogPlatformService,
   ],
   exports: [
     ConnectorService,
@@ -317,6 +344,12 @@ import { SafeExpressionEngineAdapter } from './infrastructure/adapters/expressio
     // Bridge Exports
     IntegrationBridgePlatformService,
     TranslationService,
+
+    // Catalog Exports
+    IntegrationCatalogPlatformService,
+    TemplateService,
+    CertificationService,
+    MarketplaceService,
   ],
 })
 export class IntegrationModule {}
