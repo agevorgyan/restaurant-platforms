@@ -1,0 +1,47 @@
+/**
+ * Enterprise Integration Event Bridge - Domain Enums
+ */
+
+export enum EventSourceType {
+  REST_API = 'REST_API',
+  WEBHOOK = 'WEBHOOK',
+  GRAPHQL = 'GRAPHQL',
+  GRPC = 'GRPC',
+  STREAMING = 'STREAMING',
+  MESSAGE_QUEUE = 'MESSAGE_QUEUE',
+  FILE_IMPORT = 'FILE_IMPORT',
+  POLLING = 'POLLING',
+}
+
+export enum EventTargetType {
+  DOMAIN_EVENT = 'DOMAIN_EVENT',
+  INTEGRATION_EVENT = 'INTEGRATION_EVENT',
+  WORKFLOW_EVENT = 'WORKFLOW_EVENT',
+  NOTIFICATION_EVENT = 'NOTIFICATION_EVENT',
+  AUDIT_EVENT = 'AUDIT_EVENT',
+  AUTOMATION_EVENT = 'AUTOMATION_EVENT',
+  AI_EVENT = 'AI_EVENT',
+}
+
+export enum BridgeStatus {
+  RECEIVED = 'RECEIVED',
+  TRANSLATED = 'TRANSLATED',
+  VALIDATED = 'VALIDATED',
+  PUBLISHED = 'PUBLISHED',
+  FAILED = 'FAILED',
+  DEAD_LETTER = 'DEAD_LETTER',
+}
+
+export enum TranslationResultEnum {
+  SUCCESS = 'SUCCESS',
+  PARTIAL = 'PARTIAL',
+  FAILED = 'FAILED',
+  IGNORED = 'IGNORED',
+}
+
+export enum EventPriorityEnum {
+  LOW = 'LOW',
+  NORMAL = 'NORMAL',
+  HIGH = 'HIGH',
+  CRITICAL = 'CRITICAL',
+}
