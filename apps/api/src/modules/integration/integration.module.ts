@@ -1,17 +1,22 @@
 /**
- * Enterprise Integration Module - Connector, HTTP & Webhook Platform Integration
+ * Enterprise Integration Module - Connector, HTTP, Webhook & Transformation Integration
  *
  * Registers NestJS controllers, domain services, infrastructure repositories,
  * and hexagonal adapters into the dependency injection container for:
  * 1. Enterprise Connector Platform
  * 2. Enterprise HTTP & API Integration Platform
  * 3. Enterprise Webhook Platform
+ * 4. Enterprise Data Transformation Platform
  */
 
 import { Module } from '@nestjs/common';
 import { EnterpriseConnectorController } from './presentation/controllers/enterprise-connector.controller';
 import { EnterpriseHttpController } from './presentation/controllers/enterprise-http.controller';
 import { EnterpriseWebhookController } from './presentation/controllers/enterprise-webhook.controller';
+import {
+  EnterpriseTransformationController,
+  EnterpriseSchemaController,
+} from './presentation/controllers/enterprise-transformation.controller';
 
 // Connector Platform Services & Tokens
 import {
@@ -62,6 +67,19 @@ import {
   SIGNATURE_VERIFIER_TOKEN,
 } from './application/services/webhook-platform.services';
 
+// Transformation Platform Services & Tokens
+import {
+  SchemaValidationService,
+  ExpressionService,
+  NormalizationService,
+  MappingService,
+  TransformationRegistryService,
+  TransformationPlatformService,
+  TRANSFORMATION_REPOSITORY_TOKEN,
+  SCHEMA_REPOSITORY_TOKEN,
+  EXPRESSION_ENGINE_TOKEN,
+} from './application/services/transformation-platform.services';
+
 // Infrastructure Repositories
 import { InMemoryConnectorRepository } from './infrastructure/repositories/in-memory-connector.repository';
 import { InMemoryCircuitBreakerRepository } from './infrastructure/repositories/in-memory-circuit-breaker.repository';
@@ -74,6 +92,10 @@ import {
   InMemoryDeadLetterRepository,
   InMemoryNonceStore,
 } from './infrastructure/repositories/in-memory-webhook.repository';
+import {
+  InMemoryTransformationRepository,
+  InMemorySchemaRepository,
+} from './infrastructure/repositories/in-memory-transformation.repository';
 
 // Infrastructure Adapters
 import {
@@ -91,12 +113,15 @@ import {
   HmacSignatureVerifierAdapter,
   EnterpriseWebhookSecretResolverAdapter,
 } from './infrastructure/adapters/webhook-verifier.adapters';
+import { SafeExpressionEngineAdapter } from './infrastructure/adapters/expression-engine.adapter';
 
 @Module({
   controllers: [
     EnterpriseConnectorController,
     EnterpriseHttpController,
     EnterpriseWebhookController,
+    EnterpriseTransformationController,
+    EnterpriseSchemaController,
   ],
   providers: [
     // Connector Repositories & Adapters
@@ -166,6 +191,20 @@ import {
       useClass: HmacSignatureVerifierAdapter,
     },
 
+    // Transformation Repositories & Adapters
+    {
+      provide: TRANSFORMATION_REPOSITORY_TOKEN,
+      useClass: InMemoryTransformationRepository,
+    },
+    {
+      provide: SCHEMA_REPOSITORY_TOKEN,
+      useClass: InMemorySchemaRepository,
+    },
+    {
+      provide: EXPRESSION_ENGINE_TOKEN,
+      useClass: SafeExpressionEngineAdapter,
+    },
+
     // Connector Platform Domain Services
     CredentialReferenceService,
     ConfigurationService,
@@ -193,6 +232,14 @@ import {
     WebhookPublicationService,
     DeadLetterService,
     WebhookPlatformService,
+
+    // Transformation Platform Domain Services
+    SchemaValidationService,
+    ExpressionService,
+    NormalizationService,
+    MappingService,
+    TransformationRegistryService,
+    TransformationPlatformService,
   ],
   exports: [
     ConnectorService,
@@ -221,6 +268,14 @@ import {
     ReplayProtectionService,
     RoutingService,
     DeadLetterService,
+
+    // Transformation Exports
+    TransformationPlatformService,
+    SchemaValidationService,
+    MappingService,
+    NormalizationService,
+    ExpressionService,
+    TransformationRegistryService,
   ],
 })
 export class IntegrationModule {}
