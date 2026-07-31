@@ -1,0 +1,42 @@
+/**
+ * Enterprise Webhook Platform - Domain Enums
+ */
+
+export enum WebhookType {
+  PAYMENT = 'PAYMENT',
+  DELIVERY = 'DELIVERY',
+  CRM = 'CRM',
+  POS = 'POS',
+  ERP = 'ERP',
+  GOVERNMENT = 'GOVERNMENT',
+  NOTIFICATION = 'NOTIFICATION',
+  IDENTITY = 'IDENTITY',
+  AI = 'AI',
+  CUSTOM = 'CUSTOM',
+}
+
+export enum SignatureType {
+  HMAC_SHA256 = 'HMAC_SHA256',
+  RSA_SIGNATURE = 'RSA_SIGNATURE',
+  ECDSA_SIGNATURE = 'ECDSA_SIGNATURE',
+  JWT = 'JWT',
+  MTLS = 'MTLS',
+  CUSTOM_SIGNATURE = 'CUSTOM_SIGNATURE',
+}
+
+export enum WebhookStatus {
+  RECEIVED = 'RECEIVED',
+  VALIDATED = 'VALIDATED',
+  REJECTED = 'REJECTED',
+  PROCESSING = 'PROCESSING',
+  PROCESSED = 'PROCESSED',
+  FAILED = 'FAILED',
+  DEAD_LETTER = 'DEAD_LETTER',
+}
+
+export enum SignatureStatus {
+  VALID = 'VALID',
+  INVALID = 'INVALID',
+  EXPIRED = 'EXPIRED',
+  MISSING = 'MISSING',
+}

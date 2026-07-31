@@ -1,84 +1,134 @@
-import { Controller, Get, Post, Body, Query } from '@nestjs/common';
-import { 
-  WebhookPublisher, 
-  WebhookReplayService, 
-  DeadLetterWebhookService,
-  WebhookReceiver
-} from '../../application/services';
-import { 
-  WebhookSubscription, 
-  WebhookStatistics, 
-  FailedWebhook 
-} from '../../application/read-models';
+/**
+ * Enterprise Webhook Platform - REST Controller
+ *
+ * Exposes production REST API endpoints for secure webhook ingestion,
+ * history queries, operational metrics, Dead Letter Queue (DLQ), and replay execution.
+ *
+ * API Base Path: /integrations/webhooks
+ */
 
-@Controller('webhooks')
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Query,
+  Headers,
+  HttpCode,
+  HttpStatus,
+  Req,
+} from '@nestjs/common';
+import {
+  WebhookPlatformService,
+  DeadLetterService,
+} from '../../application/services/webhook-platform.services';
+import {
+  IngestWebhookDto,
+  WebhookResponseDto,
+  WebhookQueryDto,
+  ReplayWebhookDto,
+} from '../../application/dto/webhook.dto';
+import {
+  WebhookHistory,
+  WebhookStatistics,
+  DeadLetterQueue,
+} from '../../application/read-models/webhook.read-models';
+
+@Controller('integrations/webhooks')
 export class EnterpriseWebhookController {
   constructor(
-    private readonly webhookPublisher: WebhookPublisher,
-    private readonly webhookReplayService: WebhookReplayService,
-    private readonly dlqService: DeadLetterWebhookService,
-    private readonly receiver: WebhookReceiver
+    private readonly webhookService: WebhookPlatformService,
+    private readonly dlqService: DeadLetterService
   ) {}
 
+  /**
+   * POST /integrations/webhooks/:connector
+   * Ingest an inbound webhook from an external integration partner/vendor.
+   */
+  @Post(':connector')
+  @HttpCode(HttpStatus.OK)
+  async ingestWebhook(
+    @Param('connector') connector: string,
+    @Headers() headers: Record<string, string>,
+    @Body() payload: unknown
+  ): Promise<WebhookResponseDto> {
+    const signatureStr =
+      headers['x-hub-signature-256'] ||
+      headers['x-signature'] ||
+      headers['stripe-signature'] ||
+      headers['x-webhook-signature'];
+
+    const timestampHeader = headers['x-webhook-timestamp'] || headers['x-timestamp'];
+    const nonceHeader = headers['x-webhook-nonce'] || headers['x-nonce'];
+
+    const dto: IngestWebhookDto = {
+      connectorId: connector,
+      endpointPath: `/integrations/webhooks/${connector}`,
+      rawPayload: (payload as object) || {},
+      headers,
+      signatureStr: Array.isArray(signatureStr) ? signatureStr[0] : signatureStr,
+      timestampHeader: Array.isArray(timestampHeader) ? timestampHeader[0] : timestampHeader,
+      nonceHeader: Array.isArray(nonceHeader) ? nonceHeader[0] : nonceHeader,
+    };
+
+    return this.webhookService.ingestWebhook(dto);
+  }
+
+  /**
+   * GET /integrations/webhooks
+   * Retrieve audit history of ingested webhooks with status and tenant filters.
+   */
   @Get()
-  async getInfo(): Promise<{ status: string; version: string }> {
-    return { status: 'ONLINE', version: '1.0.0' };
-  }
-
-  @Get('subscriptions')
-  async getSubscriptions(@Query('tenantId') tenantId: string): Promise<WebhookSubscription[]> {
-    return [{
-      subscriptionId: 'sub-1',
-      tenantId: tenantId || 'tenant-001',
-      endpointUrl: 'https://api.partner.com/webhooks/restaurant',
-      subscribedEvents: ['Order.Created', 'Menu.Updated'],
-      secretHash: 'hash-abc',
-      status: 'ACTIVE',
-      createdAt: new Date(),
-      updatedAt: new Date()
-    }];
-  }
-
-  @Get('health')
-  async getHealth(): Promise<{ status: string; dlqSize: number }> {
-    return {
-      status: 'HEALTHY',
-      dlqSize: this.dlqService.getDeadLetters().length
+  async getWebhookHistory(
+    @Headers('x-tenant-id') tenantHeader?: string,
+    @Query('connectorId') connectorId?: string,
+    @Query('status') status?: any,
+    @Query('limit') limit?: string,
+    @Query('offset') offset?: string
+  ): Promise<WebhookHistory> {
+    const tenantId = tenantHeader || undefined;
+    const query: WebhookQueryDto = {
+      tenantId,
+      connectorId,
+      status,
+      limit: limit ? parseInt(limit, 10) : undefined,
+      offset: offset ? parseInt(offset, 10) : undefined,
     };
+    return this.webhookService.getHistory(query);
   }
 
+  /**
+   * GET /integrations/webhooks/statistics
+   * Retrieve operational metrics, total processed, rejected, and DLQ counts.
+   */
   @Get('statistics')
-  async getStatistics(@Query('tenantId') tenantId: string): Promise<WebhookStatistics> {
-    return {
-      tenantId: tenantId || 'global',
-      totalDeliveries24h: 5000,
-      successfulDeliveries24h: 4990,
-      failedDeliveries24h: 10,
-      averageLatencyMs: 150
-    };
+  async getStatistics(): Promise<WebhookStatistics> {
+    return this.webhookService.getStatistics();
   }
 
-  @Post('test')
-  async testWebhookDelivery(@Body() payload: { endpointUrl: string; secret: string }): Promise<{ success: boolean }> {
-    const sub: WebhookSubscription = {
-      subscriptionId: 'test-sub',
-      tenantId: 'test-tenant',
-      endpointUrl: payload.endpointUrl,
-      subscribedEvents: ['System.Ping'],
-      secretHash: payload.secret,
-      status: 'ACTIVE',
-      createdAt: new Date(),
-      updatedAt: new Date()
-    };
-    
-    const delivery = await this.webhookPublisher.publish(sub, 'ping-event', { message: 'Ping' });
-    return { success: delivery.status === 'SUCCESS' };
+  /**
+   * GET /integrations/webhooks/dead-letter
+   * Query the Dead Letter Queue for unprocessable or failed webhooks.
+   */
+  @Get('dead-letter')
+  async getDeadLetterQueue(
+    @Headers('x-tenant-id') tenantHeader?: string,
+    @Query('connectorId') connectorId?: string
+  ): Promise<DeadLetterQueue> {
+    const tenantId = tenantHeader || undefined;
+    return this.dlqService.getDeadLetterQueue({ tenantId, connectorId });
   }
 
+  /**
+   * POST /integrations/webhooks/replay
+   * Replay a dead-lettered or failed webhook delivery manually.
+   */
   @Post('replay')
-  async replayWebhook(@Body() payload: { deadLetterId: string }): Promise<{ status: string }> {
-    // Mock replay behavior
-    console.log(`[EnterpriseWebhookController] Replaying DLQ ID: ${payload.deadLetterId}`);
-    return { status: 'SUCCESS' };
+  @HttpCode(HttpStatus.OK)
+  async replayWebhook(
+    @Body() dto: ReplayWebhookDto
+  ): Promise<WebhookResponseDto> {
+    return this.webhookService.replayDeadLetter(dto.webhookId);
   }
 }

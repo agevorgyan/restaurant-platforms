@@ -1,14 +1,17 @@
 /**
- * Enterprise Integration Module - Connector & HTTP Platform Integration
+ * Enterprise Integration Module - Connector, HTTP & Webhook Platform Integration
  *
  * Registers NestJS controllers, domain services, infrastructure repositories,
- * and hexagonal adapters into the dependency injection container for both
- * Enterprise Connector Platform and Enterprise HTTP & API Integration Platform.
+ * and hexagonal adapters into the dependency injection container for:
+ * 1. Enterprise Connector Platform
+ * 2. Enterprise HTTP & API Integration Platform
+ * 3. Enterprise Webhook Platform
  */
 
 import { Module } from '@nestjs/common';
 import { EnterpriseConnectorController } from './presentation/controllers/enterprise-connector.controller';
 import { EnterpriseHttpController } from './presentation/controllers/enterprise-http.controller';
+import { EnterpriseWebhookController } from './presentation/controllers/enterprise-webhook.controller';
 
 // Connector Platform Services & Tokens
 import {
@@ -44,6 +47,21 @@ import {
   REQUEST_HISTORY_REPOSITORY_TOKEN,
 } from './application/services/http-platform.services';
 
+// Webhook Platform Services & Tokens
+import {
+  SignatureVerificationService,
+  ReplayProtectionService,
+  RoutingService,
+  WebhookPublicationService,
+  DeadLetterService,
+  WebhookPlatformService,
+  WEBHOOK_REPOSITORY_TOKEN,
+  DEAD_LETTER_REPOSITORY_TOKEN,
+  NONCE_STORE_TOKEN,
+  WEBHOOK_SECRET_RESOLVER_TOKEN,
+  SIGNATURE_VERIFIER_TOKEN,
+} from './application/services/webhook-platform.services';
+
 // Infrastructure Repositories
 import { InMemoryConnectorRepository } from './infrastructure/repositories/in-memory-connector.repository';
 import { InMemoryCircuitBreakerRepository } from './infrastructure/repositories/in-memory-circuit-breaker.repository';
@@ -51,6 +69,11 @@ import {
   InMemoryRequestHistoryRepository,
   InMemoryIdempotencyRepository,
 } from './infrastructure/repositories/in-memory-request-history.repository';
+import {
+  InMemoryWebhookRepository,
+  InMemoryDeadLetterRepository,
+  InMemoryNonceStore,
+} from './infrastructure/repositories/in-memory-webhook.repository';
 
 // Infrastructure Adapters
 import {
@@ -64,11 +87,16 @@ import {
   NodeGraphQLClientAdapter,
   NodeGrpcClientAdapter,
 } from './infrastructure/adapters/http.adapters';
+import {
+  HmacSignatureVerifierAdapter,
+  EnterpriseWebhookSecretResolverAdapter,
+} from './infrastructure/adapters/webhook-verifier.adapters';
 
 @Module({
   controllers: [
     EnterpriseConnectorController,
     EnterpriseHttpController,
+    EnterpriseWebhookController,
   ],
   providers: [
     // Connector Repositories & Adapters
@@ -116,6 +144,28 @@ import {
       useClass: NodeGrpcClientAdapter,
     },
 
+    // Webhook Repositories & Adapters
+    {
+      provide: WEBHOOK_REPOSITORY_TOKEN,
+      useClass: InMemoryWebhookRepository,
+    },
+    {
+      provide: DEAD_LETTER_REPOSITORY_TOKEN,
+      useClass: InMemoryDeadLetterRepository,
+    },
+    {
+      provide: NONCE_STORE_TOKEN,
+      useClass: InMemoryNonceStore,
+    },
+    {
+      provide: WEBHOOK_SECRET_RESOLVER_TOKEN,
+      useClass: EnterpriseWebhookSecretResolverAdapter,
+    },
+    {
+      provide: SIGNATURE_VERIFIER_TOKEN,
+      useClass: HmacSignatureVerifierAdapter,
+    },
+
     // Connector Platform Domain Services
     CredentialReferenceService,
     ConfigurationService,
@@ -135,6 +185,14 @@ import {
     GraphQLClientService,
     GrpcClientService,
     HttpIntegrationService,
+
+    // Webhook Platform Domain Services
+    SignatureVerificationService,
+    ReplayProtectionService,
+    RoutingService,
+    WebhookPublicationService,
+    DeadLetterService,
+    WebhookPlatformService,
   ],
   exports: [
     ConnectorService,
@@ -156,6 +214,13 @@ import {
     IdempotencyService,
     CorrelationService,
     RetryPolicyService,
+
+    // Webhook Exports
+    WebhookPlatformService,
+    SignatureVerificationService,
+    ReplayProtectionService,
+    RoutingService,
+    DeadLetterService,
   ],
 })
 export class IntegrationModule {}
