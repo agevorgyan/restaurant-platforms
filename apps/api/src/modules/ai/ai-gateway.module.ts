@@ -1,14 +1,16 @@
 /**
- * Enterprise AI Gateway Module
+ * Enterprise AI Gateway & Prompt Management Platform Module
  *
  * Registers controllers, domain services, infrastructure repositories,
- * and provider adapters (OpenAI, Anthropic, Gemini, Ollama) into NestJS DI container.
+ * prompt variable engines, and provider adapters (OpenAI, Anthropic, Gemini, Ollama)
+ * into NestJS DI container.
  */
 
 import { Module } from '@nestjs/common';
 import { EnterpriseAiGatewayController } from './presentation/controllers/enterprise-ai-gateway.controller';
+import { EnterprisePromptController } from './presentation/controllers/enterprise-prompt.controller';
 
-// Services & Tokens
+// AI Gateway Services & Tokens
 import {
   ProviderRegistryService,
   ModelRegistryService,
@@ -20,11 +22,22 @@ import {
   PROVIDER_ADAPTERS_TOKEN,
 } from './application/services/ai-gateway.services';
 
+// Prompt Platform Services & Tokens
+import {
+  VariableService,
+  TemplateService,
+  EvaluationService,
+  ApprovalService,
+  EnterprisePromptPlatformService,
+  PROMPT_REPOSITORY_TOKEN,
+} from './application/services/prompt-platform.services';
+
 // Repositories
 import {
   InMemoryProviderRepository,
   InMemoryInferenceHistoryRepository,
 } from './infrastructure/repositories/in-memory-provider.repository';
+import { InMemoryPromptRepository } from './infrastructure/repositories/in-memory-prompt.repository';
 
 // Infrastructure Adapters
 import {
@@ -39,9 +52,12 @@ import { IntegrationModule } from '../integration/integration.module';
 
 @Module({
   imports: [IntegrationModule],
-  controllers: [EnterpriseAiGatewayController],
+  controllers: [
+    EnterpriseAiGatewayController,
+    EnterprisePromptController,
+  ],
   providers: [
-    // Repositories
+    // AI Gateway Repositories
     {
       provide: PROVIDER_REPOSITORY_TOKEN,
       useClass: InMemoryProviderRepository,
@@ -49,6 +65,12 @@ import { IntegrationModule } from '../integration/integration.module';
     {
       provide: INFERENCE_HISTORY_REPOSITORY_TOKEN,
       useClass: InMemoryInferenceHistoryRepository,
+    },
+
+    // Prompt Platform Repositories
+    {
+      provide: PROMPT_REPOSITORY_TOKEN,
+      useClass: InMemoryPromptRepository,
     },
 
     // Provider Adapters
@@ -62,18 +84,32 @@ import { IntegrationModule } from '../integration/integration.module';
       inject: [OpenAiProviderAdapter, AnthropicProviderAdapter, GeminiProviderAdapter, OllamaProviderAdapter],
     },
 
-    // Domain Services
+    // AI Gateway Domain Services
     ProviderRegistryService,
     ModelRegistryService,
     RoutingService,
     CostTrackingService,
     EnterpriseAiGatewayPlatformService,
+
+    // Prompt Platform Domain Services
+    VariableService,
+    TemplateService,
+    EvaluationService,
+    ApprovalService,
+    EnterprisePromptPlatformService,
   ],
   exports: [
     EnterpriseAiGatewayPlatformService,
     ProviderRegistryService,
     ModelRegistryService,
     RoutingService,
+
+    // Prompt Exports
+    EnterprisePromptPlatformService,
+    VariableService,
+    TemplateService,
+    EvaluationService,
+    ApprovalService,
   ],
 })
 export class AiGatewayModule {}

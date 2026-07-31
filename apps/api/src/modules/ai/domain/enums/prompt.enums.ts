@@ -1,0 +1,30 @@
+/**
+ * Enterprise Prompt Management Platform - Domain Enums
+ */
+
+export enum PromptType {
+  SYSTEM_PROMPT = 'SYSTEM_PROMPT',
+  USER_PROMPT = 'USER_PROMPT',
+  ASSISTANT_PROMPT = 'ASSISTANT_PROMPT',
+  TEMPLATE_PROMPT = 'TEMPLATE_PROMPT',
+  CHAIN_PROMPT = 'CHAIN_PROMPT',
+  RAG_PROMPT = 'RAG_PROMPT',
+  AGENT_PROMPT = 'AGENT_PROMPT',
+  TOOL_PROMPT = 'TOOL_PROMPT',
+}
+
+export enum PromptStatus {
+  DRAFT = 'DRAFT',
+  REVIEW = 'REVIEW',
+  APPROVED = 'APPROVED',
+  PUBLISHED = 'PUBLISHED',
+  DEPRECATED = 'DEPRECATED',
+  ARCHIVED = 'ARCHIVED',
+}
+
+export enum EvaluationStatus {
+  PENDING = 'PENDING',
+  PASSED = 'PASSED',
+  FAILED = 'FAILED',
+  WARNING = 'WARNING',
+}
