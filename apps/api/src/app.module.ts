@@ -6,6 +6,7 @@ import { RestaurantModule } from './modules/restaurant/restaurant.module';
 import { SecurityModule } from './modules/security/security.module';
 import { AutomationModule } from './modules/automation/automation.module';
 import { IntegrationModule } from './modules/integration/integration.module';
+import { AiGatewayModule } from './modules/ai/ai-gateway.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { IntegrationModule } from './modules/integration/integration.module';
     SecurityModule,
     AutomationModule,
     IntegrationModule,
+    AiGatewayModule,
   ],
   controllers: [AppController],
   providers: [AppService],

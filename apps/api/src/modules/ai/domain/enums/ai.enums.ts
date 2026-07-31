@@ -1,0 +1,42 @@
+/**
+ * Enterprise AI Gateway - Domain Enums
+ */
+
+export enum ProviderType {
+  OPENAI = 'OPENAI',
+  ANTHROPIC = 'ANTHROPIC',
+  GOOGLE_GEMINI = 'GOOGLE_GEMINI',
+  AZURE_OPENAI = 'AZURE_OPENAI',
+  AWS_BEDROCK = 'AWS_BEDROCK',
+  OLLAMA = 'OLLAMA',
+  LM_STUDIO = 'LM_STUDIO',
+  VLLM = 'VLLM',
+  CUSTOM = 'CUSTOM',
+}
+
+export enum ModelType {
+  CHAT = 'CHAT',
+  COMPLETION = 'COMPLETION',
+  EMBEDDING = 'EMBEDDING',
+  VISION = 'VISION',
+  SPEECH = 'SPEECH',
+  REASONING = 'REASONING',
+  FUNCTION_CALLING = 'FUNCTION_CALLING',
+  MULTIMODAL = 'MULTIMODAL',
+}
+
+export enum ProviderStatus {
+  CONFIGURED = 'CONFIGURED',
+  HEALTHY = 'HEALTHY',
+  DEGRADED = 'DEGRADED',
+  UNAVAILABLE = 'UNAVAILABLE',
+  DISABLED = 'DISABLED',
+}
+
+export enum InferenceStatus {
+  QUEUED = 'QUEUED',
+  RUNNING = 'RUNNING',
+  COMPLETED = 'COMPLETED',
+  FAILED = 'FAILED',
+  CANCELLED = 'CANCELLED',
+}
