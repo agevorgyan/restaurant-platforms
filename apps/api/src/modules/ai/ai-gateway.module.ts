@@ -1,14 +1,15 @@
 /**
- * Enterprise AI Gateway & Prompt Management Platform Module
+ * Enterprise AI Gateway, Prompt Platform & Embedding/Vector Platform Module
  *
  * Registers controllers, domain services, infrastructure repositories,
- * prompt variable engines, and provider adapters (OpenAI, Anthropic, Gemini, Ollama)
+ * vector store adapters (pgvector / in-memory), and AI provider adapters
  * into NestJS DI container.
  */
 
 import { Module } from '@nestjs/common';
 import { EnterpriseAiGatewayController } from './presentation/controllers/enterprise-ai-gateway.controller';
 import { EnterprisePromptController } from './presentation/controllers/enterprise-prompt.controller';
+import { EnterpriseVectorController } from './presentation/controllers/enterprise-vector.controller';
 
 // AI Gateway Services & Tokens
 import {
@@ -32,12 +33,23 @@ import {
   PROMPT_REPOSITORY_TOKEN,
 } from './application/services/prompt-platform.services';
 
-// Repositories
+// Vector Platform Services & Tokens
+import {
+  ChunkingService,
+  EmbeddingService,
+  EnterpriseVectorPlatformService,
+  EMBEDDING_REPOSITORY_TOKEN,
+  VECTOR_STORE_TOKEN,
+} from './application/services/vector-platform.services';
+
+// Repositories & Adapters
 import {
   InMemoryProviderRepository,
   InMemoryInferenceHistoryRepository,
 } from './infrastructure/repositories/in-memory-provider.repository';
 import { InMemoryPromptRepository } from './infrastructure/repositories/in-memory-prompt.repository';
+import { InMemoryEmbeddingRepository } from './infrastructure/repositories/in-memory-embedding.repository';
+import { InMemoryVectorStoreAdapter, PgVectorStoreAdapter } from './infrastructure/repositories/pgvector-store.adapter';
 
 // Infrastructure Adapters
 import {
@@ -55,6 +67,7 @@ import { IntegrationModule } from '../integration/integration.module';
   controllers: [
     EnterpriseAiGatewayController,
     EnterprisePromptController,
+    EnterpriseVectorController,
   ],
   providers: [
     // AI Gateway Repositories
@@ -72,6 +85,17 @@ import { IntegrationModule } from '../integration/integration.module';
       provide: PROMPT_REPOSITORY_TOKEN,
       useClass: InMemoryPromptRepository,
     },
+
+    // Vector Platform Repositories & Adapters
+    {
+      provide: EMBEDDING_REPOSITORY_TOKEN,
+      useClass: InMemoryEmbeddingRepository,
+    },
+    {
+      provide: VECTOR_STORE_TOKEN,
+      useClass: InMemoryVectorStoreAdapter,
+    },
+    PgVectorStoreAdapter,
 
     // Provider Adapters
     OpenAiProviderAdapter,
@@ -97,6 +121,11 @@ import { IntegrationModule } from '../integration/integration.module';
     EvaluationService,
     ApprovalService,
     EnterprisePromptPlatformService,
+
+    // Vector Platform Domain Services
+    ChunkingService,
+    EmbeddingService,
+    EnterpriseVectorPlatformService,
   ],
   exports: [
     EnterpriseAiGatewayPlatformService,
@@ -110,6 +139,12 @@ import { IntegrationModule } from '../integration/integration.module';
     TemplateService,
     EvaluationService,
     ApprovalService,
+
+    // Vector Exports
+    EnterpriseVectorPlatformService,
+    ChunkingService,
+    EmbeddingService,
+    VECTOR_STORE_TOKEN,
   ],
 })
 export class AiGatewayModule {}
