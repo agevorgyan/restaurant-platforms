@@ -5,12 +5,14 @@
  * 1. Enterprise Platform Health & Operations Platform
  * 2. Enterprise Distributed Configuration Platform
  * 3. Enterprise Feature Flag Platform
+ * 4. Enterprise Tenant Provisioning Platform
  */
 
 import { Module } from '@nestjs/common';
 import { EnterpriseHealthController } from './presentation/controllers/enterprise-health.controller';
 import { EnterpriseConfigController } from './presentation/controllers/enterprise-config.controller';
 import { EnterpriseFeatureFlagController } from './presentation/controllers/enterprise-feature-flag.controller';
+import { EnterpriseProvisioningController } from './presentation/controllers/enterprise-provisioning.controller';
 import {
   HealthService,
   DependencyService,
@@ -40,6 +42,15 @@ import {
   EnterpriseFeatureFlagPlatformService,
 } from './application/services/feature-flag-platform.services';
 import {
+  WorkspaceService,
+  ResourceAllocationService,
+  InitializationService,
+  ProvisioningPolicyService,
+  RollbackService,
+  ProvisioningService,
+  EnterpriseTenantProvisioningPlatformService,
+} from './application/services/provisioning-platform.services';
+import {
   HEALTH_REPOSITORY_TOKEN,
   HEALTH_QUERY_REPOSITORY_TOKEN,
   HEALTH_PROVIDER_TOKEN,
@@ -54,9 +65,15 @@ import {
   FEATURE_FLAG_QUERY_REPOSITORY_TOKEN,
   EVALUATION_CACHE_TOKEN,
 } from './domain/ports/feature-flag.ports';
+import {
+  TENANT_PROVISIONING_REPOSITORY_TOKEN,
+  TENANT_PROVISIONING_QUERY_REPOSITORY_TOKEN,
+  WORKSPACE_PROVISIONER_TOKEN,
+} from './domain/ports/provisioning.ports';
 import { InMemoryHealthRepository } from './infrastructure/repositories/in-memory-health.repository';
 import { InMemoryConfigurationRepository } from './infrastructure/repositories/in-memory-config.repository';
 import { InMemoryFeatureFlagRepository } from './infrastructure/repositories/in-memory-feature-flag.repository';
+import { InMemoryTenantProvisioningRepository } from './infrastructure/repositories/in-memory-provisioning.repository';
 import { IntegrationModule } from '../integration/integration.module';
 
 @Module({
@@ -65,6 +82,7 @@ import { IntegrationModule } from '../integration/integration.module';
     EnterpriseHealthController,
     EnterpriseConfigController,
     EnterpriseFeatureFlagController,
+    EnterpriseProvisioningController,
   ],
   providers: [
     // Health Repositories & Providers
@@ -136,6 +154,29 @@ import { IntegrationModule } from '../integration/integration.module';
     EvaluationService,
     FeatureFlagService,
     EnterpriseFeatureFlagPlatformService,
+
+    // Tenant Provisioning Repositories & Workspace Provisioner
+    {
+      provide: TENANT_PROVISIONING_REPOSITORY_TOKEN,
+      useClass: InMemoryTenantProvisioningRepository,
+    },
+    {
+      provide: TENANT_PROVISIONING_QUERY_REPOSITORY_TOKEN,
+      useClass: InMemoryTenantProvisioningRepository,
+    },
+    {
+      provide: WORKSPACE_PROVISIONER_TOKEN,
+      useClass: InMemoryTenantProvisioningRepository,
+    },
+
+    // Tenant Provisioning Services
+    WorkspaceService,
+    ResourceAllocationService,
+    InitializationService,
+    ProvisioningPolicyService,
+    RollbackService,
+    ProvisioningService,
+    EnterpriseTenantProvisioningPlatformService,
   ],
   exports: [
     EnterprisePlatformHealthService,
@@ -171,6 +212,17 @@ import { IntegrationModule } from '../integration/integration.module';
     FEATURE_FLAG_REPOSITORY_TOKEN,
     FEATURE_FLAG_QUERY_REPOSITORY_TOKEN,
     EVALUATION_CACHE_TOKEN,
+
+    EnterpriseTenantProvisioningPlatformService,
+    ProvisioningService,
+    WorkspaceService,
+    ResourceAllocationService,
+    InitializationService,
+    ProvisioningPolicyService,
+    RollbackService,
+    TENANT_PROVISIONING_REPOSITORY_TOKEN,
+    TENANT_PROVISIONING_QUERY_REPOSITORY_TOKEN,
+    WORKSPACE_PROVISIONER_TOKEN,
   ],
 })
 export class PlatformHealthModule {}
