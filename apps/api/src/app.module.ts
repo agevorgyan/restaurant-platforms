@@ -8,6 +8,7 @@ import { AutomationModule } from './modules/automation/automation.module';
 import { IntegrationModule } from './modules/integration/integration.module';
 import { AiGatewayModule } from './modules/ai/ai-gateway.module';
 import { AnalyticsModule } from './modules/analytics/analytics.module';
+import { PlatformHealthModule } from './modules/platform/platform-health.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { AnalyticsModule } from './modules/analytics/analytics.module';
     IntegrationModule,
     AiGatewayModule,
     AnalyticsModule,
+    PlatformHealthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
