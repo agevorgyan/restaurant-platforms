@@ -1,17 +1,14 @@
 /**
- * Enterprise Platform Health & Operations Platform Module
+ * Enterprise Platform Operations Module
  *
  * Registers controllers, domain services, infrastructure repositories, and event publishers for:
- * 1. Service Health Registry & Status Lifecycle
- * 2. Directed Dependency Graphs & Transitive Failure Propagation
- * 3. Heartbeat Monitoring & Missed Heartbeat Timeouts
- * 4. Availability SLA Calculations (99.999% SLA)
- * 5. Maintenance Window Scheduling & Overrides
- * 6. Health Check Aggregation & Operational Dashboards
+ * 1. Enterprise Platform Health & Operations Platform
+ * 2. Enterprise Distributed Configuration Platform
  */
 
 import { Module } from '@nestjs/common';
 import { EnterpriseHealthController } from './presentation/controllers/enterprise-health.controller';
+import { EnterpriseConfigController } from './presentation/controllers/enterprise-config.controller';
 import {
   HealthService,
   DependencyService,
@@ -22,18 +19,33 @@ import {
   EnterprisePlatformHealthService,
 } from './application/services/health-platform.services';
 import {
+  ValidationService,
+  PropagationService,
+  EnvironmentService,
+  VersionService,
+  SnapshotService,
+  ConfigurationService,
+  EnterpriseDistributedConfigService,
+} from './application/services/config-platform.services';
+import {
   HEALTH_REPOSITORY_TOKEN,
   HEALTH_QUERY_REPOSITORY_TOKEN,
   HEALTH_PROVIDER_TOKEN,
 } from './domain/ports/health.ports';
+import {
+  CONFIGURATION_REPOSITORY_TOKEN,
+  CONFIGURATION_QUERY_REPOSITORY_TOKEN,
+  CONFIGURATION_PROVIDER_TOKEN,
+} from './domain/ports/config.ports';
 import { InMemoryHealthRepository } from './infrastructure/repositories/in-memory-health.repository';
+import { InMemoryConfigurationRepository } from './infrastructure/repositories/in-memory-config.repository';
 import { IntegrationModule } from '../integration/integration.module';
 
 @Module({
   imports: [IntegrationModule],
-  controllers: [EnterpriseHealthController],
+  controllers: [EnterpriseHealthController, EnterpriseConfigController],
   providers: [
-    // Repositories & Providers
+    // Health Repositories & Providers
     {
       provide: HEALTH_REPOSITORY_TOKEN,
       useClass: InMemoryHealthRepository,
@@ -47,7 +59,7 @@ import { IntegrationModule } from '../integration/integration.module';
       useClass: InMemoryHealthRepository,
     },
 
-    // Domain & Application Services
+    // Health Services
     HealthService,
     DependencyService,
     HeartbeatService,
@@ -55,6 +67,29 @@ import { IntegrationModule } from '../integration/integration.module';
     MaintenanceService,
     HealthAggregationService,
     EnterprisePlatformHealthService,
+
+    // Configuration Repositories & Providers
+    {
+      provide: CONFIGURATION_REPOSITORY_TOKEN,
+      useClass: InMemoryConfigurationRepository,
+    },
+    {
+      provide: CONFIGURATION_QUERY_REPOSITORY_TOKEN,
+      useClass: InMemoryConfigurationRepository,
+    },
+    {
+      provide: CONFIGURATION_PROVIDER_TOKEN,
+      useClass: InMemoryConfigurationRepository,
+    },
+
+    // Configuration Services
+    ValidationService,
+    PropagationService,
+    EnvironmentService,
+    VersionService,
+    SnapshotService,
+    ConfigurationService,
+    EnterpriseDistributedConfigService,
   ],
   exports: [
     EnterprisePlatformHealthService,
@@ -67,6 +102,17 @@ import { IntegrationModule } from '../integration/integration.module';
     HEALTH_REPOSITORY_TOKEN,
     HEALTH_QUERY_REPOSITORY_TOKEN,
     HEALTH_PROVIDER_TOKEN,
+
+    EnterpriseDistributedConfigService,
+    ConfigurationService,
+    ValidationService,
+    PropagationService,
+    EnvironmentService,
+    VersionService,
+    SnapshotService,
+    CONFIGURATION_REPOSITORY_TOKEN,
+    CONFIGURATION_QUERY_REPOSITORY_TOKEN,
+    CONFIGURATION_PROVIDER_TOKEN,
   ],
 })
 export class PlatformHealthModule {}
