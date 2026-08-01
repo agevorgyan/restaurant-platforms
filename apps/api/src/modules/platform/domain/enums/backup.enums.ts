@@ -1,0 +1,45 @@
+/**
+ * Enterprise Backup & Disaster Recovery Platform - Domain Enums
+ *
+ * Defines core domain enumerations for backup categories, recovery strategy types,
+ * backup status lifecycle, and restore status states.
+ */
+
+export enum BackupType {
+  FULL_BACKUP = 'FULL_BACKUP',
+  INCREMENTAL_BACKUP = 'INCREMENTAL_BACKUP',
+  DIFFERENTIAL_BACKUP = 'DIFFERENTIAL_BACKUP',
+  SNAPSHOT = 'SNAPSHOT',
+  POINT_IN_TIME_BACKUP = 'POINT_IN_TIME_BACKUP',
+  TENANT_BACKUP = 'TENANT_BACKUP',
+  CONFIGURATION_BACKUP = 'CONFIGURATION_BACKUP',
+  METADATA_BACKUP = 'METADATA_BACKUP',
+}
+
+export enum RecoveryType {
+  FULL_RESTORE = 'FULL_RESTORE',
+  PARTIAL_RESTORE = 'PARTIAL_RESTORE',
+  POINT_IN_TIME_RECOVERY = 'POINT_IN_TIME_RECOVERY',
+  TENANT_RESTORE = 'TENANT_RESTORE',
+  CROSS_REGION_FAILOVER = 'CROSS_REGION_FAILOVER',
+  DISASTER_RECOVERY = 'DISASTER_RECOVERY',
+  VALIDATION_RESTORE = 'VALIDATION_RESTORE',
+}
+
+export enum BackupStatus {
+  SCHEDULED = 'SCHEDULED',
+  RUNNING = 'RUNNING',
+  COMPLETED = 'COMPLETED',
+  FAILED = 'FAILED',
+  EXPIRED = 'EXPIRED',
+  ARCHIVED = 'ARCHIVED',
+}
+
+export enum RestoreStatus {
+  PENDING = 'PENDING',
+  RUNNING = 'RUNNING',
+  COMPLETED = 'COMPLETED',
+  VALIDATED = 'VALIDATED',
+  FAILED = 'FAILED',
+  ROLLED_BACK = 'ROLLED_BACK',
+}

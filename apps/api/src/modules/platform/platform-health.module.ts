@@ -6,6 +6,7 @@
  * 2. Enterprise Distributed Configuration Platform
  * 3. Enterprise Feature Flag Platform
  * 4. Enterprise Tenant Provisioning Platform
+ * 5. Enterprise Backup & Disaster Recovery Platform
  */
 
 import { Module } from '@nestjs/common';
@@ -13,6 +14,7 @@ import { EnterpriseHealthController } from './presentation/controllers/enterpris
 import { EnterpriseConfigController } from './presentation/controllers/enterprise-config.controller';
 import { EnterpriseFeatureFlagController } from './presentation/controllers/enterprise-feature-flag.controller';
 import { EnterpriseProvisioningController } from './presentation/controllers/enterprise-provisioning.controller';
+import { EnterpriseBackupController } from './presentation/controllers/enterprise-backup.controller';
 import {
   HealthService,
   DependencyService,
@@ -27,7 +29,7 @@ import {
   PropagationService,
   EnvironmentService,
   VersionService,
-  SnapshotService,
+  SnapshotService as ConfigSnapshotService,
   ConfigurationService,
   EnterpriseDistributedConfigService,
 } from './application/services/config-platform.services';
@@ -51,6 +53,16 @@ import {
   EnterpriseTenantProvisioningPlatformService,
 } from './application/services/provisioning-platform.services';
 import {
+  SnapshotService as BackupSnapshotService,
+  RestoreService,
+  RecoveryService,
+  ReplicationService,
+  ValidationService as BackupValidationService,
+  PolicyService as BackupPolicyService,
+  BackupService,
+  EnterpriseBackupDisasterRecoveryPlatformService,
+} from './application/services/backup-platform.services';
+import {
   HEALTH_REPOSITORY_TOKEN,
   HEALTH_QUERY_REPOSITORY_TOKEN,
   HEALTH_PROVIDER_TOKEN,
@@ -70,10 +82,16 @@ import {
   TENANT_PROVISIONING_QUERY_REPOSITORY_TOKEN,
   WORKSPACE_PROVISIONER_TOKEN,
 } from './domain/ports/provisioning.ports';
+import {
+  BACKUP_REPOSITORY_TOKEN,
+  BACKUP_QUERY_REPOSITORY_TOKEN,
+  BACKUP_PROVIDER_TOKEN,
+} from './domain/ports/backup.ports';
 import { InMemoryHealthRepository } from './infrastructure/repositories/in-memory-health.repository';
 import { InMemoryConfigurationRepository } from './infrastructure/repositories/in-memory-config.repository';
 import { InMemoryFeatureFlagRepository } from './infrastructure/repositories/in-memory-feature-flag.repository';
 import { InMemoryTenantProvisioningRepository } from './infrastructure/repositories/in-memory-provisioning.repository';
+import { InMemoryBackupRepository } from './infrastructure/repositories/in-memory-backup.repository';
 import { IntegrationModule } from '../integration/integration.module';
 
 @Module({
@@ -83,6 +101,7 @@ import { IntegrationModule } from '../integration/integration.module';
     EnterpriseConfigController,
     EnterpriseFeatureFlagController,
     EnterpriseProvisioningController,
+    EnterpriseBackupController,
   ],
   providers: [
     // Health Repositories & Providers
@@ -127,7 +146,7 @@ import { IntegrationModule } from '../integration/integration.module';
     PropagationService,
     EnvironmentService,
     VersionService,
-    SnapshotService,
+    ConfigSnapshotService,
     ConfigurationService,
     EnterpriseDistributedConfigService,
 
@@ -177,6 +196,30 @@ import { IntegrationModule } from '../integration/integration.module';
     RollbackService,
     ProvisioningService,
     EnterpriseTenantProvisioningPlatformService,
+
+    // Backup & Disaster Recovery Repositories & Pluggable Providers
+    {
+      provide: BACKUP_REPOSITORY_TOKEN,
+      useClass: InMemoryBackupRepository,
+    },
+    {
+      provide: BACKUP_QUERY_REPOSITORY_TOKEN,
+      useClass: InMemoryBackupRepository,
+    },
+    {
+      provide: BACKUP_PROVIDER_TOKEN,
+      useClass: InMemoryBackupRepository,
+    },
+
+    // Backup & Disaster Recovery Services
+    BackupSnapshotService,
+    RestoreService,
+    RecoveryService,
+    ReplicationService,
+    BackupValidationService,
+    BackupPolicyService,
+    BackupService,
+    EnterpriseBackupDisasterRecoveryPlatformService,
   ],
   exports: [
     EnterprisePlatformHealthService,
@@ -196,7 +239,7 @@ import { IntegrationModule } from '../integration/integration.module';
     PropagationService,
     EnvironmentService,
     VersionService,
-    SnapshotService,
+    ConfigSnapshotService,
     CONFIGURATION_REPOSITORY_TOKEN,
     CONFIGURATION_QUERY_REPOSITORY_TOKEN,
     CONFIGURATION_PROVIDER_TOKEN,
@@ -223,6 +266,18 @@ import { IntegrationModule } from '../integration/integration.module';
     TENANT_PROVISIONING_REPOSITORY_TOKEN,
     TENANT_PROVISIONING_QUERY_REPOSITORY_TOKEN,
     WORKSPACE_PROVISIONER_TOKEN,
+
+    EnterpriseBackupDisasterRecoveryPlatformService,
+    BackupService,
+    RestoreService,
+    BackupSnapshotService,
+    ReplicationService,
+    BackupValidationService,
+    BackupPolicyService,
+    RecoveryService,
+    BACKUP_REPOSITORY_TOKEN,
+    BACKUP_QUERY_REPOSITORY_TOKEN,
+    BACKUP_PROVIDER_TOKEN,
   ],
 })
 export class PlatformHealthModule {}
