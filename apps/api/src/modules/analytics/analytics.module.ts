@@ -6,6 +6,7 @@
  * 2. Enterprise KPI Platform
  * 3. Enterprise Business Intelligence (BI) Platform
  * 4. Enterprise Dashboard Platform
+ * 5. Enterprise Forecasting & Predictive Analytics Platform
  */
 
 import { Module } from '@nestjs/common';
@@ -13,6 +14,7 @@ import { EnterpriseAnalyticsController } from './presentation/controllers/enterp
 import { EnterpriseKpiController } from './presentation/controllers/enterprise-kpi.controller';
 import { EnterpriseBiController } from './presentation/controllers/enterprise-bi.controller';
 import { EnterpriseDashboardController } from './presentation/controllers/enterprise-dashboard.controller';
+import { EnterpriseForecastingController } from './presentation/controllers/enterprise-forecasting.controller';
 
 import {
   MetricCollectionService,
@@ -54,10 +56,27 @@ import {
   DASHBOARD_QUERY_REPOSITORY_TOKEN,
 } from './domain/ports/dashboard.ports';
 
+import {
+  ForecastService,
+  PredictionService,
+  TrendAnalysisService,
+  SeasonalityService,
+  AnomalyDetectionService,
+  ConfidenceService,
+  ForecastVersionService,
+  EnterpriseForecastingPlatformService,
+} from './application/services/forecasting-platform.services';
+import {
+  FORECAST_REPOSITORY_TOKEN,
+  FORECAST_QUERY_REPOSITORY_TOKEN,
+  FORECASTING_ENGINE_TOKEN,
+} from './domain/ports/forecasting.ports';
+
 import { InMemoryAnalyticsRepository } from './infrastructure/repositories/in-memory-analytics.repository';
 import { InMemoryKpiRepository } from './infrastructure/repositories/in-memory-kpi.repository';
 import { InMemoryBiRepository } from './infrastructure/repositories/in-memory-bi.repository';
 import { InMemoryDashboardRepository } from './infrastructure/repositories/in-memory-dashboard.repository';
+import { InMemoryForecastingRepository } from './infrastructure/repositories/in-memory-forecasting.repository';
 import { IntegrationModule } from '../integration/integration.module';
 
 @Module({
@@ -67,6 +86,7 @@ import { IntegrationModule } from '../integration/integration.module';
     EnterpriseKpiController,
     EnterpriseBiController,
     EnterpriseDashboardController,
+    EnterpriseForecastingController,
   ],
   providers: [
     // Repositories & Tokens
@@ -93,6 +113,18 @@ import { IntegrationModule } from '../integration/integration.module';
     {
       provide: DASHBOARD_QUERY_REPOSITORY_TOKEN,
       useClass: InMemoryDashboardRepository,
+    },
+    {
+      provide: FORECAST_REPOSITORY_TOKEN,
+      useClass: InMemoryForecastingRepository,
+    },
+    {
+      provide: FORECAST_QUERY_REPOSITORY_TOKEN,
+      useClass: InMemoryForecastingRepository,
+    },
+    {
+      provide: FORECASTING_ENGINE_TOKEN,
+      useClass: InMemoryForecastingRepository,
     },
 
     // Analytics Foundation Services
@@ -122,6 +154,16 @@ import { IntegrationModule } from '../integration/integration.module';
     RefreshService,
     PermissionService,
     EnterpriseDashboardPlatformService,
+
+    // Forecasting Platform Services
+    ForecastService,
+    PredictionService,
+    TrendAnalysisService,
+    SeasonalityService,
+    AnomalyDetectionService,
+    ConfidenceService,
+    ForecastVersionService,
+    EnterpriseForecastingPlatformService,
   ],
   exports: [
     // Foundation Exports
@@ -157,6 +199,19 @@ import { IntegrationModule } from '../integration/integration.module';
     PermissionService,
     DASHBOARD_REPOSITORY_TOKEN,
     DASHBOARD_QUERY_REPOSITORY_TOKEN,
+
+    // Forecasting Exports
+    EnterpriseForecastingPlatformService,
+    ForecastService,
+    PredictionService,
+    TrendAnalysisService,
+    SeasonalityService,
+    AnomalyDetectionService,
+    ConfidenceService,
+    ForecastVersionService,
+    FORECAST_REPOSITORY_TOKEN,
+    FORECAST_QUERY_REPOSITORY_TOKEN,
+    FORECASTING_ENGINE_TOKEN,
   ],
 })
 export class AnalyticsModule {}
