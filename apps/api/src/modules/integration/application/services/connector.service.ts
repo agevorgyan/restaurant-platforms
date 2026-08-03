@@ -61,6 +61,17 @@ export class CredentialManagementService {
     console.log(`[CredentialManagementService] Stored credentials for tenant ${tenantId}, connector ${connectorId}`);
     return true;
   }
+
+  /**
+   * Generates a new API key for the specified application.
+   * @param applicationId - The application identifier to generate a key for.
+   */
+  public async generateApiKey(applicationId: string): Promise<string> {
+    // In production, this would delegate to a secrets vault (e.g., HashiCorp Vault, AWS KMS)
+    const apiKey = `sk_live_${crypto.randomUUID().replace(/-/g, '')}`;
+    console.log(`[CredentialManagementService] Generated API key for application: ${applicationId}`);
+    return apiKey;
+  }
 }
 
 export class ConnectorHealthService {

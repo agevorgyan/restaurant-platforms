@@ -1,5 +1,7 @@
-export class MediaUploaded {
-  public readonly occurredOn: Date = new Date();
+import { DomainEvent } from '@saas/core';
+
+export class MediaUploaded implements DomainEvent {
+  public readonly dateTimeOccurred: Date = new Date();
   constructor(
     public readonly mediaId: string,
     public readonly tenantId: string,
@@ -8,56 +10,63 @@ export class MediaUploaded {
     public readonly fileSize: number,
     public readonly checksum: string
   ) {}
+  public getAggregateId(): string { return this.mediaId; }
 }
 
-export class MediaProcessingStarted {
-  public readonly occurredOn: Date = new Date();
+export class MediaProcessingStarted implements DomainEvent {
+  public readonly dateTimeOccurred: Date = new Date();
   constructor(
     public readonly mediaId: string,
     public readonly tenantId: string,
     public readonly processingJobId: string
   ) {}
+  public getAggregateId(): string { return this.mediaId; }
 }
 
-export class MediaProcessingCompleted {
-  public readonly occurredOn: Date = new Date();
+export class MediaProcessingCompleted implements DomainEvent {
+  public readonly dateTimeOccurred: Date = new Date();
   constructor(
     public readonly mediaId: string,
     public readonly tenantId: string,
     public readonly processingJobId: string,
-    public readonly outputs: Record<string, string> // e.g. { "720p": "s3://...", "thumbnail": "s3://..." }
+    public readonly outputs: Record<string, string>
   ) {}
+  public getAggregateId(): string { return this.mediaId; }
 }
 
-export class MediaArchived {
-  public readonly occurredOn: Date = new Date();
+export class MediaArchived implements DomainEvent {
+  public readonly dateTimeOccurred: Date = new Date();
   constructor(
     public readonly mediaId: string,
     public readonly tenantId: string
   ) {}
+  public getAggregateId(): string { return this.mediaId; }
 }
 
-export class MediaDeleted {
-  public readonly occurredOn: Date = new Date();
+export class MediaDeleted implements DomainEvent {
+  public readonly dateTimeOccurred: Date = new Date();
   constructor(
     public readonly mediaId: string,
     public readonly tenantId: string
   ) {}
+  public getAggregateId(): string { return this.mediaId; }
 }
 
-export class MediaRestored {
-  public readonly occurredOn: Date = new Date();
+export class MediaRestored implements DomainEvent {
+  public readonly dateTimeOccurred: Date = new Date();
   constructor(
     public readonly mediaId: string,
     public readonly tenantId: string
   ) {}
+  public getAggregateId(): string { return this.mediaId; }
 }
 
-export class MediaMetadataUpdated {
-  public readonly occurredOn: Date = new Date();
+export class MediaMetadataUpdated implements DomainEvent {
+  public readonly dateTimeOccurred: Date = new Date();
   constructor(
     public readonly mediaId: string,
     public readonly tenantId: string,
     public readonly updates: Record<string, any>
   ) {}
+  public getAggregateId(): string { return this.mediaId; }
 }

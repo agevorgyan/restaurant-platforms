@@ -43,9 +43,10 @@ export interface EmailStatistics {
 export interface ProviderHealth {
   providerName: string;
   isAvailable: boolean;
-  activeConnections: number;
+  activeConnections?: number;
   latencyMs: number;
   errorRatePercentage: number;
+  lastCheckedAt?: Date;
 }
 
 export interface FailedEmail {

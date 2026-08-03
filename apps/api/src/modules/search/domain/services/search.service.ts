@@ -52,7 +52,7 @@ export class SearchCoordinator {
     // 6. Return SearchResult
     
     return SearchResult.create({
-      query: criteria.toValue().query,
+      query: criteria.props.query,
       hits: [],
       facets: [],
       totalHits: 0,

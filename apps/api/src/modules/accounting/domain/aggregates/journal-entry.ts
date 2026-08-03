@@ -109,7 +109,7 @@ export class JournalEntry extends AggregateRoot<JournalEntryId> {
       this._creditLines.map(l => l.amount)
     );
 
-    const isBalanced = new BalancedJournalSpecification().isSatisfiedBy({ totalDebit, totalCredit });
+    const isBalanced = new BalancedJournalSpecification().isSatisfiedBy({ debits: totalDebit, credits: totalCredit });
     if (!isBalanced) {
       throw new Error('Journal is not balanced. Total Debits must equal Total Credits.');
     }

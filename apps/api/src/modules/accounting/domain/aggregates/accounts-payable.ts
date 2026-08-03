@@ -5,16 +5,13 @@ import {
   SupplierReference,
   VendorInvoiceNumber,
   PurchaseOrderReference,
-  Currency,
-  OriginalAmount,
-  OutstandingAmount,
-  DueDate,
-  IssueDate,
   PaymentTerms,
   PayableStatus,
   PayableStatusEnum,
   Priority
 } from '../value-objects/accounts-payable-core';
+import { Currency } from '../value-objects/journal-entry-core';
+import { OriginalAmount, OutstandingAmount, DueDate, IssueDate } from '../value-objects/accounts-receivable-core';
 import { PayableLine } from '../entities/payable-line';
 import { PaymentAllocation } from '../entities/payment-allocation';
 import { CreditNote } from '../entities/credit-note';
@@ -25,8 +22,8 @@ import {
   PayableCreated,
   SupplierInvoiceRegistered,
   PayableApproved,
-  PaymentAllocated,
-  PartialPaymentRecorded,
+  PayablePaymentAllocated as PaymentAllocated,
+  PayablePartialPaymentRecorded as PartialPaymentRecorded,
   CreditNoteApplied,
   PayableClosed,
   PayableReopened,

@@ -8,6 +8,14 @@ export class GrossSalary extends DomainPrimitive<number> {
   }
 }
 
+export class BaseSalary extends DomainPrimitive<number> {
+  private constructor(value: number) { super(value); }
+  public static create(value: number): BaseSalary {
+    if (value < 0) throw new Error('Base salary cannot be negative.');
+    return new BaseSalary(value);
+  }
+}
+
 export class NetSalary extends DomainPrimitive<number> {
   private constructor(value: number) { super(value); }
   public static create(value: number): NetSalary {

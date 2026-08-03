@@ -1,4 +1,5 @@
-import { Identifier, DomainPrimitive, ValueObject } from '@saas/domain';
+import { Identifier, DomainPrimitive } from '@saas/domain';
+import { ValueObject } from '@saas/core';
 
 export class PayableId extends Identifier<string> {
   private constructor(value: string) { super(value); }
@@ -54,36 +55,6 @@ export class PayableStatus extends DomainPrimitive<PayableStatusEnum> {
   }
 }
 
-// Re-using common structural VOs from AccountsReceivable logic, but keeping isolated instances
-export class DueDate extends DomainPrimitive<Date> {
-  private constructor(value: Date) { super(value); }
-  public static create(value: Date): DueDate {
-    return new DueDate(value);
-  }
-}
-
-export class IssueDate extends DomainPrimitive<Date> {
-  private constructor(value: Date) { super(value); }
-  public static create(value: Date): IssueDate {
-    return new IssueDate(value);
-  }
-}
-
-export class OutstandingAmount extends DomainPrimitive<number> {
-  private constructor(value: number) { super(value); }
-  public static create(value: number): OutstandingAmount {
-    if (value < 0) throw new Error('Outstanding amount cannot be negative.');
-    return new OutstandingAmount(value);
-  }
-}
-
-export class OriginalAmount extends DomainPrimitive<number> {
-  private constructor(value: number) { super(value); }
-  public static create(value: number): OriginalAmount {
-    if (value <= 0) throw new Error('Original amount must be strictly positive.');
-    return new OriginalAmount(value);
-  }
-}
 
 export class PaymentTerms extends DomainPrimitive<string> {
   private constructor(value: string) { super(value); }

@@ -1,5 +1,5 @@
 import { DomainEvent } from '@saas/events';
-import { EventMetadata } from '@saas/events/src/metadata';
+import { EventMetadata, createEventMetadata } from '@saas/events';
 
 export interface StaffMemberCreatedPayload {
   staffId: string;
@@ -13,7 +13,7 @@ export class StaffMemberCreated extends DomainEvent<StaffMemberCreatedPayload> {
     aggregateId: string,
     aggregateVersion: number,
     payload: StaffMemberCreatedPayload,
-    metadata: EventMetadata = {}
+    metadata: EventMetadata = createEventMetadata()
   ) {
     super(
       crypto.randomUUID(),
@@ -38,7 +38,7 @@ export class StaffMemberUpdated extends DomainEvent<StaffMemberUpdatedPayload> {
     aggregateId: string,
     aggregateVersion: number,
     payload: StaffMemberUpdatedPayload,
-    metadata: EventMetadata = {}
+    metadata: EventMetadata = createEventMetadata()
   ) {
     super(
       crypto.randomUUID(),
@@ -58,7 +58,7 @@ export class StaffActivated extends DomainEvent<{ staffId: string }> {
     aggregateId: string,
     aggregateVersion: number,
     payload: { staffId: string },
-    metadata: EventMetadata = {}
+    metadata: EventMetadata = createEventMetadata()
   ) {
     super(
       crypto.randomUUID(),
@@ -78,7 +78,7 @@ export class StaffDeactivated extends DomainEvent<{ staffId: string }> {
     aggregateId: string,
     aggregateVersion: number,
     payload: { staffId: string },
-    metadata: EventMetadata = {}
+    metadata: EventMetadata = createEventMetadata()
   ) {
     super(
       crypto.randomUUID(),

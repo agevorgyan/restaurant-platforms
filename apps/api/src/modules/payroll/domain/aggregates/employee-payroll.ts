@@ -1,8 +1,8 @@
 import { AggregateRoot } from '@saas/domain';
 import { EmployeePayrollId, EmployeeReference, EmployeePayrollStatus, EmployeePayrollStatusEnum } from '../value-objects/employee-payroll-core';
 import { PayrollPeriod } from '../value-objects/payroll-period';
-import { BaseSalary, RegularHours, OvertimeHours, NightHours, HolidayHours } from '../value-objects/work-hours';
-import { GrossSalary, TaxAmount, DeductionAmount, BonusAmount, NetSalary, HourlyRate } from '../value-objects/money-types';
+import { RegularHours, OvertimeHours, NightHours, HolidayHours } from '../value-objects/work-hours';
+import { BaseSalary, GrossSalary, TaxAmount, DeductionAmount, BonusAmount, NetSalary, HourlyRate } from '../value-objects/money-types';
 import { Currency } from '../value-objects/currency';
 import { WorkedHoursEntry } from '../entities/worked-hours-entry';
 import { PayrollBonus } from '../entities/payroll-bonus';

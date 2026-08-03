@@ -64,7 +64,7 @@ export class AccountLocked {
 }
 
 /** Emitted when automated response revokes a session. */
-export class SessionRevoked {
+export class AutomatedSessionRevoked {
   constructor(
     public readonly sessionId: string,
     public readonly reason: string,

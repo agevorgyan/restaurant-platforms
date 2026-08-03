@@ -6,11 +6,12 @@ export class FinancialPeriodId extends Identifier<string> {
   public static generate(): FinancialPeriodId { return new FinancialPeriodId(crypto.randomUUID()); }
 }
 
-export class FiscalYear extends DomainPrimitive<number> {
+/** Represents a fiscal year as a numeric value (e.g., 2024). */
+export class FiscalYearNumber extends DomainPrimitive<number> {
   private constructor(value: number) { super(value); }
-  public static create(value: number): FiscalYear {
+  public static create(value: number): FiscalYearNumber {
     if (value < 1900 || value > 2100) throw new Error('Invalid fiscal year.');
-    return new FiscalYear(value);
+    return new FiscalYearNumber(value);
   }
 }
 

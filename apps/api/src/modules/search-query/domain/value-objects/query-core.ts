@@ -1,4 +1,5 @@
-import { DomainPrimitive, ValueObject } from '@saas/domain';
+import { DomainPrimitive } from '@saas/domain';
+import { ValueObject } from '@saas/core';
 
 // ENUMS
 

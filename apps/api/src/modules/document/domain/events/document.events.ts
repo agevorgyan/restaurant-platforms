@@ -1,83 +1,83 @@
-import { DomainEvent } from '@saas/domain';
+import { DomainEvent } from '@saas/core';
 
-export class DocumentCreated extends DomainEvent {
+export class DocumentCreated implements DomainEvent {
+  public readonly dateTimeOccurred: Date = new Date();
   constructor(
     public readonly documentId: string,
     public readonly tenantId: string,
     public readonly documentType: string,
     public readonly visibility: string,
     public readonly createdBy: string
-  ) {
-    super();
-  }
+  ) {}
+  public getAggregateId(): string { return this.documentId; }
 }
 
-export class DocumentUploaded extends DomainEvent {
+export class DocumentUploaded implements DomainEvent {
+  public readonly dateTimeOccurred: Date = new Date();
   constructor(
     public readonly documentId: string,
     public readonly tenantId: string,
     public readonly objectKey: string,
     public readonly fileSize: number,
     public readonly checksum: string
-  ) {
-    super();
-  }
+  ) {}
+  public getAggregateId(): string { return this.documentId; }
 }
 
-export class DocumentArchived extends DomainEvent {
+export class DocumentArchived implements DomainEvent {
+  public readonly dateTimeOccurred: Date = new Date();
   constructor(
     public readonly documentId: string,
     public readonly tenantId: string
-  ) {
-    super();
-  }
+  ) {}
+  public getAggregateId(): string { return this.documentId; }
 }
 
-export class DocumentDeleted extends DomainEvent {
+export class DocumentDeleted implements DomainEvent {
+  public readonly dateTimeOccurred: Date = new Date();
   constructor(
     public readonly documentId: string,
     public readonly tenantId: string
-  ) {
-    super();
-  }
+  ) {}
+  public getAggregateId(): string { return this.documentId; }
 }
 
-export class DocumentRestored extends DomainEvent {
+export class DocumentRestored implements DomainEvent {
+  public readonly dateTimeOccurred: Date = new Date();
   constructor(
     public readonly documentId: string,
     public readonly tenantId: string
-  ) {
-    super();
-  }
+  ) {}
+  public getAggregateId(): string { return this.documentId; }
 }
 
-export class DocumentMetadataUpdated extends DomainEvent {
+export class DocumentMetadataUpdated implements DomainEvent {
+  public readonly dateTimeOccurred: Date = new Date();
   constructor(
     public readonly documentId: string,
     public readonly tenantId: string,
     public readonly updates: Record<string, any>
-  ) {
-    super();
-  }
+  ) {}
+  public getAggregateId(): string { return this.documentId; }
 }
 
-export class DocumentProcessingStarted extends DomainEvent {
+export class DocumentProcessingStarted implements DomainEvent {
+  public readonly dateTimeOccurred: Date = new Date();
   constructor(
     public readonly documentId: string,
     public readonly tenantId: string,
     public readonly processorType: string
-  ) {
-    super();
-  }
+  ) {}
+  public getAggregateId(): string { return this.documentId; }
 }
 
-export class DocumentProcessingCompleted extends DomainEvent {
+export class DocumentProcessingCompleted implements DomainEvent {
+  public readonly dateTimeOccurred: Date = new Date();
   constructor(
     public readonly documentId: string,
     public readonly tenantId: string,
     public readonly processorType: string,
     public readonly results: Record<string, any>
-  ) {
-    super();
-  }
+  ) {}
+  public getAggregateId(): string { return this.documentId; }
 }

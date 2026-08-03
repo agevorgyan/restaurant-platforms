@@ -27,7 +27,7 @@ export class EnterpriseDocumentController {
     const docs = await this.repository.findByTenantId(TenantId.create(tenantId), skip, take);
     
     return docs.map(d => ({
-      id: d.id.value,
+      id: d.id,
       tenantId: d.tenantId.value,
       name: d.name.value,
       type: d.type.value,
@@ -63,7 +63,7 @@ export class EnterpriseDocumentController {
     if (!doc) throw new Error('Document not found');
 
     return {
-      id: doc.id.value,
+      id: doc.id,
       tenantId: doc.tenantId.value,
       name: doc.name.value,
       type: doc.type.value,
@@ -92,8 +92,8 @@ export class EnterpriseDocumentController {
     await this.repository.save(document);
     
     return {
-      id: document.id.value,
-      uploadUrl: `https://mock-storage.com/upload/${document.id.value}`
+      id: document.id,
+      uploadUrl: `https://mock-storage.com/upload/${document.id}`
     };
   }
 

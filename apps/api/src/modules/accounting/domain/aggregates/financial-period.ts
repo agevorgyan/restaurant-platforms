@@ -1,7 +1,7 @@
 import { AggregateRoot } from '@saas/domain';
 import {
   FinancialPeriodId,
-  FiscalYear,
+  FiscalYearNumber as FiscalYear,
   FiscalQuarter,
   FiscalMonth,
   PeriodCode,

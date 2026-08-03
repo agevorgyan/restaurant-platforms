@@ -12,7 +12,10 @@ export class NotificationPreferenceService {
     return this.preferences.get(userId) || {
       userId,
       tenantId: 'global',
+      optedOutChannels: [],
+      optedOutTypes: [],
       mutedCategories: [],
+      timezone: 'UTC',
       desktopNotificationsEnabled: true,
       soundEnabled: true
     };

@@ -10,7 +10,7 @@ import { BreakDuration } from '../value-objects/break-duration';
 import { MaximumCapacity } from '../value-objects/maximum-capacity';
 import { AssignedEmployees } from '../value-objects/assigned-employees';
 import { AssignedEmployee } from '../entities/assigned-employee';
-import { ShiftCreated, EmployeeAssignedToShift, EmployeeRemovedFromShift, ShiftStarted, ShiftEnded, ShiftCompleted, ShiftCancelled } from '../events/shift-events';
+import { ShiftCreated, EmployeeAssignedToShift, EmployeeRemovedFromShift, ShiftStarted, ShiftCompleted, ShiftCancelled } from '../events/shift-events';
 
 export class ShiftId extends Identifier<string> {
   private constructor(value: string) { super(value); }

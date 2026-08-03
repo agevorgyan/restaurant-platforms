@@ -75,6 +75,7 @@ export class AdjustmentApprovalStatus extends DomainPrimitive<AdjustmentApproval
 export enum AdjustmentStatusEnum {
   DRAFT = 'DRAFT',
   SUBMITTED = 'SUBMITTED',
+  APPROVED = 'APPROVED',
   APPLIED = 'APPLIED',
   CANCELLED = 'CANCELLED',
   ARCHIVED = 'ARCHIVED'

@@ -6,7 +6,7 @@ export class PayrollCalculationService implements IDomainService {
   }
 }
 
-export class TaxCalculationService implements IDomainService {
+export class BasicTaxCalculationService implements IDomainService {
   public calculateTax(gross: number, taxRate: number): number {
     return gross * (taxRate / 100);
   }

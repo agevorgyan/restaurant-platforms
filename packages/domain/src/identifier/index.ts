@@ -1,5 +1,5 @@
 export abstract class Identifier<T> {
-  constructor(protected readonly value: T) {
+  constructor(public readonly value: T) {
     if (value === null || value === undefined) {
       throw new Error('Identifier cannot be null or undefined');
     }

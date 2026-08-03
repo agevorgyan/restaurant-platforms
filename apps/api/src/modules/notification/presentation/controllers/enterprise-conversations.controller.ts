@@ -3,7 +3,7 @@ import {
   ConversationDeliveryService,
   ProviderRegistry,
   DeliveryTrackingService,
-  ProviderHealthService,
+  ConversationProviderHealthService as ProviderHealthService,
   WebhookReceiver
 } from '../../application/services';
 import { 
@@ -34,7 +34,7 @@ export class EnterpriseConversationsController {
 
   @Get('statistics')
   async getStatistics(): Promise<any> {
-    return this.tracking.getStatistics();
+    return this.tracking.getStatistics('global');
   }
 
   @Get('health')

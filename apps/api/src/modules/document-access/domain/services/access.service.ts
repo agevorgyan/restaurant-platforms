@@ -67,10 +67,10 @@ export class PermissionValidationService {
   ): Promise<void> {
     const permission = this.policyEvaluator.evaluate(identity, objectRef, type);
     
-    await this.auditor.logAccessAttempt(identity, objectRef, type, permission.value.decision, permission.value.reason);
+    await this.auditor.logAccessAttempt(identity, objectRef, type, permission.toValue().decision, permission.toValue().reason);
 
-    if (permission.value.decision !== PermissionDecisionEnum.ALLOW) {
-      throw new Error(`Access Denied: ${permission.value.reason || 'Policy evaluation failed'}`);
+    if (permission.toValue().decision !== PermissionDecisionEnum.ALLOW) {
+      throw new Error(`Access Denied: ${permission.toValue().reason || 'Policy evaluation failed'}`);
     }
   }
 }
@@ -132,7 +132,7 @@ export class SecureAccessService {
       3600
     );
 
-    return signedUrl.value;
+    return signedUrl.toValue();
   }
 
   public async requestUploadUrl(
@@ -150,6 +150,6 @@ export class SecureAccessService {
       3600
     );
 
-    return signedUrl.value;
+    return signedUrl.toValue();
   }
 }

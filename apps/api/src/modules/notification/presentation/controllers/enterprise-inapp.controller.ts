@@ -8,7 +8,7 @@ import {
 import { 
   InAppNotification,
   NotificationFeed,
-  NotificationStatistics
+  InAppNotificationStatistics as NotificationStatistics
 } from '../../application/read-models';
 
 @Controller('notifications/in-app')

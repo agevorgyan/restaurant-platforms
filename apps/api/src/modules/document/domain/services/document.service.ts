@@ -34,7 +34,7 @@ export class DocumentValidationService {
 
   public validateAccess(document: Document, requestTenantId: string): void {
     if (!this.ownershipSpec.isSatisfiedBy({ document, requestTenantId })) {
-      throw new Error(`Access denied. Tenant ${requestTenantId} does not own document ${document.id.value}`);
+      throw new Error(`Access denied. Tenant ${requestTenantId} does not own document ${document.id}`);
     }
   }
 }

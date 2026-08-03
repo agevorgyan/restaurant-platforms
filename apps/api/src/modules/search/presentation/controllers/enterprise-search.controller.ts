@@ -34,13 +34,13 @@ export class EnterpriseSearchController {
     });
 
     const result = await this.searchService.search(tenantId, userId, criteria);
-    const resultObj = result.toValue();
+    const resultObj = result.props;
 
     return {
       tenantId,
       query,
       page: 1,
-      limit: criteria.toValue().limit,
+      limit: criteria.props.limit,
       totalHits: resultObj.totalHits,
       hits: resultObj.hits.map(h => ({
         id: h.id,
@@ -73,13 +73,13 @@ export class EnterpriseSearchController {
     });
 
     const result = await this.searchService.search(tenantId, userId, criteria);
-    const resultObj = result.toValue();
+    const resultObj = result.props;
 
     return {
       tenantId,
       query: payload.query,
       page: 1, // simplified
-      limit: criteria.toValue().limit,
+      limit: criteria.props.limit,
       totalHits: resultObj.totalHits,
       hits: resultObj.hits.map(h => ({
         id: h.id,
@@ -100,7 +100,7 @@ export class EnterpriseSearchController {
   ): Promise<any> {
     if (!tenantId || !prefix) throw new Error('tenantId and q are required');
     const suggestions = await this.suggestionService.getSuggestions(tenantId, prefix);
-    return { suggestions: suggestions.map(s => s.toValue()) };
+    return { suggestions: suggestions.map(s => s.props) };
   }
 
   @Get('popular')

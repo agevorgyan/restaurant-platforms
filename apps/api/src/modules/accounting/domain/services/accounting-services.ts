@@ -1,8 +1,22 @@
-import { IDomainService } from '@saas/core';
+import { IDomainService } from '@saas/domain';
 
 export class DoubleEntryService implements IDomainService {
   public validateDoubleEntry(debits: number, credits: number): boolean {
     return Math.abs(debits - credits) < 0.0001;
+  }
+}
+
+export class DoubleEntryValidationService extends DoubleEntryService {
+  public validateLines(lines: any[]): boolean {
+    return lines.length >= 2;
+  }
+}
+
+export class JournalBalancingService implements IDomainService {
+  public calculateTotals(debits: any[], credits: any[]): { debits: number; credits: number; totalDebit: number; totalCredit: number } {
+    const totalDebit = debits.reduce((acc, val) => acc + (typeof val === 'number' ? val : val?.toValue?.() || 0), 0);
+    const totalCredit = credits.reduce((acc, val) => acc + (typeof val === 'number' ? val : val?.toValue?.() || 0), 0);
+    return { debits: totalDebit, credits: totalCredit, totalDebit, totalCredit };
   }
 }
 

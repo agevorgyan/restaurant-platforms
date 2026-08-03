@@ -1,6 +1,6 @@
 import { Specification } from '@saas/domain-rules';
 import { PayrollPeriod } from '../value-objects/payroll-period';
-import { PayrollStatusEnum } from '../value-objects/payroll-status';
+import { PayrollRunStatusEnum as PayrollStatusEnum } from '../value-objects/payroll-run-status';
 
 export interface PayrollPeriodContext {
   newPeriod: PayrollPeriod;

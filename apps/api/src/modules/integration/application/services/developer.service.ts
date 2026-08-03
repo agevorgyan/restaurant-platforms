@@ -2,7 +2,7 @@ import {
   ApiProduct, 
   SdkPackage, 
   ApplicationRegistration,
-  ApiUsage,
+  DeveloperApiUsage as ApiUsage,
   SandboxStatistics
 } from '../read-models';
 

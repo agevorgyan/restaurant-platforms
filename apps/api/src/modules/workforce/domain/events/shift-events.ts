@@ -1,5 +1,5 @@
 import { DomainEvent } from '@saas/events';
-import { EventMetadata } from '@saas/events/src/metadata';
+import { EventMetadata, createEventMetadata } from '@saas/events';
 
 export interface ShiftCreatedPayload {
   shiftId: string;
@@ -11,7 +11,7 @@ export interface ShiftCreatedPayload {
 }
 
 export class ShiftCreated extends DomainEvent<ShiftCreatedPayload> {
-  constructor(aggregateId: string, aggregateVersion: number, payload: ShiftCreatedPayload, metadata: EventMetadata = {}) {
+  constructor(aggregateId: string, aggregateVersion: number, payload: ShiftCreatedPayload, metadata: EventMetadata = createEventMetadata()) {
     super(crypto.randomUUID(), 'ShiftCreated', aggregateId, 'Shift', aggregateVersion, new Date(), payload, metadata);
   }
 }
@@ -22,7 +22,7 @@ export interface EmployeeAssignedToShiftPayload {
 }
 
 export class EmployeeAssignedToShift extends DomainEvent<EmployeeAssignedToShiftPayload> {
-  constructor(aggregateId: string, aggregateVersion: number, payload: EmployeeAssignedToShiftPayload, metadata: EventMetadata = {}) {
+  constructor(aggregateId: string, aggregateVersion: number, payload: EmployeeAssignedToShiftPayload, metadata: EventMetadata = createEventMetadata()) {
     super(crypto.randomUUID(), 'EmployeeAssignedToShift', aggregateId, 'Shift', aggregateVersion, new Date(), payload, metadata);
   }
 }
@@ -33,25 +33,25 @@ export interface EmployeeRemovedFromShiftPayload {
 }
 
 export class EmployeeRemovedFromShift extends DomainEvent<EmployeeRemovedFromShiftPayload> {
-  constructor(aggregateId: string, aggregateVersion: number, payload: EmployeeRemovedFromShiftPayload, metadata: EventMetadata = {}) {
+  constructor(aggregateId: string, aggregateVersion: number, payload: EmployeeRemovedFromShiftPayload, metadata: EventMetadata = createEventMetadata()) {
     super(crypto.randomUUID(), 'EmployeeRemovedFromShift', aggregateId, 'Shift', aggregateVersion, new Date(), payload, metadata);
   }
 }
 
 export class ShiftStarted extends DomainEvent<{ shiftId: string }> {
-  constructor(aggregateId: string, aggregateVersion: number, payload: { shiftId: string }, metadata: EventMetadata = {}) {
+  constructor(aggregateId: string, aggregateVersion: number, payload: { shiftId: string }, metadata: EventMetadata = createEventMetadata()) {
     super(crypto.randomUUID(), 'ShiftStarted', aggregateId, 'Shift', aggregateVersion, new Date(), payload, metadata);
   }
 }
 
 export class ShiftCompleted extends DomainEvent<{ shiftId: string }> {
-  constructor(aggregateId: string, aggregateVersion: number, payload: { shiftId: string }, metadata: EventMetadata = {}) {
+  constructor(aggregateId: string, aggregateVersion: number, payload: { shiftId: string }, metadata: EventMetadata = createEventMetadata()) {
     super(crypto.randomUUID(), 'ShiftCompleted', aggregateId, 'Shift', aggregateVersion, new Date(), payload, metadata);
   }
 }
 
 export class ShiftCancelled extends DomainEvent<{ shiftId: string; reason?: string }> {
-  constructor(aggregateId: string, aggregateVersion: number, payload: { shiftId: string; reason?: string }, metadata: EventMetadata = {}) {
+  constructor(aggregateId: string, aggregateVersion: number, payload: { shiftId: string; reason?: string }, metadata: EventMetadata = createEventMetadata()) {
     super(crypto.randomUUID(), 'ShiftCancelled', aggregateId, 'Shift', aggregateVersion, new Date(), payload, metadata);
   }
 }

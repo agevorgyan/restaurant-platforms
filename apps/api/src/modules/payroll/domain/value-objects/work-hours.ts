@@ -1,14 +1,6 @@
 import { DomainPrimitive } from '@saas/domain';
 
-export class BaseSalary extends DomainPrimitive<number> {
-  private constructor(value: number) { super(value); }
-  public static create(value: number): BaseSalary {
-    if (value < 0) {
-      throw new Error('Base salary cannot be negative.');
-    }
-    return new BaseSalary(value);
-  }
-}
+
 
 export class RegularHours extends DomainPrimitive<number> {
   private constructor(value: number) { super(value); }

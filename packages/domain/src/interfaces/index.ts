@@ -26,7 +26,8 @@ export interface IDomainFactory<T> {
   restore(state: unknown): T;
 }
 
-export type IDomainService = Record<string, unknown>;
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface IDomainService {}
 
 export interface IRepository<T> {
   findById(id: string): Promise<T | null>;

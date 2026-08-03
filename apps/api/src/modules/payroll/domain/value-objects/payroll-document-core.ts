@@ -57,12 +57,7 @@ export class GenerationDate extends DomainPrimitive<Date> {
   }
 }
 
-export class ApprovalDate extends DomainPrimitive<Date> {
-  private constructor(value: Date) { super(value); }
-  public static create(value: Date): ApprovalDate {
-    return new ApprovalDate(value);
-  }
-}
+
 
 export class DocumentVersion extends DomainPrimitive<number> {
   private constructor(value: number) { super(value); }

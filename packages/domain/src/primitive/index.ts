@@ -1,5 +1,5 @@
 export abstract class DomainPrimitive<T> {
-  protected readonly value: T;
+  public readonly value: T;
 
   constructor(value: T) {
     if (value === null || value === undefined) {

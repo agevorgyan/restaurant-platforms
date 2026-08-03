@@ -7,9 +7,9 @@ import {
   DocumentStatusEnum,
   DocumentPeriod,
   GenerationDate,
-  ApprovalDate,
   DocumentVersion
 } from '../value-objects/payroll-document-core';
+import { ApprovalDate } from '../value-objects/payroll-dates';
 import { DocumentSection } from '../entities/document-section';
 import { DocumentAttachment } from '../entities/document-attachment';
 import { DigitalSignature } from '../entities/digital-signature';
@@ -30,7 +30,7 @@ export class PayrollDocument extends AggregateRoot<PayrollDocumentId> {
   private _attachments: DocumentAttachment[] = [];
   private _signatures: DigitalSignature[] = [];
   private _approvalRecords: DocumentApprovalRecord[] = [];
-  private _version: DocumentVersion;
+  private _docVersion: DocumentVersion;
 
   constructor(
     id: PayrollDocumentId,
@@ -42,7 +42,7 @@ export class PayrollDocument extends AggregateRoot<PayrollDocumentId> {
   ) {
     super(id);
     this._status = status;
-    this._version = version;
+    this._docVersion = version;
   }
 
   public static create(
@@ -62,7 +62,7 @@ export class PayrollDocument extends AggregateRoot<PayrollDocumentId> {
   }
 
   get status(): DocumentStatus { return this._status; }
-  get documentVersion(): DocumentVersion { return this._version; }
+  get documentVersion(): DocumentVersion { return this._docVersion; }
   get sections(): DocumentSection[] { return [...this._sections]; }
   get attachments(): DocumentAttachment[] { return [...this._attachments]; }
   get signatures(): DigitalSignature[] { return [...this._signatures]; }
@@ -83,7 +83,7 @@ export class PayrollDocument extends AggregateRoot<PayrollDocumentId> {
     this._sections = sections;
     this._attachments = attachments;
     this._status = DocumentStatus.create(DocumentStatusEnum.GENERATED);
-    this._version = DocumentVersion.create(this._version.toValue() + 1);
+    this._docVersion = DocumentVersion.create(this._docVersion.toValue() + 1);
 
     this.record(new PayrollDocumentGenerated(this.id.toValue(), this.version(), {
       documentId: this.id.toValue()

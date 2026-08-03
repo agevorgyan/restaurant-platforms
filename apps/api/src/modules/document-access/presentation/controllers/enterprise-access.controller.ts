@@ -16,8 +16,8 @@ export class EnterpriseAccessController {
 
   @Post('upload-url')
   async generateUploadUrl(@Body() payload: any): Promise<{ url: string }> {
-    const identity = RequesterIdentity.create(payload.identity).value;
-    const objectRef = ObjectReference.create(payload.objectReference).value;
+    const identity = RequesterIdentity.create(payload.identity).toValue();
+    const objectRef = ObjectReference.create(payload.objectReference).toValue();
     
     const url = await this.accessService.requestUploadUrl(identity, objectRef);
     return { url };
@@ -25,8 +25,8 @@ export class EnterpriseAccessController {
 
   @Post('download-url')
   async generateDownloadUrl(@Body() payload: any): Promise<{ url: string }> {
-    const identity = RequesterIdentity.create(payload.identity).value;
-    const objectRef = ObjectReference.create(payload.objectReference).value;
+    const identity = RequesterIdentity.create(payload.identity).toValue();
+    const objectRef = ObjectReference.create(payload.objectReference).toValue();
     
     const url = await this.accessService.requestDownloadUrl(identity, objectRef);
     return { url };
@@ -34,8 +34,8 @@ export class EnterpriseAccessController {
 
   @Post('validate')
   async validateAccess(@Body() payload: any): Promise<{ valid: boolean }> {
-    const identity = RequesterIdentity.create(payload.identity).value;
-    const objectRef = ObjectReference.create(payload.objectReference).value;
+    const identity = RequesterIdentity.create(payload.identity).toValue();
+    const objectRef = ObjectReference.create(payload.objectReference).toValue();
     
     try {
       await this.validator.validateAccess(identity, objectRef, payload.accessType as AccessTypeEnum);

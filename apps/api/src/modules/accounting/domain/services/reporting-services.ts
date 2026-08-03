@@ -1,4 +1,4 @@
-import { IDomainService } from '@saas/core';
+import { IDomainService } from '@saas/domain';
 import { FinancialStatement, StatementSection, StatementTotals } from '../../application/read-models/financial-statement.model';
 
 export class BalanceSheetGenerator implements IDomainService {

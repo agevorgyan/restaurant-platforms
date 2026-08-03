@@ -1,4 +1,4 @@
-import { AggregateRoot } from '@saas/domain';
+import { AggregateRoot } from '@saas/core';
 import { 
   DocumentId, 
   TenantId, 
@@ -69,7 +69,7 @@ export class Document extends AggregateRoot<DocumentProps> {
   public get checksum(): Checksum | undefined { return this.props.checksum; }
 
   private constructor(props: DocumentProps) {
-    super(props);
+    super(props.id.toValue(), props);
   }
 
   public static create(props: Omit<DocumentProps, 'createdAt' | 'updatedAt' | 'status'>): Document {
@@ -81,11 +81,11 @@ export class Document extends AggregateRoot<DocumentProps> {
     });
 
     document.addDomainEvent(new DocumentCreated(
-      document.id.value,
-      document.tenantId.value,
-      document.type.value,
-      document.visibility.value,
-      document.props.createdBy.value
+      document.id,
+      document.tenantId.toValue(),
+      document.type.toValue(),
+      document.visibility.toValue(),
+      document.props.createdBy.toValue()
     ));
 
     return document;
@@ -116,7 +116,7 @@ export class Document extends AggregateRoot<DocumentProps> {
     this.props.updatedAt = new Date();
 
     this.addDomainEvent(new DocumentUploaded(
-      this.id.value,
+      this.id,
       this.tenantId.value,
       this.objectKey.value,
       this.fileSize.value,
@@ -133,7 +133,7 @@ export class Document extends AggregateRoot<DocumentProps> {
     this.props.storageClass = StorageClass.create(StorageClassEnum.ARCHIVE);
     this.props.updatedAt = new Date();
 
-    this.addDomainEvent(new DocumentArchived(this.id.value, this.tenantId.value));
+    this.addDomainEvent(new DocumentArchived(this.id, this.tenantId.value));
   }
 
   public restore(): void {
@@ -145,14 +145,14 @@ export class Document extends AggregateRoot<DocumentProps> {
     this.props.storageClass = StorageClass.create(StorageClassEnum.HOT);
     this.props.updatedAt = new Date();
 
-    this.addDomainEvent(new DocumentRestored(this.id.value, this.tenantId.value));
+    this.addDomainEvent(new DocumentRestored(this.id, this.tenantId.value));
   }
 
   public delete(): void {
     this.props.status = DocumentStatus.create(DocumentStatusEnum.DELETED);
     this.props.updatedAt = new Date();
     
-    this.addDomainEvent(new DocumentDeleted(this.id.value, this.tenantId.value));
+    this.addDomainEvent(new DocumentDeleted(this.id, this.tenantId.value));
   }
 
   public updateMetadata(metadata: Record<string, any>, tags: string[]): void {
@@ -160,19 +160,19 @@ export class Document extends AggregateRoot<DocumentProps> {
     this.props.tags = [...new Set([...this.props.tags, ...tags])];
     this.props.updatedAt = new Date();
 
-    this.addDomainEvent(new DocumentMetadataUpdated(this.id.value, this.tenantId.value, this.props.metadata));
+    this.addDomainEvent(new DocumentMetadataUpdated(this.id, this.tenantId.value, this.props.metadata));
   }
 
   public startProcessing(processorType: string): void {
     this.props.status = DocumentStatus.create(DocumentStatusEnum.PROCESSING);
     this.props.updatedAt = new Date();
-    this.addDomainEvent(new DocumentProcessingStarted(this.id.value, this.tenantId.value, processorType));
+    this.addDomainEvent(new DocumentProcessingStarted(this.id, this.tenantId.value, processorType));
   }
 
   public completeProcessing(processorType: string, results: Record<string, any>): void {
     this.props.status = DocumentStatus.create(DocumentStatusEnum.AVAILABLE);
     this.props.updatedAt = new Date();
     // In a real system, we might merge results into metadata or a separate domain entity
-    this.addDomainEvent(new DocumentProcessingCompleted(this.id.value, this.tenantId.value, processorType, results));
+    this.addDomainEvent(new DocumentProcessingCompleted(this.id, this.tenantId.value, processorType, results));
   }
 }

@@ -32,9 +32,12 @@ export interface NotificationPreference {
   tenantId: string;
   optedOutChannels: string[];
   optedOutTypes: string[];
+  mutedCategories: string[];
   quietHoursStart?: string; // e.g. "22:00"
   quietHoursEnd?: string;   // e.g. "07:00"
   timezone: string;
+  desktopNotificationsEnabled: boolean;
+  soundEnabled: boolean;
 }
 
 export interface NotificationStatistics {

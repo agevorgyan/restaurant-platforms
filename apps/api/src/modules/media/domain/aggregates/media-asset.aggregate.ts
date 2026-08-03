@@ -1,4 +1,4 @@
-import { AggregateRoot } from '@saas/domain';
+import { AggregateRoot } from '@saas/core';
 import {
   MediaId,
   TenantId,
@@ -46,7 +46,7 @@ export interface MediaAssetProps {
 
 export class MediaAsset extends AggregateRoot<MediaAssetProps> {
   private constructor(props: MediaAssetProps, id?: string) {
-    super(props, id ?? props.mediaId.toValue());
+    super(id ?? props.mediaId.toValue(), props);
   }
 
   public static create(props: MediaAssetProps, id?: string): MediaAsset {
