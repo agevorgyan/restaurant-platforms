@@ -9,6 +9,7 @@ import { IntegrationModule } from './modules/integration/integration.module';
 import { AiGatewayModule } from './modules/ai/ai-gateway.module';
 import { AnalyticsModule } from './modules/analytics/analytics.module';
 import { PlatformHealthModule } from './modules/platform/platform-health.module';
+import { GeneralLedgerModule } from './modules/accounting/general-ledger.module';
 
 @Module({
   imports: [
@@ -20,8 +21,10 @@ import { PlatformHealthModule } from './modules/platform/platform-health.module'
     AiGatewayModule,
     AnalyticsModule,
     PlatformHealthModule,
+    GeneralLedgerModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}
+
